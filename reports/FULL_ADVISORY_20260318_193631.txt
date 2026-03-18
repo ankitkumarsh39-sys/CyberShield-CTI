@@ -1,0 +1,41 @@
+============================================================
+THREAT INTELLIGENCE ADVISORY
+============================================================
+REPORT DATE      : 2026-03-18 19:36:31
+SOURCE URL       : https://atos.net/en/lp/cybershield/investigating-a-new-click-fix-variant
+TARGET COMPANY   : Persistent
+============================================================
+
+SUMMARY: This shows that ClickFix still evolves, expandind arsenal of proxy execution
+methods and starting to utilize native networking utilities. ASAR archives are
+rarely inspected, allowing the dropper logic to execute through normal
+application startup with minimal visibility. ]report/forever/e/ File
+%APPDATA%\id.txt Path %TEMP%\[13-digit-timestamp]\ SHA256
+a390fe045f50a0697b14160132dfa124c7f92d85c18fba07df351c2fcfc11063 (app.asar)
+SHA256 9ee58eb59e337c06429ff3f0afd0ee6886b0644ddd4531305b269e97ad2b8d42
+(WorkFlowy.exe –Older version of legitimate binary, not malicious) SHA256
+dc95f7c7fb98ec30d3cb03963865a11d1b7b696e34f163b8de45f828b62ec829 (main.js)
+Hunting Query title: Suspicious Commands executed via Run dialog id:
+20891a30-032e-4f15-a282-fa4a8b0d8aae status: experimental description: Detects
+suspicious command interpreters and LOLBins written into the Explorer RunMRU
+registry key (commonly used for Run dialog history), with explorer.exe as the
+initiating process.
+
+VECTORS: Phishing, ClickFix, Net Use, WebDAV, Win+R
+TECHNIQUES: Persistence, C2 Beacon, Proxy Execution, LOLBin
+--------------------------------------------------
+CONSOLIDATED IOCs:
+IP: 94[.]156[.]170[.]255 | 21 hits
+IP: 144[.]31[.]165[.]173 | 12 hits
+IP: 94.156.170[.]255     | 21 hits
+DOMAIN: play2go.cloud             | 0 hits
+DOMAIN: cloudflare[.]report       | 18 hits
+DOMAIN: attack.defense            | Status: 400
+DOMAIN: cloudflare.report         | 18 hits
+DOMAIN: happyglamper[.]ro         | 22 hits
+DOMAIN: update.cmd                | Status: 400
+URL/Path: http://94.156.170[.]255/flowy.zip’
+URL/Path: http://94.156.170[.]255/webdav
+HASH: 9ee58eb59e337c06429ff3f0afd0ee6886b0644ddd4531305b269e97ad2b8d42 | 0 hits
+HASH: dc95f7c7fb98ec30d3cb03963865a11d1b7b696e34f163b8de45f828b62ec829 | 10 hits
+HASH: a390fe045f50a0697b14160132dfa124c7f92d85c18fba07df351c2fcfc11063 | Status: 404

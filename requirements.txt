@@ -1,0 +1,7 @@
+requests
+beautifulsoup4
+iocextract
+sumy
+nltk
+numpy
+warnings
