@@ -1,0 +1,37 @@
+============================================================
+THREAT INTELLIGENCE ADVISORY
+============================================================
+REPORT DATE      : 2026-03-18 21:50:30
+SOURCE URL       : https://www.acronis.com/en/tru/posts/vidar-stealer-20-distributed-via-fake-game-cheats-on-github-and-reddit/
+TARGET COMPANY   : Attackers hide malicious links behind images and route
+============================================================
+
+SUMMARY: In the earliest days of gaming, cheats were fun codes left by developers, which
+gave players abilities they normally wouldn't have — infinite lives, flying
+through walls, etc. Studies suggest a significant percentage of online gamers
+have either used cheats themselves or regularly encounter cheaters in their
+matches, driving frustration among legitimate players and creating substantial
+revenue losses for game publishers. When users seek out free cheats to avoid
+subscription costs, they become prime targets for campaigns that promise a
+competitive advantage but deliver credential theft, cryptocurrency wallet
+exfiltration and complete system compromise.
+
+VECTORS: Social Engineering
+TECHNIQUES: Persistence
+--------------------------------------------------
+MALICIOUS IOCs (15 Found):
+Domain: any.run                                       | 1 hits (Re-analyzed)
+Domain: steamcommunity[.]com                          | 1 hits (Re-analyzed)
+Domain: telegram[.]me                                 | 1 hits (Re-analyzed)
+URL: \\pipe\\test                                  | 0 hits
+File_Hash: 2f416aac027f19f563cc45e3b4b72e992aaafb63da27f968b9a76a391134dc7d | 57 hits
+File_Hash: 496d15810c25136955dd9aed6d018519380ee431f28c1bca715da59fe1385d12 | 52 hits
+File_Hash: b1cebd305c6aa27048a3673e70f8e1604735b2c06c83452d2935c330b5a3eb58 | 53 hits
+File_Hash: b6192c05029c8905fcbb88469d712dfdeaf1feb33b0690f8539373f19b6cbf85 | 14 hits
+File_Hash: bfee57d9e1b68c5c5aa63792b4e67b94f3361749e186531bd01609d9382672f3 | 52 hits
+File_Hash: c5e7fab18baee4a6b092e566414f4d2df1afbde35a1d12f518113054f144853f | 15 hits
+File_Hash: cbf2218ce316134795c75691f17dfaf02071ff5c369049fbf11ed072cf2103ab | 16 hits
+File_Hash: d1258b4c2b9849833651d1e844d1a99a5bc7febbb751548f960e92525afe6c26 | 50 hits
+File_Hash: d1721c9adcfa3d16bb4907afccfae64517e6c58a7c6ef058c9f5f543f60240c9 | 41 hits
+File_Hash: e1979c42cb9e72ba9f9fcae7364887df1edcad38128feefdc3adbc768c51da05 | 45 hits
+File_Hash: fa7eafa65996c325faf2d77cc2d80179daa9228b3c138d2d3365280c79e30820 | 14 hits
