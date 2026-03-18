@@ -5,3 +5,6 @@ sumy
 nltk
 numpy
 warnings
+base64
+time
+os
