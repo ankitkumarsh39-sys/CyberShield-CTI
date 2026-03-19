@@ -1,0 +1,32 @@
+============================================================
+THREAT INTELLIGENCE ADVISORY
+============================================================
+REPORT DATE      : 2026-03-18 22:16:45
+SOURCE URL       : https://pushsecurity.com/blog/installfix/
+TARGET COMPANY   : CLI tools and present
+============================================================
+
+SUMMARY: Zero-day phishing protection Browser extension security Account takeover
+detection Attack path hardening ClickFix protection Incident response Secure
+shadow SaaS Secure shadow AI Blog / Browser-based attacks InstallFix: How
+attackers are weaponizing malvertised install guides Jacques Louw Co-founder /
+CRO Mar 6, 2026 | 8 min read Share this post Browser-based attacks Detection &
+response Attackers are distributing almost identical cloned sites of popular
+developer tools like Claude Code with fake install instructions via malicious
+search engine ads â tricking victims into installing infostealer malware
+instead. New IoCs have been added accordingly, but this campaign is moving very
+quickly, so the list won't stay up to date for long. Amatera is a relatively new
+infostealer used by cybercriminals to steal sensitive data, such as browser
+saved passwords, cookies, session tokens, and general system information.
+
+VECTORS: Phishing, ClickFix, Fake CAPTCHA
+TECHNIQUES: Unknown
+--------------------------------------------------
+MALICIOUS IOCs (7 Found):
+Domain: claude-code-macos[.]com                       | 18 hits
+Domain: contatoplus[.]com                             | 18 hits
+Domain: pages.dev                                     | 1 hits (Re-analyzed)
+Domain: sarahmoftah[.]com                             | 14 hits
+Domain: saramoftah.com                                | 20 hits
+Domain: saramoftah[.]com                              | 20 hits
+Domain: some.website                                  | 1 hits (Re-analyzed)

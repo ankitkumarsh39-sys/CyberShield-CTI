@@ -1,3 +1,5 @@
+""" The libraries are essential for the functionality of the CyberShield-CTI Engine, 
+which includes web scraping, text processing, and interaction with the VirusTotal API."""
 requests
 beautifulsoup4
 iocextract
@@ -8,3 +10,5 @@ warnings
 base64
 time
 os
+logging
+load_dotenv
