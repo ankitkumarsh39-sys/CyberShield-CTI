@@ -46,6 +46,8 @@ Create a key.env file in the root directory and add your VirusTotal API key:
 Plaintext
 VT_API_KEY=your_api_key_here
 
+source API_KEY = https://www.virustotal.com/gui/home/apikey
+
 ============================================================================
 
 📖 Usage
