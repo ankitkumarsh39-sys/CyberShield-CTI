@@ -243,3 +243,6 @@
 2026-03-20 06:05:05 - INFO - Triggering Re-analysis for 3cb9dea916432ffb8784ac36d1f2d3cd(Score: 0)
 2026-03-20 06:05:36 - INFO - Triggering Re-analysis for 3dfb151d082df7937b01e2bb6030fe4a(Score: 0)
 2026-03-20 06:06:08 - INFO - Triggering Re-analysis for 5986ab04dd6b3d259935249741d3eff2(Score: 0)
+2026-03-20 06:06:41 - INFO - Triggering Re-analysis for e035c858c1969cffc1a4978b86e90a30(Score: 1)
+2026-03-20 06:06:47 - ERROR - Re-analysis failed: HTTPSConnectionPool(host='www.virustotal.com', port=443): Read timed out. (read timeout=5)
+2026-03-20 06:06:47 - INFO - Success: Report generated at reports/FULL_ADVISORY_20260320_060647.txt
