@@ -1,23 +1,24 @@
 import sys
 import subprocess
-import requests          
-import re                
-import iocextract        
-import os                
-import time              
-import textwrap          
-import base64            
-import warnings          
-import logging           
-from bs4 import BeautifulSoup    
-from datetime import datetime    
-from dotenv import load_dotenv   
+import requests          # For making HTTP requests to VirusTotal and Threat Intel blogs
+import re                # For Regular Expression matching (finding defanged IPs and URLs)
+import iocextract        # A specialized library for extracting MD5, SHA1, and SHA256 hashes
+import os                # For interacting with the Operating System (creating folders/loading files)
+import time              # For managing API rate limits (pausing between VirusTotal requests)
+import textwrap          # For formatting the final report text to a specific width (readability)
+import base64            # To encode URLs into the ID format required by VirusTotal v3 API
+import warnings          # To silence unnecessary logs from BeautifulSoup or Requests
+import logging           # NEW: For creating a professional 'cyber_shield.log' audit trail
+from bs4 import BeautifulSoup    # For parsing HTML and extracting clean text from web pages
+from datetime import datetime    # For adding timestamps to report filenames and logs
+from dotenv import load_dotenv   # To load the VT_API_KEY from a hidden .env file (Security)
 
-# --- Summarization libraries (NLP) ---
-from sumy.parsers.plaintext import PlaintextParser  
-from sumy.nlp.tokenizers import Tokenizer           
-from sumy.summarizers.lsa import LsaSummarizer      
+# --- Summarization libraries (NLP - Natural Language Processing) ---
+from sumy.parsers.plaintext import PlaintextParser  # Converts raw text into a format the AI can read
+from sumy.nlp.tokenizers import Tokenizer           # Breaks text down into individual words/sentences
+from sumy.summarizers.lsa import LsaSummarizer      # Uses Latent Semantic Analysis to pick the top 3 sentences     
 
+# Suppress BeautifulSoup warnings to keep the terminal clean
 warnings.filterwarnings("ignore", category=UserWarning)
 
 # --- 1. LOGGING CONFIGURATION ---
