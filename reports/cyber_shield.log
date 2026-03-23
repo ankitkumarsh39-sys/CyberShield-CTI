@@ -246,3 +246,17 @@
 2026-03-20 06:06:41 - INFO - Triggering Re-analysis for e035c858c1969cffc1a4978b86e90a30(Score: 1)
 2026-03-20 06:06:47 - ERROR - Re-analysis failed: HTTPSConnectionPool(host='www.virustotal.com', port=443): Read timed out. (read timeout=5)
 2026-03-20 06:06:47 - INFO - Success: Report generated at reports/FULL_ADVISORY_20260320_060647.txt
+2026-03-23 17:12:54 - INFO - CyberShield-CTI Engine Initialized.
+2026-03-23 17:13:35 - INFO - Starting analysis for: https://www.acronis.com/en/tru/posts/vidar-stealer-20-distributed-via-fake-game-cheats-on-github-and-reddit/
+2026-03-23 17:14:45 - INFO - Triggering Re-analysis for hxxps://telegram[.]me/ahnadar(Score: 5)
+2026-03-23 17:16:21 - INFO - Triggering Re-analysis for 4a090e26e285661730dfd0911856c830bd0a44e639237178476ccb4993d7974f(Score: 0)
+2026-03-23 17:19:11 - INFO - Success: Report generated at reports/FULL_ADVISORY_20260323_171908.txt
+2026-03-23 17:21:43 - INFO - CyberShield-CTI Engine Initialized.
+2026-03-23 17:21:44 - INFO - Starting analysis for: https://www.acronis.com/en/tru/posts/vidar-stealer-20-distributed-via-fake-game-cheats-on-github-and-reddit/
+2026-03-23 17:24:22 - INFO - Triggering Re-analysis for 4a090e26e285661730dfd0911856c830bd0a44e639237178476ccb4993d7974f(Score: 0)
+2026-03-23 17:27:06 - INFO - Success: Report generated at reports/FULL_ADVISORY_20260323_172705.txt
+2026-03-23 17:46:25 - INFO - CyberShield-CTI Engine Initialized.
+2026-03-23 17:46:26 - INFO - Starting analysis for: https://www.acronis.com/en/tru/posts/vidar-stealer-20-distributed-via-fake-game-cheats-on-github-and-reddit/
+2026-03-23 17:49:00 - INFO - Triggering Re-analysis for 4a090e26e285661730dfd0911856c830bd0a44e639237178476ccb4993d7974f(Score: 0)
+2026-03-23 17:49:02 - ERROR - Re-analysis failed: HTTPSConnectionPool(host='www.virustotal.com', port=443): Max retries exceeded with url: /api/v3/files/4a090e26e285661730dfd0911856c830bd0a44e639237178476ccb4993d7974f/analyse (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1081)')))
+2026-03-23 17:51:39 - INFO - Success: Report generated at reports/FULL_ADVISORY_20260323_175137.txt

@@ -1,5 +1,5 @@
-import sys
-import subprocess
+import sys               # For handling command-line arguments (if needed in the future)
+import subprocess        # For potential future use (e.g., running external tools or scripts)
 import requests          # For making HTTP requests to VirusTotal and Threat Intel blogs
 import re                # For Regular Expression matching (finding defanged IPs and URLs)
 import iocextract        # A specialized library for extracting MD5, SHA1, and SHA256 hashes
@@ -38,6 +38,9 @@ if not VT_API_KEY:
     raise ValueError("Missing VirusTotal API Key. Check cyber_shield.log for details.")
 
 class CTIWorkbench: 
+    # The __init__ method is the constructor for the CTIWorkbench class. 
+    # It initializes the engine by setting up necessary directories for reports, loading whitelists and blocklists from local text files, and defining a mapping of keywords to MITRE ATT&CK techniques. 
+    # This setup ensures that the engine is ready to process threat intelligence data effectively while maintaining a structured environment for storing outputs and logs.
     def __init__(self):
         """Initializes the engine, sets up directories, and loads whitelists."""
         logging.info("CyberShield-CTI Engine Initialized.")
@@ -73,6 +76,10 @@ class CTIWorkbench:
         self.ip_whitelist = self._load_file('whitelist.txt')
         self.manual_blocklist = self._load_file('blocklist.txt')
         self.domain_whitelist = ['google.com', 'microsoft.com', 'github.com', 'acronis.com', 'atos.net', 'huntress.com', 'virustotal.com', 'twitter.com', 'linkedin.com', 'any.run']
+    
+    # The _ensure_dir function is a utility method that checks if the parent directory of a given file path exists. If it doesn't, the function creates the necessary directory structure. 
+    # This is particularly useful for ensuring that when the tool attempts to write reports or blocklists, it won't encounter errors due to missing directories.
+    #  By implementing this self-healing mechanism, the tool can recover gracefully from situations where directories might have been accidentally deleted or were never created in the first place.
 
     def _ensure_dir(self, file_path):
         """Creates the parent directory for any file if it's missing."""
@@ -80,6 +87,11 @@ class CTIWorkbench:
         if directory and not os.path.exists(directory):
             os.makedirs(directory)
             logging.info(f"Created missing directory: {directory}")
+
+    # The _load_file function is designed to handle both the loading and initialization of critical text files (like whitelists and blocklists) in a self-healing manner. 
+    # If the specified file exists, it reads the contents into a list while stripping whitespace and converting to lowercase for consistency. 
+    # If the file is missing, it creates a new file with a header comment, logs this action, and returns an empty list.
+    # This approach ensures that the tool can operate smoothly even if essential files are accidentally deleted or not set up initially.
 
     def _load_file(self, filename):
         """Self-healing file loader."""
@@ -92,6 +104,8 @@ class CTIWorkbench:
             logging.info(f"Initialized missing file: {filename}")
             return []
 
+    #  The _get_url_id function is a helper method that takes a URL as input and encodes it into a format suitable for querying the VirusTotal v3 API.
+    #  Since the API requires URLs to be represented as a base64-encoded string, this function performs the necessary encoding and formatting to ensure that the URL can be correctly processed by the API when checking for malicious activity.
     def _get_url_id(self, url):
         return base64.urlsafe_b64encode(url.encode()).decode().strip("=")
     
@@ -128,14 +142,16 @@ class CTIWorkbench:
             logging.error(f"Network error: {str(e)}")
             return 0, "Lookup Error"
 
-    # The get_summary function uses the LSA summarization algorithm from the sumy library to generate a concise summary of the input text. It processes the text, extracts key sentences, and formats the summary for better readability.
+    # The get_summary function uses the LSA summarization algorithm from the sumy library to generate a concise summary of the input text. 
+    # It processes the text, extracts key sentences, and formats the summary for better readability.
     def get_summary(self, text):
         parser = PlaintextParser.from_string(' '.join(text.split()), Tokenizer("english"))
         summarizer = LsaSummarizer()
-        summary = summarizer(parser.document, 3) 
+        summary = summarizer(parser.document, 10)  # Get the top 10 sentences as the summary
         return textwrap.fill(" ".join([str(s) for s in summary]), width=80)
 
-    # The extract_context function analyzes the input text to identify relevant MITRE ATT&CK techniques based on predefined keywords. It also attempts to extract the name of the victim organization from the text using regular expressions. The function returns a dictionary containing the detected TTPs and the identified victim.
+    # The extract_context function analyzes the input text to identify relevant MITRE ATT&CK techniques based on predefined keywords. 
+    # It also attempts to extract the name of the victim organization from the text using regular expressions. The function returns a dictionary containing the detected TTPs and the identified victim.
     def extract_context(self, text):
         text_lower = text.lower()
         found_ttps = []
@@ -151,35 +167,38 @@ class CTIWorkbench:
             "victim": victim_match.group(1).strip() if victim_match else "Unspecified"
         }
 
-    # The generate_report function orchestrates the entire process of analyzing a given URL. It scrapes the webpage, extracts relevant IOCs, checks them against VirusTotal, and compiles a comprehensive report. The report includes detected TTPs, a summary of the page content, and categorized lists of malicious IOCs. The function also handles file management for storing reports and blocklists.
+    # The generate_report function orchestrates the entire process of analyzing a given URL. It scrapes the webpage, extracts relevant IOCs, checks them against VirusTotal, and compiles a comprehensive report. 
+    # The report includes detected TTPs, a summary of the page content, and categorized lists of malicious IOCs. The function also handles file management for storing reports and blocklists.
     def generate_report(self, url):
         logging.info(f"Starting analysis for: {url}")
         try:
-            res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=15)
+            res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=10)
             soup = BeautifulSoup(res.text, 'html.parser')
             page_text = soup.get_text(separator=' ')
             context = self.extract_context(page_text)
             
-#-----------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
             # Extraction logic
             # 1. Matches exactly 12 digits followed by a word boundary (no dot/char)
-# 2. OR matches the 4-part IP structure with defanged separators
+            # 2. OR matches the 4-part IP structure with defanged separators
             found_ips = sorted(list(set(re.findall(r'\b(?:\d{12}|(?:\d{1,3}(?:\[\.\]|\.|\(\.\))){3}\d{1,3})\b', page_text))))
             raw_hashes = sorted(list(set(iocextract.extract_hashes(page_text))))
             ignored_ext = ['.exe', '.png', '.asar', '.zip', '.txt', '.js', '.json', '.jpg', '.get']
             all_domains = sorted(list(set([d.lower() for d in re.findall(r'(?:com|org|net)s?\'[a-zA-Z0-9\-]+(?:\[\.\]|\.|\(\.\))[a-z]{2,}', page_text) 
                               if not any(ext in d.lower() for ext in ignored_ext)])))
-            #  Updated RegEx to exclude common file extensions and focus on domain-like patterns
             
+            # Updated RegEx to exclude common file extensions and focus on domain-like patterns
             # Updated RegEx to catch steamcommunity[.]com/profiles/12345...
             found_urls = sorted(list(set(re.findall(r'(?:http|hxxp)s?(?:\[\:\/\/\]|\:\/\/)[a-zA-Z0-9\-\.\[\]]+(?:(?:\/|\%2F)[\w\.\-\/\=\?\&\%\+\[\]]+)?', page_text))))
 
-#-----------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
             mal_data = {"File_Hash": [], "Domain": [], "URL": [], "IPs": []}
             full_list = []
 
-            # The process_ioc function is a helper function defined within generate_report to avoid code duplication when processing different types of IOCs (IPs, domains, URLs, and file hashes). It takes a list of IOCs, their type, and category as input, performs cleaning and normalization, checks against whitelists and blocklists, queries VirusTotal for reputation data, and categorizes the results accordingly. This modular approach enhances code readability and maintainability while ensuring consistent processing across all IOC types.
+            # The process_ioc function is a helper function defined within generate_report to avoid code duplication when processing different types of IOCs (IPs, domains, URLs, and file hashes). 
+            # It takes a list of IOCs, their type, and category as input, performs cleaning and normalization, checks against whitelists and blocklists, queries VirusTotal for reputation data, 
+            # and categorizes the results accordingly. This modular approach enhances code readability and maintainability while ensuring consistent processing across all IOC types.
             def process_ioc(ioc_list, ioc_type, cat):
                 for ioc in ioc_list:
                     print(f"[*] Checking for {cat}: {ioc[:30]}...")
@@ -187,8 +206,7 @@ class CTIWorkbench:
                     # The cleaning step normalizes the IOC by replacing common obfuscation patterns (like [.] or hxxp) with their standard forms. 
                     # This helps in accurately checking against whitelists and blocklists, as well as querying VirusTotal. By converting to lowercase, 
                     # it also ensures that the checks are case-insensitive, which is important for consistency.
-
-                    clean_val = ioc.replace("[.]", ".").replace("(.)", ".").replace("[://]", "://").replace("hxxp", "http").lower()# This line  process_ioc does the "Refanging"
+                    clean_val = ioc.replace("[.]", ".").replace("(.)", ".").replace("[://]", "://").replace("hxxp", "http").lower()# This line process_ioc does the "Refanging"
                     if any(w in clean_val for w in self.ip_whitelist + self.domain_whitelist):
                         continue
                     is_block = clean_val in self.manual_blocklist
@@ -206,7 +224,9 @@ class CTIWorkbench:
             process_ioc(found_urls, 'url', 'URL')
             process_ioc(raw_hashes, 'hash', 'File_Hash')
 
-            # --- EXPORT TO TEXT FILES --- 
+#----------------------------------------------------------------------------------------------------------------------------------------------
+
+            # --- EXPORT TO TEXT FILES ---
             ts = datetime.now().strftime('%Y%m%d_%H%M%S')
             report_path = f"{self.base_reports_dir}/FULL_ADVISORY_{ts}.txt"
             self._ensure_dir(report_path)
