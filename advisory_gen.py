@@ -1,5 +1,6 @@
 import sys               # For handling command-line arguments (if needed in the future)
 import subprocess        # For potential future use (e.g., running external tools or scripts)
+from nltk import text    # For potential future use in more advanced NLP tasks (currently using sumy for summarization)
 import requests          # For making HTTP requests to VirusTotal and Threat Intel blogs
 import re                # For Regular Expression matching (finding defanged IPs and URLs)
 import iocextract        # A specialized library for extracting MD5, SHA1, and SHA256 hashes
@@ -8,7 +9,7 @@ import time              # For managing API rate limits (pausing between VirusTo
 import textwrap          # For formatting the final report text to a specific width (readability)
 import base64            # To encode URLs into the ID format required by VirusTotal v3 API
 import warnings          # To silence unnecessary logs from BeautifulSoup or Requests
-import logging           # NEW: For creating a professional 'cyber_shield.log' audit trail
+import logging           # For creating a professional 'cyber_shield.log' audit trail
 from bs4 import BeautifulSoup    # For parsing HTML and extracting clean text from web pages
 from datetime import datetime    # For adding timestamps to report filenames and logs
 from dotenv import load_dotenv   # To load the VT_API_KEY from a hidden .env file (Security)
@@ -112,35 +113,149 @@ class CTIWorkbench:
     # to filter out false positives and trigger re-analysis for low-score IOCs, improving accuracy.
     # This function queries the VirusTotal API for the given IOC and returns the number of malicious hits along with a status message.
     def get_vt_data(self, ioc_type, ioc_value):
-        val = ioc_value.replace("[.]", ".").replace("(.)", ".").replace("[://]", "://").replace("hxxp", "http")
-        endpoints = {"ip": "ip_addresses", "domain": "domains", "hash": "files", "url": "urls"}
+
+        def deobfuscate(ioc_value):
+            val = ioc_value.strip()
+        # Common defanging replacements
+            replacements = {
+                "[.]": ".",
+                "(.)": ".",
+                "{.}": ".",
+                "[://]": "://",
+                "hxxp://": "http://",
+                "hxxps://": "https://",
+                "hxxp": "http",
+                "fxp": "ftp"
+            }
+            
+            # If the value contains common defanging patterns, perform replacements; otherwise, return the original value
+
+            for k, v in replacements.items():# This loop iterates through the defined replacements and applies them to the input value, effectively 
+                #"refanging" any obfuscated IOCs back to their standard format for accurate processing.
+                    val = val.replace(k, v)
+            return val
+        
+        # The deobfuscate function is called to clean the IOC value by replacing common obfuscation patterns with their standard forms. 
+        # This ensures that the IOC is in the correct format for querying VirusTotal and checking against whitelists and blocklists.
+        val = deobfuscate(ioc_value)
+
+        # --- Validate and Refang the IOC and type of IOC ---
+        endpoints = {
+            "ip": "ip_addresses",
+            "domain": "domains",
+            "hash": "files",
+            "url": "urls"
+        }
+
+        #--- Validate the IOC type against supported endpoints. If the type is not recognized, log an error and return a failure status.
+        #  This check prevents unnecessary API calls with invalid types and ensures that the function only processes known IOC categories.
+        if ioc_type not in endpoints:
+            logging.error(f"Unsupported IOC type: {ioc_type}")
+            return 0, f"Unsupported IOC Type: {ioc_type}"
+        
+        # For URLs, we need to convert them to the specific ID format required by the VirusTotal v3 API, which involves base64 encoding. 
+        # For other IOC types, we can use the cleaned value directly.
+        
         resource_id = self._get_url_id(val) if ioc_type == "url" else val
         api_url = f"https://www.virustotal.com/api/v3/{endpoints.get(ioc_type)}/{resource_id}"
         
+        malicious = 0# Initial malicious count is set to 0, and will be updated based on the API response. This variable is crucial for determining whether to trigger a re-analysis for low-score IOCs.    
+        logging.info(f"Querying VT for {ioc_type.upper()}: {val[:100]}...")# Log the query action with the type of IOC and a truncated version of the value for readability in the logs.")   
+
         try:
-            time.sleep(15) 
+
+            # optional: small sleep to respect API rate limits, especially if processing many IOCs in a loop. Adjust the duration as needed based on VT's guidelines and your usage patterns.
+            time.sleep(20) # Pause to respect API rate limits
             res = requests.get(api_url, headers=self.headers, timeout=10)
-            malicious = 0
-            # If the initial lookup returns 200, check the number of malicious hits. If it's 5 or fewer, trigger a re-analysis to check for updates, as some IOCs may be newly added or previously undetected.
+
+            # Rate limit handling: 
+            # If we hit a rate limit (e.g., 429 Too Many Requests), we can log this event and return a specific status message.
+            # If the initial lookup returns 200, check the number of malicious hits. If it's 3 or fewer, trigger a re-analysis to check for updates, as some IOCs may be newly added or previously undetected.
+            if res.status_code == 429:
+                logging.warning(f" VT Rate limit hit(429) for {ioc_type.upper()}: {val[:200]}... Waiting sleeping for 20 seconds before retrying.")
+                time.sleep(20) # Wait before retrying
+                res = requests.get(api_url, headers=self.headers, timeout=10) # Retry the API call after waiting
+
+            # If the initial lookup returns 200, check the number of malicious hits
             if res.status_code == 200:
-                malicious = res.json()['data']['attributes']['last_analysis_stats'].get('malicious', 0)
+
+                try:
+                    malicious = res.json()['data']['attributes']['last_analysis_stats'].get('malicious', 0)
+    
+                # return malicious count and status message. If the expected keys are not found in the response, log an error and return a failure status.
+                except KeyError:
+                    logging.error("Unexpected response format from VirusTotal API")
+                    return 0, f" VT Lookup Failed (Status Code: {res.status_code}): {res.json()}"
+        
             # If the IOC has 5 or fewer malicious hits, trigger a re-analysis to check for updates, as some IOCs may be newly added or previously undetected.
-            if malicious <= 5:
-                logging.info(f"Triggering Re-analysis for {ioc_value}(Score: {malicious})")
+            if malicious <= 5: # Threshold for low-score IOCs that may benefit from re-analysis
+
+                logging.info(f"Triggering Re-analysis for {ioc_type.upper()}: {val[:200]} (Score: {malicious})")
                 try:
                     rescan_url = f"{api_url}/analyse"
-                    requests.post(rescan_url, headers=self.headers, timeout=5)# Trigger re-analysis
-                    time.sleep(10) # Wait for re-analysis to complete
-                    res = requests.get(api_url, headers=self.headers, timeout=5)# Re-fetch results after re-analysis
-                    if res.status_code == 200:# Re-fetch results after re-analysis
-                        malicious = res.json()['data']['attributes']['last_analysis_stats'].get('malicious', 0)
-                        return malicious, f"{malicious} hits (Re-analyzed)"
-                except Exception as e:
-                    logging.error(f"Re-analysis failed: {str(e)}")
-            return malicious, f"{malicious} hits"
+
+                    # store post response and check it
+                    post_res = requests.post(rescan_url, headers=self.headers, timeout=10)# Trigger re-analysis
+                    
+                    # Accept common successful response codes (200 OK, 202 Accepted) for the re-analysis request. 
+                    # If the response indicates that the re-analysis was accepted, we can proceed to wait and then re-fetch the results. 
+                    if post_res.status_code in (200, 201, 202):# Re-fetch results after re-analysis
+                        time.sleep(20) # Wait for re-analysis to complete
+
+                        res = requests.get(api_url, headers=self.headers, timeout=10)# Re-fetch results after re-analysis
+                        
+                        if res.status_code == 200:# Check results again after re-analysis
+                            malicious = res.json()['data']['attributes']['last_analysis_stats'].get('malicious', 0)
+                            return malicious, f"{malicious} hits (Re-analyzed)"
+                        
+                        # if fatch failed after successfull POST
+                        # if the re-fetch after re-analysis fails, log the error and return the original malicious count with a note that re-analysis was attempted but failed.
+                        return malicious, f"{malicious} hits (Re-analysis attempted but failed): {res.status_code})"
+
+                    #if re-analysis POST fails (e.g., due to network issues or API errors), log the error and return the original malicious count with a note that re-analysis was skipped.
+                    return malicious, f"{malicious} hits (Re-analysis attempted but failed): {post_res.status_code})"
+                
+                except Exception as e:# if re_analysis failed logg the error
+                    logging.error(f"Re-analysis error for {ioc_type.upper()} try manual analysis: {str(e)}")
+                    return malicious, f"{malicious} hits (Re-analysis failed)"
+
         except Exception as e:
-            logging.error(f"Network error: {str(e)}")
+            logging.error(f"Network error during VT lookup for {ioc_type.upper()}: {str(e)}")
             return 0, "Lookup Error"
+        return malicious, f"{malicious} hits"
+                
+    def vt_lookup_multiple(self, ioc_list, ioc_type, base_sleep=5, max_retries=3):
+        results = []
+
+        for i, ioc in enumerate(ioc_list, start=1):
+            logging.info(f"[{i}/{len(ioc_list)}] VT starting Lookup for {ioc_type.upper()}: {str(ioc)[:200]}...")
+
+            retries = 0
+            while retries <= max_retries:
+                score, msg = self.get_vt_data(ioc_type, ioc)
+
+            # If your get_vt_data returns "Lookup Error" or indicates rate limit in msg,
+            # retry with backoff. (If you already handle 429 inside get_vt_data, this becomes extra safety.)
+
+                if "rate limit" in msg.lower() or "429" in msg:
+                    wait_time = base_sleep * (2 ** retries)  # Exponential backoff
+                    logging.warning(f"Rate limit hit for {ioc_type.upper()} Retrying in {retries+1}/{max_retries} after waiting {wait_time} seconds.")
+                    time.sleep(wait_time)
+                    retries += 1
+                continue
+
+            # succes and non-reate limit failed  -> break retry loop
+            break
+        results.append({
+            "ioc": ioc,
+            "type": ioc_type,
+            "score": score,
+            "message": msg
+        })
+
+        # sleep between IOCs to avoid 429 
+        time.sleep(base_sleep)
+        return results
 
     # The get_summary function uses the LSA summarization algorithm from the sumy library to generate a concise summary of the input text. 
     # It processes the text, extracts key sentences, and formats the summary for better readability.
@@ -153,6 +268,7 @@ class CTIWorkbench:
     # The extract_context function analyzes the input text to identify relevant MITRE ATT&CK techniques based on predefined keywords. 
     # It also attempts to extract the name of the victim organization from the text using regular expressions. The function returns a dictionary containing the detected TTPs and the identified victim.
     def extract_context(self, text):
+        victims =[]
         text_lower = text.lower()
         found_ttps = []
         for keyword, info in self.mitre_map.items():
@@ -161,11 +277,17 @@ class CTIWorkbench:
                 if entry not in found_ttps:
                     found_ttps.append(entry)
 
-        victim_match = re.search(r'([A-Z][\w\s]+) (?:targeted|attacked|victim|breached|researchers)', text)
-        return {
-            "ttps": ", ".join(found_ttps) if found_ttps else "T1204 (User Execution)",
-            "victim": victim_match.group(1).strip() if victim_match else "Unspecified"
-        }
+                    victim_pattern = re.compile(
+                        r'\b([A-Z][A-Za-z0-9&.,\- ]{2,60}?)\b\s+(?:was\s+)?'
+                        r'(?:targeted|attacked|breached|compromised|hacked|hit|affected)',
+                        re.IGNORECASE
+                    )
+                    victims = victim_pattern.findall(text)
+
+            return {
+                    "ttps": ", ".join(found_ttps) if found_ttps else "T1204 (User Execution)",
+                    "victims": victims if victims else ["Unspecified"]
+            }
 
     # The generate_report function orchestrates the entire process of analyzing a given URL. It scrapes the webpage, extracts relevant IOCs, checks them against VirusTotal, and compiles a comprehensive report. 
     # The report includes detected TTPs, a summary of the page content, and categorized lists of malicious IOCs. The function also handles file management for storing reports and blocklists.
@@ -182,15 +304,41 @@ class CTIWorkbench:
             # 1. Matches exactly 12 digits followed by a word boundary (no dot/char)
             # 2. OR matches the 4-part IP structure with defanged separators
             found_ips = sorted(list(set(re.findall(r'\b(?:\d{12}|(?:\d{1,3}(?:\[\.\]|\.|\(\.\))){3}\d{1,3})\b', page_text))))
+            def normalize_ip(ip):# This function takes an IP address that may be defanged (e.g., using [.] or (.) instead of .) and normalizes it back to the standard format.
+                ip = ip.replace("[.]", ".").replace("(.)", ".")# By replacing common defanging patterns with a standard dot, this function ensures that all IP addresses are in a consistent format for further processing and analysis.
+                return ip
+            found_ips = sorted(set(normalize_ip(ip) for ip in found_ips))# This line applies the normalize_ip function to each found IP address, ensuring that all IPs are in a consistent format. The sorted and set functions are used to remove duplicates and maintain an ordered list of unique IP addresses.
+
             raw_hashes = sorted(list(set(iocextract.extract_hashes(page_text))))
+
+             # To reduce false positives, we exclude common file extensions that are unlikely to be domains. 
+             # This helps focus the domain extraction on more relevant patterns, improving the accuracy of the report.
             ignored_ext = ['.exe', '.png', '.asar', '.zip', '.txt', '.js', '.json', '.jpg', '.get']
-            all_domains = sorted(list(set([d.lower() for d in re.findall(r'(?:com|org|net)s?\'[a-zA-Z0-9\-]+(?:\[\.\]|\.|\(\.\))[a-z]{2,}', page_text) 
-                              if not any(ext in d.lower() for ext in ignored_ext)])))
-            
+
+            all_domains = sorted(
+                set(
+                    d.lower()
+                    for d in re.findall(
+                        r'\b[a-zA-Z0-9-]{1,63}(?:\[\.\]|\(\.\)|\.)(?:[a-z]{2,})(?:\/[^\s]*)?\b',
+                        page_text,
+                        re.IGNORECASE
+                    )
+                    if not any(ext in d.lower() for ext in ignored_ext)
+                )
+            )
+
             # Updated RegEx to exclude common file extensions and focus on domain-like patterns
             # Updated RegEx to catch steamcommunity[.]com/profiles/12345...
             found_urls = sorted(list(set(re.findall(r'(?:http|hxxp)s?(?:\[\:\/\/\]|\:\/\/)[a-zA-Z0-9\-\.\[\]]+(?:(?:\/|\%2F)[\w\.\-\/\=\?\&\%\+\[\]]+)?', page_text))))
-
+            
+            raw_cves = re.findall(
+                r'\bCVE[\s\-_–—]?(\d{4})[\s\-_–—]?(\d{4,7})\b',
+                page_text,
+                re.IGNORECASE
+                )
+            found_cves = sorted(list(set(f"CVE-{y}-{n}".upper() for y, n in raw_cves)))
+            logging.info(f"Extracted counts -> IOCs: {len(found_ips)}, Domains: {len(all_domains)}, URLs: {len(found_urls)}, Hashes: {len(raw_hashes)}, CVE: {len(found_cves)}")
+            
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
             mal_data = {"File_Hash": [], "Domain": [], "URL": [], "IPs": []}
@@ -201,7 +349,7 @@ class CTIWorkbench:
             # and categorizes the results accordingly. This modular approach enhances code readability and maintainability while ensuring consistent processing across all IOC types.
             def process_ioc(ioc_list, ioc_type, cat):
                 for ioc in ioc_list:
-                    print(f"[*] Checking for {cat}: {ioc[:30]}...")
+                    print(f"[*] Checking for {cat}: {ioc[:80]}...")
 
                     # The cleaning step normalizes the IOC by replacing common obfuscation patterns (like [.] or hxxp) with their standard forms. 
                     # This helps in accurately checking against whitelists and blocklists, as well as querying VirusTotal. By converting to lowercase, 
@@ -210,7 +358,15 @@ class CTIWorkbench:
                     if any(w in clean_val for w in self.ip_whitelist + self.domain_whitelist):
                         continue
                     is_block = clean_val in self.manual_blocklist
-                    hits, status = (1, "[!] BLOCKLIST MATCH") if is_block else self.get_vt_data(ioc_type, ioc)
+
+                    logging.info(f"Processing {ioc_type.upper()} IOC: raw={ioc[:80]} clean={clean_val[:80]}")
+                    # The vt_result variable is assigned a tuple based on whether the IOC is found in the manual blocklist. 
+                    # If it is a blocklisted item, it is immediately categorized as a threat with a message indicating a blocklist match.
+                    
+                    vt_result = (1, "[!] BLOCKLIST MATCH") if is_block else self.get_vt_data(ioc_type, ioc)
+                    if not vt_result:
+                        vt_result = (0, "VT returned None (check get_vt_data returns)")
+                    hits, status = vt_result
 
                     # It acts as the final judge, deciding whether an Indicator of Compromise (IOC) is dangerous enough to be included in your Malicious_IOCs report.
                     # It uses OR logic, meaning if any one of these three conditions is true, the item is marked as a threat.
@@ -228,33 +384,40 @@ class CTIWorkbench:
 
             # --- EXPORT TO TEXT FILES ---
             ts = datetime.now().strftime('%Y%m%d_%H%M%S')
-            report_path = f"{self.base_reports_dir}/FULL_ADVISORY_{ts}.txt"
+            report_path = f"{self.base_reports_dir}/ADVISORY_{ts}.txt"
             self._ensure_dir(report_path)
 
             with open(report_path, "w", encoding="utf-8") as f:
                 f.write("=" *50 + "\nReport:\n" + "=" *50 + f"\n")
                 f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"SOURCE URL       : {url}\n")
-                f.write(f"TARGET COMPANY   : {context['victim']}\n\n")
+                f.write(f"TARGET COMPANY   : {', '.join(context['victims'])}\n\n")
                 f.write("=" *50 + "\nMITRE ATT&CK ANALYSIS:\n" + "=" *50 + f"\nDetected TTPs    : {context['ttps']}\n\n")
                 f.write(f"SUMMARY: {self.get_summary(page_text)}\n\n")
-                f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} Found):\n" + "\n".join(full_list))
+                f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} IOC_Found):\n\n" + "\n".join(full_list) + "\n\n")
+                f.write("=" * 50 + "\nCVE REFERENCES:\n" + "=" * 50 + "\n\n")
+                f.write("Detected CVEs :\n" + ("\n".join(found_cves) if found_cves else "None"))
+                logging.info(f"Report generated with {len(full_list)} malicious IOCs found.")
 
+            # If any malicious IOCs were found, also create a separate blocklist file for immediate use in defenses like firewalls or EDRs. 
+            # This provides a quick reference for security teams to implement blocks without having to sift through the full report.
             if full_list:
-                blocklist_path = f"{self.malicious_dir}/URGENT_BLOCKLIST_{ts}.txt"
-                self._ensure_dir(blocklist_path)
-                with open(blocklist_path, "w", encoding="utf-8") as f:
-                    for cat, items in mal_data.items():
-                        if items: 
+                blocklist_path = f"{self.malicious_dir}/URGENT_BLOCKLIST_{ts}.txt" # NEW: Separate blocklist file for quick defensive action
+                self._ensure_dir(blocklist_path) # Ensure the directory exists before writing the blocklist
+                with open(blocklist_path, "w", encoding="utf-8") as f: # Write only the raw IOCs to the blocklist for easy import into security tools
+                    for cat, items in mal_data.items(): # Iterate through each category (IPs, Domains, URLs, File Hashes)
+                        if items: # Only write categories that have malicious IOCs
                             f.write(f"[{cat}]\n" + "\n".join(items) + "\n\n")
 
-            logging.info(f"Success: Report generated at {report_path}")
+            logging.info(f"Success: Report generated at {report_path}\n{'='*60}")
             return report_path
 
         except Exception as e:
             logging.critical(f"FATAL ERROR in generate_report: {str(e)}")
             return None
 
+# The main block serves as the entry point for the script when executed directly.
+# It prompts the user to input a Threat Intelligence (TI) URL, then calls the generate_report method of the CTIWorkbench class to analyze the URL and produce a report.
 if __name__ == "__main__":
     tool = CTIWorkbench()
     target = input("Paste TI URL: ")
