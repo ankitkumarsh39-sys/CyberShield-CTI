@@ -1,1 +1,30 @@
+# --- uv / Python specific ---
+# Ignore the virtual environment directory created by `uv venv` or `uv sync`
+.venv/
+
+# --- uv Lockfile ---
+# NOTE: If you are building a LIBRARY, you might ignore uv.lock.
+# If you are building an APP (like CyberShield-CTI), COMMIT uv.lock.
+# uv.lock
+
+# --- Python Bytecode & Cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# --- Environment Variables (Security) ---
+# Since you use load_dotenv, DO NOT commit your .env file
 .env
+.env.local
+.env.*
+
+# --- Project Specifics ---
+# Ignore the log file mentioned in your code
+cyber_shield.log
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
