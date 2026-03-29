@@ -1,0 +1,19 @@
+==================================================
+Report:
+==================================================
+REPORT DATE      : 2026-03-26 19:00:58
+SOURCE URL       : https://opensourcemalware.com/blog/clawdbot-skills-ganked-your-crypto
+TARGET COMPANY   : Unspecified
+
+==================================================
+MITRE ATT&CK ANALYSIS:
+==================================================
+Detected TTPs    : T1204 (User Execution)
+
+SUMMARY: OpenSourceMalware.com - Community Threat Intelligence
+
+--------------------------------------------------
+MALICIOUS IOCs (0 IOC_Found):
+
+
+
