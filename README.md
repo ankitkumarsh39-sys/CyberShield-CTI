@@ -70,9 +70,23 @@ Role: SOC Analyst | Cybersecurity Professional
 To make the "Installation" section of your README work, create a file named `requirements.txt` in your folder and paste this:
 
 ```text
-requests
-beautifulsoup4
-iocextract
-sumy
-python-dotenv
-lxml
+""" The libraries are essential for the functionality of the CyberShield-CTI Engine, 
+which includes web scraping, text processing, and interaction with the VirusTotal API."""
+
+# --- Networking & Web Scraping ---
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# --- Threat Intel & IOC Extraction ---
+iocextract>=1.16.1
+python-dotenv>=1.0.1
+
+# --- NLP & Summarization ---
+sumy>=0.11.0
+nltk>=3.8.1
+
+# --- Data Processing ---
+numpy>=1.26.0
+regex>=2024.0.0
+```
