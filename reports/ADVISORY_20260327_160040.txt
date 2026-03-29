@@ -1,0 +1,78 @@
+==================================================
+Report:
+==================================================
+REPORT DATE      : 2026-03-27 16:00:40
+SOURCE URL       : https://cvefeed.io/vuln/latest/
+TARGET COMPANY   : Unspecified
+
+==================================================
+MITRE ATT&CK ANALYSIS:
+==================================================
+Detected TTPs    : T1204 (User Execution)
+
+SUMMARY: Latest CVE Vulnerabilities – CVEFeed CVE ID, Product, Vendor ... Pricing Browse
+by Apps View All Apps Splunk Slack Webhook Teams Jira Chrome API Login Clear
+Menu Dashboard Homepage Search CVEQL New Feature Cisa KEV Catalog CVE Newsroom
+Vulnerabilities Latests Exploit Predictions Initial Access Intel Products
+Security Index Vendor Vulnerability Posture RSS Feed Knowledge Base CVE Metrics
+& Stats CWE Definitions CAPEC Definitions cvefeed.io About & Contact
+Documentation Github Follow us at Twitter Latest CVE Feed Home Vulnerabilities
+Latest CVE Intelligence Vulnerabilities published in the last 30 days. All
+Critical Actively Exploited Remotely Exploitable Last Updated Last Updated
+Published CVSS Score Score Vulnerability Published 7.0 HIGH CVE-2026-3457 —
+Stored XSS vulnerability in Sentinel ACC Improper Neutralization of Input During
+Web Page Generation (XSS or 'Cross-site Scripting') vulnerability in Thales
+Sentinel LDK Runtime on Windows allows Stored XSS.This issue affects Sentinel
+LDK R… | Cross-Site Scripting Mar 27, 2026 Mar 27, 2026 Mar 27, 2026 Mar 27,
+2026 3.7 LOW CVE-2026-27860 — Dovecot LDAP Authentication Filter Injection If
+auth_username_chars is empty, it is possible to inject arbitrary LDAP filter to
+Dovecot's LDAP authentication. A suitably formatted mail message causes mail
+delivery process to consume large amounts of CPU … Remote | Denial of Service
+Mar 27, 2026 Mar 27, 2026 Mar 27, 2026 Mar 27, 2026 7.5 HIGH CVE-2026-27858 —
+Dovecot Managesieve Denial of Service and Memory Exhaustion Attacker can send a
+specifically crafted message before authentication that causes managesieve to
+allocate large amount of memory. An attacker can use this to determine the
+configured credentials. This can be used to crash ManageSieve service
+repeatedly, making it unavailable for other users. A local unprivileged user can
+exploit this vulnerability by mis-authorizing two runtime D-Bus (Desktop Bus)
+setters, setZoneSettings2 and setPolicySettings. On the site with the affected
+version of the plugin enabled, a logged-in user with a page-creating/edi… Remote
+| Cross-Site Scripting Mar 27, 2026 Mar 27, 2026 Mar 27, 2026 Mar 27, 2026 5.3
+MEDIUM CVE-2026-33366 — BUFFALO Wi-Fi Router Unauthenticated Reboot
+Vulnerability Missing authentication for critical function vulnerability in
+BUFFALO Wi-Fi router products may allow an attacker to forcibly reboot the
+product without authentication. If this vulnerability is exploited, an arbitrary
+code may be executed on the products. If this vulnerability is exploited, an
+arbitrary OS command may be executed on the products. Analytics Help us
+understand how visitors use the site so we can improve it.
+
+--------------------------------------------------
+MALICIOUS IOCs (0 IOC_Found):
+
+
+
+==================================================
+CVE REFERENCES:
+==================================================
+
+Detected CVEs :
+CVE-2025-59028
+CVE-2025-59031
+CVE-2025-59032
+CVE-2026-0394
+CVE-2026-24031
+CVE-2026-27650
+CVE-2026-27855
+CVE-2026-27856
+CVE-2026-27857
+CVE-2026-27858
+CVE-2026-27859
+CVE-2026-27860
+CVE-2026-32669
+CVE-2026-32678
+CVE-2026-33280
+CVE-2026-33366
+CVE-2026-33559
+CVE-2026-34353
+CVE-2026-3457
+CVE-2026-4948

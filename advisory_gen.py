@@ -289,7 +289,7 @@ class CTIWorkbench:
                     "victims": victims if victims else ["Unspecified"]
             }
 
-    # The generate_report function orchestrates the entire process of analyzing a given URL. It scrapes the webpage, extracts relevant IOCs, checks them against VirusTotal, and compiles a comprehensive report. 
+    # The generate_report function or   `chestrates the entire process of analyzing a given URL. It scrapes the webpage, extracts relevant IOCs, checks them against VirusTotal, and compiles a comprehensive report. 
     # The report includes detected TTPs, a summary of the page content, and categorized lists of malicious IOCs. The function also handles file management for storing reports and blocklists.
     def generate_report(self, url):
         logging.info(f"Starting analysis for: {url}")
