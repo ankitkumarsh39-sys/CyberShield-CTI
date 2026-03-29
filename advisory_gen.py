@@ -337,7 +337,7 @@ class CTIWorkbench:
                 re.IGNORECASE
                 )
             found_cves = sorted(list(set(f"CVE-{y}-{n}".upper() for y, n in raw_cves)))
-            logging.info(f"Extracted counts -> IOCs: {len(found_ips)}, Domains: {len(all_domains)}, URLs: {len(found_urls)}, Hashes: {len(raw_hashes)}, CVE: {len(found_cves)}")
+            logging.info(f"Extracted counts of IOCs-> IPs: {len(found_ips)}, Domains: {len(all_domains)}, URLs: {len(found_urls)}, Hashes: {len(raw_hashes)}, CVE: {len(found_cves)}")
             
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
 

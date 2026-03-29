@@ -1851,3 +1851,214 @@
 2026-03-29 22:43:09 - INFO - Triggering Re-analysis for DOMAIN: com.utils (Score: 0)
 2026-03-29 22:43:11 - INFO - Processing DOMAIN IOC: raw=command-confirm[.]com clean=command-confirm.com
 2026-03-29 22:43:11 - INFO - Querying VT for DOMAIN: command-confirm.com...
+2026-03-30 00:33:58 - INFO - CyberShield-CTI Engine Initialized.
+2026-03-30 00:35:36 - INFO - Starting analysis for: https://opensourcemalware.com/blog/clawdbot-skills-ganked-your-crypto
+2026-03-30 00:35:37 - INFO - Extracted counts -> IOCs: 0, Domains: 1, URLs: 0, Hashes: 0, CVE: 0
+2026-03-30 00:35:37 - INFO - Processing DOMAIN IOC: raw=opensourcemalware.com clean=opensourcemalware.com
+2026-03-30 00:35:37 - INFO - Querying VT for DOMAIN: opensourcemalware.com...
+2026-03-30 00:35:58 - INFO - Triggering Re-analysis for DOMAIN: opensourcemalware.com (Score: 0)
+2026-03-30 00:36:20 - CRITICAL - FATAL ERROR in generate_report: NLTK tokenizers are missing or the language is not supported.
+Download them by following command: python -c "import nltk; nltk.download('punkt')"
+Original error was:
+
+**********************************************************************
+  Resource 'punkt_tab' not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  >>> import nltk
+  >>> nltk.download('punkt_tab')
+
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load 'tokenizers/punkt_tab/english/'
+
+  Searched in:
+    - '/home/Prashant/nltk_data'
+    - '/home/Prashant/Ankit/CyberShield-CTI/.venv/nltk_data'
+    - '/home/Prashant/Ankit/CyberShield-CTI/.venv/share/nltk_data'
+    - '/home/Prashant/Ankit/CyberShield-CTI/.venv/lib/nltk_data'
+    - '/usr/share/nltk_data'
+    - '/usr/local/share/nltk_data'
+    - '/usr/lib/nltk_data'
+    - '/usr/local/lib/nltk_data'
+**********************************************************************
+
+2026-03-30 00:38:21 - INFO - CyberShield-CTI Engine Initialized.
+2026-03-30 00:38:48 - INFO - Starting analysis for: SOURCE URL       : https://opensourcemalware.com/blog/clawdbot-skills-ganked-your-crypto
+2026-03-30 00:38:48 - CRITICAL - FATAL ERROR in generate_report: No connection adapters were found for 'SOURCE URL       : https://opensourcemalware.com/blog/clawdbot-skills-ganked-your-crypto'
+2026-03-30 00:41:09 - INFO - CyberShield-CTI Engine Initialized.
+2026-03-30 00:41:13 - INFO - Starting analysis for: https://opensourcemalware.com/blog/clawdbot-skills-ganked-your-crypto
+2026-03-30 00:41:14 - INFO - Extracted counts -> IOCs: 0, Domains: 1, URLs: 0, Hashes: 0, CVE: 0
+2026-03-30 00:41:14 - INFO - Processing DOMAIN IOC: raw=opensourcemalware.com clean=opensourcemalware.com
+2026-03-30 00:41:14 - INFO - Querying VT for DOMAIN: opensourcemalware.com...
+2026-03-30 00:41:35 - INFO - Triggering Re-analysis for DOMAIN: opensourcemalware.com (Score: 0)
+2026-03-30 00:41:56 - INFO - Report generated with 0 malicious IOCs found.
+2026-03-30 00:41:56 - INFO - Success: Report generated at reports/ADVISORY_20260330_004156.txt
+============================================================
+2026-03-30 00:43:18 - INFO - CyberShield-CTI Engine Initialized.
+2026-03-30 00:43:21 - INFO - Starting analysis for: https://pushsecurity.com/blog/installfix/#id-iocs
+2026-03-30 00:43:24 - INFO - Extracted counts -> IOCs: 0, Domains: 31, URLs: 4, Hashes: 1, CVE: 0
+2026-03-30 00:43:24 - INFO - Processing DOMAIN IOC: raw=-version.com/claudeâ clean=-version.com/claudeâ
+2026-03-30 00:43:24 - INFO - Querying VT for DOMAIN: -version.com/claudeâ...
+2026-03-30 00:43:45 - INFO - Triggering Re-analysis for DOMAIN: -version.com/claudeâ (Score: 0)
+2026-03-30 00:43:45 - INFO - Processing DOMAIN IOC: raw=-version[.]com clean=-version.com
+2026-03-30 00:43:45 - INFO - Querying VT for DOMAIN: -version.com...
+2026-03-30 00:44:07 - INFO - Triggering Re-analysis for DOMAIN: -version.com (Score: 0)
+2026-03-30 00:44:32 - INFO - Processing DOMAIN IOC: raw=-version[.]com/claude clean=-version.com/claude
+2026-03-30 00:44:32 - INFO - Querying VT for DOMAIN: -version.com/claude...
+2026-03-30 00:44:53 - INFO - Triggering Re-analysis for DOMAIN: -version.com/claude (Score: 0)
+2026-03-30 00:44:54 - INFO - Processing DOMAIN IOC: raw=asdasdasdadsvvvvv[.]pages clean=asdasdasdadsvvvvv.pages
+2026-03-30 00:44:54 - INFO - Querying VT for DOMAIN: asdasdasdadsvvvvv.pages...
+2026-03-30 00:45:14 - INFO - Triggering Re-analysis for DOMAIN: asdasdasdadsvvvvv.pages (Score: 0)
+2026-03-30 00:45:15 - INFO - Processing DOMAIN IOC: raw=cladueall[.]pages clean=cladueall.pages
+2026-03-30 00:45:15 - INFO - Querying VT for DOMAIN: cladueall.pages...
+2026-03-30 00:45:36 - INFO - Triggering Re-analysis for DOMAIN: cladueall.pages (Score: 0)
+2026-03-30 00:45:36 - INFO - Processing DOMAIN IOC: raw=claud-code[.]pages clean=claud-code.pages
+2026-03-30 00:45:36 - INFO - Querying VT for DOMAIN: claud-code.pages...
+2026-03-30 00:45:57 - INFO - Triggering Re-analysis for DOMAIN: claud-code.pages (Score: 0)
+2026-03-30 00:45:57 - INFO - Processing DOMAIN IOC: raw=claude-code-docs-dvlr2jpuuw[.]edgeone clean=claude-code-docs-dvlr2jpuuw.edgeone
+2026-03-30 00:45:57 - INFO - Querying VT for DOMAIN: claude-code-docs-dvlr2jpuuw.edgeone...
+2026-03-30 00:46:18 - INFO - Triggering Re-analysis for DOMAIN: claude-code-docs-dvlr2jpuuw.edgeone (Score: 0)
+2026-03-30 00:46:19 - INFO - Processing DOMAIN IOC: raw=claude-code-docs-site[.]pages clean=claude-code-docs-site.pages
+2026-03-30 00:46:19 - INFO - Querying VT for DOMAIN: claude-code-docs-site.pages...
+2026-03-30 00:46:40 - INFO - Triggering Re-analysis for DOMAIN: claude-code-docs-site.pages (Score: 0)
+2026-03-30 00:46:42 - INFO - Processing DOMAIN IOC: raw=claude-code-install[.]squarespace clean=claude-code-install.squarespace
+2026-03-30 00:46:42 - INFO - Querying VT for DOMAIN: claude-code-install.squarespace...
+2026-03-30 00:47:03 - INFO - Triggering Re-analysis for DOMAIN: claude-code-install.squarespace (Score: 0)
+2026-03-30 00:47:04 - INFO - Processing DOMAIN IOC: raw=claude-code-macos[.]com clean=claude-code-macos.com
+2026-03-30 00:47:04 - INFO - Querying VT for DOMAIN: claude-code-macos.com...
+2026-03-30 00:47:25 - INFO - Processing DOMAIN IOC: raw=claude-code-update[.]squarespace clean=claude-code-update.squarespace
+2026-03-30 00:47:25 - INFO - Querying VT for DOMAIN: claude-code-update.squarespace...
+2026-03-30 00:47:46 - INFO - Triggering Re-analysis for DOMAIN: claude-code-update.squarespace (Score: 0)
+2026-03-30 00:47:46 - INFO - Processing DOMAIN IOC: raw=claude.ai clean=claude.ai
+2026-03-30 00:47:46 - INFO - Querying VT for DOMAIN: claude.ai...
+2026-03-30 00:48:07 - INFO - Triggering Re-analysis for DOMAIN: claude.ai (Score: 0)
+2026-03-30 00:48:29 - INFO - Processing DOMAIN IOC: raw=claude.update clean=claude.update
+2026-03-30 00:48:29 - INFO - Querying VT for DOMAIN: claude.update...
+2026-03-30 00:48:50 - INFO - Triggering Re-analysis for DOMAIN: claude.update (Score: 0)
+2026-03-30 00:48:50 - INFO - Processing DOMAIN IOC: raw=claude[.]update clean=claude.update
+2026-03-30 00:48:50 - INFO - Querying VT for DOMAIN: claude.update...
+2026-03-30 00:49:11 - INFO - Triggering Re-analysis for DOMAIN: claude.update (Score: 0)
+2026-03-30 00:49:11 - INFO - Processing DOMAIN IOC: raw=claudecode-developers[.]squarespace clean=claudecode-developers.squarespace
+2026-03-30 00:49:11 - INFO - Querying VT for DOMAIN: claudecode-developers.squarespace...
+2026-03-30 00:49:32 - INFO - Triggering Re-analysis for DOMAIN: claudecode-developers.squarespace (Score: 0)
+2026-03-30 00:49:32 - INFO - Processing DOMAIN IOC: raw=claudecodeupdate[.]squarespace clean=claudecodeupdate.squarespace
+2026-03-30 00:49:32 - INFO - Querying VT for DOMAIN: claudecodeupdate.squarespace...
+2026-03-30 00:49:53 - INFO - Triggering Re-analysis for DOMAIN: claudecodeupdate.squarespace (Score: 0)
+2026-03-30 00:49:54 - INFO - Processing DOMAIN IOC: raw=claulastver[.]squarespace clean=claulastver.squarespace
+2026-03-30 00:49:54 - INFO - Querying VT for DOMAIN: claulastver.squarespace...
+2026-03-30 00:50:15 - INFO - Triggering Re-analysis for DOMAIN: claulastver.squarespace (Score: 0)
+2026-03-30 00:50:15 - INFO - Processing DOMAIN IOC: raw=contatoplus[.]com clean=contatoplus.com
+2026-03-30 00:50:15 - INFO - Querying VT for DOMAIN: contatoplus.com...
+2026-03-30 00:50:39 - INFO - Processing DOMAIN IOC: raw=contatoplus[.]com/curl/8d2d275360adedecfbbd91567daddeed80d20aceb8aa4320d06a21486 clean=contatoplus.com/curl/8d2d275360adedecfbbd91567daddeed80d20aceb8aa4320d06a2148649
+2026-03-30 00:50:39 - INFO - Querying VT for DOMAIN: contatoplus.com/curl/8d2d275360adedecfbbd91567daddeed80d20aceb8aa4320d06a21486493945bâ...
+2026-03-30 00:50:59 - INFO - Triggering Re-analysis for DOMAIN: contatoplus.com/curl/8d2d275360adedecfbbd91567daddeed80d20aceb8aa4320d06a21486493945bâ (Score: 0)
+2026-03-30 00:51:00 - INFO - Processing DOMAIN IOC: raw=hgjbulk.pages clean=hgjbulk.pages
+2026-03-30 00:51:00 - INFO - Querying VT for DOMAIN: hgjbulk.pages...
+2026-03-30 00:51:21 - INFO - Triggering Re-analysis for DOMAIN: hgjbulk.pages (Score: 0)
+2026-03-30 00:51:23 - INFO - Processing DOMAIN IOC: raw=jhgyuifyfiguohi[.]pages clean=jhgyuifyfiguohi.pages
+2026-03-30 00:51:23 - INFO - Querying VT for DOMAIN: jhgyuifyfiguohi.pages...
+2026-03-30 00:51:44 - INFO - Triggering Re-analysis for DOMAIN: jhgyuifyfiguohi.pages (Score: 0)
+2026-03-30 00:51:46 - INFO - Processing DOMAIN IOC: raw=myclauda[.]it clean=myclauda.it
+2026-03-30 00:51:46 - INFO - Querying VT for DOMAIN: myclauda.it...
+2026-03-30 00:52:06 - INFO - Triggering Re-analysis for DOMAIN: myclauda.it (Score: 0)
+2026-03-30 00:56:25 - INFO - CyberShield-CTI Engine Initialized.
+2026-03-30 00:58:27 - INFO - CyberShield-CTI Engine Initialized.
+2026-03-30 00:59:10 - INFO - Starting analysis for: https://www.huntress.com/blog/daisy-chaining-rogue-rmm-tools
+2026-03-30 00:59:13 - INFO - Extracted counts -> IOCs: 4, Domains: 11, URLs: 0, Hashes: 19, CVE: 0
+2026-03-30 00:59:13 - INFO - Processing IP IOC: raw=105.113.63.173 clean=105.113.63.173
+2026-03-30 00:59:13 - INFO - Querying VT for IP: 105.113.63.173...
+2026-03-30 00:59:34 - INFO - Triggering Re-analysis for IP: 105.113.63.173 (Score: 1)
+2026-03-30 00:59:55 - INFO - Processing IP IOC: raw=209.160.115.150 clean=209.160.115.150
+2026-03-30 00:59:55 - INFO - Querying VT for IP: 209.160.115.150...
+2026-03-30 01:00:16 - INFO - Triggering Re-analysis for IP: 209.160.115.150 (Score: 1)
+2026-03-30 01:00:37 - INFO - Processing IP IOC: raw=93.152.214.210 clean=93.152.214.210
+2026-03-30 01:00:37 - INFO - Querying VT for IP: 93.152.214.210...
+2026-03-30 01:00:58 - INFO - Triggering Re-analysis for IP: 93.152.214.210 (Score: 1)
+2026-03-30 01:01:20 - INFO - Processing IP IOC: raw=98.97.79.68 clean=98.97.79.68
+2026-03-30 01:01:20 - INFO - Querying VT for IP: 98.97.79.68...
+2026-03-30 01:01:41 - INFO - Triggering Re-analysis for IP: 98.97.79.68 (Score: 1)
+2026-03-30 01:02:02 - INFO - Processing DOMAIN IOC: raw=business[.]gogift clean=business.gogift
+2026-03-30 01:02:02 - INFO - Querying VT for DOMAIN: business.gogift...
+2026-03-30 01:02:23 - INFO - Triggering Re-analysis for DOMAIN: business.gogift (Score: 0)
+2026-03-30 01:02:24 - INFO - Processing DOMAIN IOC: raw=clientsetup.msi clean=clientsetup.msi
+2026-03-30 01:02:24 - INFO - Querying VT for DOMAIN: clientsetup.msi...
+2026-03-30 01:02:44 - INFO - Triggering Re-analysis for DOMAIN: clientsetup.msi (Score: 0)
+2026-03-30 01:02:45 - INFO - Processing DOMAIN IOC: raw=documents-9c765e28.msi clean=documents-9c765e28.msi
+2026-03-30 01:02:45 - INFO - Querying VT for DOMAIN: documents-9c765e28.msi...
+2026-03-30 01:03:06 - INFO - Triggering Re-analysis for DOMAIN: documents-9c765e28.msi (Score: 0)
+2026-03-30 01:03:07 - INFO - Processing DOMAIN IOC: raw=index.html clean=index.html
+2026-03-30 01:03:07 - INFO - Querying VT for DOMAIN: index.html...
+2026-03-30 01:03:27 - INFO - Triggering Re-analysis for DOMAIN: index.html (Score: 0)
+2026-03-30 01:03:28 - INFO - Processing DOMAIN IOC: raw=invitatapartyto.msi clean=invitatapartyto.msi
+2026-03-30 01:03:28 - INFO - Querying VT for DOMAIN: invitatapartyto.msi...
+2026-03-30 01:03:49 - INFO - Triggering Re-analysis for DOMAIN: invitatapartyto.msi (Score: 0)
+2026-03-30 01:03:49 - INFO - Processing DOMAIN IOC: raw=lolrmm.io clean=lolrmm.io
+2026-03-30 01:03:49 - INFO - Querying VT for DOMAIN: lolrmm.io...
+2026-03-30 01:04:10 - INFO - Triggering Re-analysis for DOMAIN: lolrmm.io (Score: 0)
+2026-03-30 01:04:31 - INFO - Processing DOMAIN IOC: raw=navigator.platform clean=navigator.platform
+2026-03-30 01:04:31 - INFO - Querying VT for DOMAIN: navigator.platform...
+2026-03-30 01:04:53 - INFO - Triggering Re-analysis for DOMAIN: navigator.platform (Score: 0)
+2026-03-30 01:04:54 - INFO - Processing DOMAIN IOC: raw=navigator.useragent clean=navigator.useragent
+2026-03-30 01:04:54 - INFO - Querying VT for DOMAIN: navigator.useragent...
+2026-03-30 01:05:14 - INFO - Triggering Re-analysis for DOMAIN: navigator.useragent (Score: 0)
+2026-03-30 01:05:15 - INFO - Processing DOMAIN IOC: raw=socialsecurityadministration-statement.msi clean=socialsecurityadministration-statement.msi
+2026-03-30 01:05:15 - INFO - Querying VT for DOMAIN: socialsecurityadministration-statement.msi...
+2026-03-30 01:05:36 - INFO - Triggering Re-analysis for DOMAIN: socialsecurityadministration-statement.msi (Score: 0)
+2026-03-30 01:05:36 - INFO - Processing DOMAIN IOC: raw=statement.scr clean=statement.scr
+2026-03-30 01:05:36 - INFO - Querying VT for DOMAIN: statement.scr...
+2026-03-30 01:05:57 - INFO - Triggering Re-analysis for DOMAIN: statement.scr (Score: 0)
+2026-03-30 01:05:58 - INFO - Processing DOMAIN IOC: raw=toolbox.rar clean=toolbox.rar
+2026-03-30 01:05:58 - INFO - Querying VT for DOMAIN: toolbox.rar...
+2026-03-30 01:06:19 - INFO - Triggering Re-analysis for DOMAIN: toolbox.rar (Score: 0)
+2026-03-30 01:06:19 - INFO - Processing HASH IOC: raw=1a0769b8445cc27e2ddcdcee9a85a072c2be729e254f6c732548b0fb2bdfe0ef clean=1a0769b8445cc27e2ddcdcee9a85a072c2be729e254f6c732548b0fb2bdfe0ef
+2026-03-30 01:06:19 - INFO - Querying VT for HASH: 1a0769b8445cc27e2ddcdcee9a85a072c2be729e254f6c732548b0fb2bdfe0ef...
+2026-03-30 01:06:40 - INFO - Triggering Re-analysis for HASH: 1a0769b8445cc27e2ddcdcee9a85a072c2be729e254f6c732548b0fb2bdfe0ef (Score: 0)
+2026-03-30 01:06:41 - INFO - Processing HASH IOC: raw=22006710eaad12c4da19edaee4cb6fdd3c3face7e16bbcbd9e4f83eed7f3e7de clean=22006710eaad12c4da19edaee4cb6fdd3c3face7e16bbcbd9e4f83eed7f3e7de
+2026-03-30 01:06:41 - INFO - Querying VT for HASH: 22006710eaad12c4da19edaee4cb6fdd3c3face7e16bbcbd9e4f83eed7f3e7de...
+2026-03-30 01:07:02 - INFO - Triggering Re-analysis for HASH: 22006710eaad12c4da19edaee4cb6fdd3c3face7e16bbcbd9e4f83eed7f3e7de (Score: 3)
+2026-03-30 01:07:24 - INFO - Processing HASH IOC: raw=27c489d5239a3a25f51119b45b7be1ae8a38a153d708f983837d3c602bd367f8 clean=27c489d5239a3a25f51119b45b7be1ae8a38a153d708f983837d3c602bd367f8
+2026-03-30 01:07:24 - INFO - Querying VT for HASH: 27c489d5239a3a25f51119b45b7be1ae8a38a153d708f983837d3c602bd367f8...
+2026-03-30 01:07:45 - INFO - Triggering Re-analysis for HASH: 27c489d5239a3a25f51119b45b7be1ae8a38a153d708f983837d3c602bd367f8 (Score: 0)
+2026-03-30 01:07:46 - INFO - Processing HASH IOC: raw=429cbc557b1a9c8ceddab06b12b0fc3fc03c2908bb9ccd5ec8d2b386ccdb679a clean=429cbc557b1a9c8ceddab06b12b0fc3fc03c2908bb9ccd5ec8d2b386ccdb679a
+2026-03-30 01:07:46 - INFO - Querying VT for HASH: 429cbc557b1a9c8ceddab06b12b0fc3fc03c2908bb9ccd5ec8d2b386ccdb679a...
+2026-03-30 01:08:07 - INFO - Triggering Re-analysis for HASH: 429cbc557b1a9c8ceddab06b12b0fc3fc03c2908bb9ccd5ec8d2b386ccdb679a (Score: 0)
+2026-03-30 01:08:07 - INFO - Processing HASH IOC: raw=42ef97c8260f9f287ead7b978378de2f27056f23dc513de5f36819159bfe5ebe clean=42ef97c8260f9f287ead7b978378de2f27056f23dc513de5f36819159bfe5ebe
+2026-03-30 01:08:07 - INFO - Querying VT for HASH: 42ef97c8260f9f287ead7b978378de2f27056f23dc513de5f36819159bfe5ebe...
+2026-03-30 01:08:28 - INFO - Triggering Re-analysis for HASH: 42ef97c8260f9f287ead7b978378de2f27056f23dc513de5f36819159bfe5ebe (Score: 0)
+2026-03-30 01:08:29 - INFO - Processing HASH IOC: raw=499d07894f730fb685ee3cbfc1a933e0da93750c1ed25a49b2eb9c32adef156a clean=499d07894f730fb685ee3cbfc1a933e0da93750c1ed25a49b2eb9c32adef156a
+2026-03-30 01:08:29 - INFO - Querying VT for HASH: 499d07894f730fb685ee3cbfc1a933e0da93750c1ed25a49b2eb9c32adef156a...
+2026-03-30 01:08:49 - INFO - Processing HASH IOC: raw=6cc665057c4a4fe42a309afd3a7fa96cf1af126e9c6e08e56df5105e05378bcc clean=6cc665057c4a4fe42a309afd3a7fa96cf1af126e9c6e08e56df5105e05378bcc
+2026-03-30 01:08:49 - INFO - Querying VT for HASH: 6cc665057c4a4fe42a309afd3a7fa96cf1af126e9c6e08e56df5105e05378bcc...
+2026-03-30 01:09:10 - INFO - Processing HASH IOC: raw=79f25a73e056ecb8aebf36c593ad1826cefa31346a2feca1ba3ed395453c9c48 clean=79f25a73e056ecb8aebf36c593ad1826cefa31346a2feca1ba3ed395453c9c48
+2026-03-30 01:09:10 - INFO - Querying VT for HASH: 79f25a73e056ecb8aebf36c593ad1826cefa31346a2feca1ba3ed395453c9c48...
+2026-03-30 01:09:31 - INFO - Triggering Re-analysis for HASH: 79f25a73e056ecb8aebf36c593ad1826cefa31346a2feca1ba3ed395453c9c48 (Score: 0)
+2026-03-30 01:09:32 - INFO - Processing HASH IOC: raw=83a8c175cdab60d043759ea04d62ac10a147d0b00e7a610f35e4939873416adc clean=83a8c175cdab60d043759ea04d62ac10a147d0b00e7a610f35e4939873416adc
+2026-03-30 01:09:32 - INFO - Querying VT for HASH: 83a8c175cdab60d043759ea04d62ac10a147d0b00e7a610f35e4939873416adc...
+2026-03-30 01:09:53 - INFO - Triggering Re-analysis for HASH: 83a8c175cdab60d043759ea04d62ac10a147d0b00e7a610f35e4939873416adc (Score: 0)
+2026-03-30 01:09:54 - INFO - Processing HASH IOC: raw=a93c946c237b981189d2668d938a9d4d1d9681757e48dae8d9d65ed25b5da657 clean=a93c946c237b981189d2668d938a9d4d1d9681757e48dae8d9d65ed25b5da657
+2026-03-30 01:09:54 - INFO - Querying VT for HASH: a93c946c237b981189d2668d938a9d4d1d9681757e48dae8d9d65ed25b5da657...
+2026-03-30 01:10:14 - INFO - Processing HASH IOC: raw=ae5afb20bc1455322c089eed22c81facb19195ed816bb52b0f405a62fd92dda7 clean=ae5afb20bc1455322c089eed22c81facb19195ed816bb52b0f405a62fd92dda7
+2026-03-30 01:10:14 - INFO - Querying VT for HASH: ae5afb20bc1455322c089eed22c81facb19195ed816bb52b0f405a62fd92dda7...
+2026-03-30 01:10:36 - INFO - Processing HASH IOC: raw=b775f42c9d280b115ac0aeb168186583f93d94a19a29b7fac8c5e2c98c986bdd clean=b775f42c9d280b115ac0aeb168186583f93d94a19a29b7fac8c5e2c98c986bdd
+2026-03-30 01:10:36 - INFO - Querying VT for HASH: b775f42c9d280b115ac0aeb168186583f93d94a19a29b7fac8c5e2c98c986bdd...
+2026-03-30 01:10:57 - INFO - Triggering Re-analysis for HASH: b775f42c9d280b115ac0aeb168186583f93d94a19a29b7fac8c5e2c98c986bdd (Score: 0)
+2026-03-30 01:10:58 - INFO - Processing HASH IOC: raw=bc8b1b0c80512ba0e8ffccfee5b507df16a3355db1143c3ba81ef42dac1baa6c clean=bc8b1b0c80512ba0e8ffccfee5b507df16a3355db1143c3ba81ef42dac1baa6c
+2026-03-30 01:10:58 - INFO - Querying VT for HASH: bc8b1b0c80512ba0e8ffccfee5b507df16a3355db1143c3ba81ef42dac1baa6c...
+2026-03-30 01:11:19 - INFO - Processing HASH IOC: raw=bfa9c3298a749c8949f890ef02b4d07589bea1635150d57215b2f37b6f3acef0 clean=bfa9c3298a749c8949f890ef02b4d07589bea1635150d57215b2f37b6f3acef0
+2026-03-30 01:11:19 - INFO - Querying VT for HASH: bfa9c3298a749c8949f890ef02b4d07589bea1635150d57215b2f37b6f3acef0...
+2026-03-30 01:11:40 - INFO - Processing HASH IOC: raw=ca9ac952feaaa5cbbbdea15716ee2acd3b1072f01156b5d2fb35066703de6955 clean=ca9ac952feaaa5cbbbdea15716ee2acd3b1072f01156b5d2fb35066703de6955
+2026-03-30 01:11:40 - INFO - Querying VT for HASH: ca9ac952feaaa5cbbbdea15716ee2acd3b1072f01156b5d2fb35066703de6955...
+2026-03-30 01:12:01 - INFO - Processing HASH IOC: raw=db341aaa9cd902b1917b70986832b96325cba577930269bcf759a20404f1d90b clean=db341aaa9cd902b1917b70986832b96325cba577930269bcf759a20404f1d90b
+2026-03-30 01:12:01 - INFO - Querying VT for HASH: db341aaa9cd902b1917b70986832b96325cba577930269bcf759a20404f1d90b...
+2026-03-30 01:12:22 - INFO - Processing HASH IOC: raw=ebc81a8f91d9b18c7d642bfdcf5f8e26d8921d4501e44e1603c0b67666d8c3e1 clean=ebc81a8f91d9b18c7d642bfdcf5f8e26d8921d4501e44e1603c0b67666d8c3e1
+2026-03-30 01:12:22 - INFO - Querying VT for HASH: ebc81a8f91d9b18c7d642bfdcf5f8e26d8921d4501e44e1603c0b67666d8c3e1...
+2026-03-30 01:12:42 - INFO - Triggering Re-analysis for HASH: ebc81a8f91d9b18c7d642bfdcf5f8e26d8921d4501e44e1603c0b67666d8c3e1 (Score: 0)
+2026-03-30 01:12:43 - INFO - Processing HASH IOC: raw=ec2bdcd616d9dcfbb9bff53d9649c4456823b7384aef65ad1838b5a9fc69e879 clean=ec2bdcd616d9dcfbb9bff53d9649c4456823b7384aef65ad1838b5a9fc69e879
+2026-03-30 01:12:43 - INFO - Querying VT for HASH: ec2bdcd616d9dcfbb9bff53d9649c4456823b7384aef65ad1838b5a9fc69e879...
+2026-03-30 01:13:03 - INFO - Triggering Re-analysis for HASH: ec2bdcd616d9dcfbb9bff53d9649c4456823b7384aef65ad1838b5a9fc69e879 (Score: 5)
+2026-03-30 01:13:26 - INFO - Processing HASH IOC: raw=f2c0c09f4871621ce6dc0cc98dbeba596f08453dd6bdc1f001f26449b1eddfb3 clean=f2c0c09f4871621ce6dc0cc98dbeba596f08453dd6bdc1f001f26449b1eddfb3
+2026-03-30 01:13:26 - INFO - Querying VT for HASH: f2c0c09f4871621ce6dc0cc98dbeba596f08453dd6bdc1f001f26449b1eddfb3...
+2026-03-30 01:13:49 - INFO - Report generated with 16 malicious IOCs found.
+2026-03-30 01:13:49 - INFO - Success: Report generated at reports/ADVISORY_20260330_011348.txt
+============================================================
