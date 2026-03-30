@@ -30,14 +30,14 @@ logging.basicConfig(
 
 # --- 2. CONFIGURATION ---
 # Load the .env file containing the VT_API_KEY
-load_dotenv("key.env")
+load_dotenv(".env")
 
 # Securely fetch the API key from environment variables
 VT_API_KEY = os.getenv("VT_API_KEY")
 
 # Check if the API key is available, if not log a critical error and exit
 if not VT_API_KEY:
-    logging.critical("VirusTotal API key not found in environment variables. Please set VT_API_KEY in key.env.")
+    logging.critical("VirusTotal API key not found in environment variables. Please set VT_API_KEY in .env.")
     raise ValueError("Missing VirusTotal API Key. Check cyber_shield.log for details.")
 
 # The main class that encapsulates all the functionality of the CyberShield-CTI Engine
@@ -84,7 +84,7 @@ class CTIWorkbench:
     def _get_url_id(self, url):
         """VirusTotal v3 requires URLs to be base64 encoded without '=' padding."""
         return base64.urlsafe_b64encode(url.encode()).decode().strip("=")
-
+    
     def get_vt_data(self, ioc_type, ioc_value):
         """Queries VirusTotal API and triggers re-analysis for low-score hits."""
         # Standardize the IOC format (Refanging)
@@ -206,7 +206,8 @@ class CTIWorkbench:
             with open(report_path, "w", encoding="utf-8") as f:
                 f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"SOURCE URL       : {url}\n")
-                f.write(f"TARGET COMPANY   : {context['victim']}\n")
+                f.write(f"TARGET COMPANY   : {context['victim']}\n\n")
+                f.write("=" *50 + "\nTHREAT SUMMARY:\n\n" + "=" *50 + f"\nAttack Vectors   : {context['vectors']}\n\nTechniques Used  : {context['techniques']}\n\n")
                 f.write(f"SUMMARY: {self.get_summary(page_text)}\n\n")
                 f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} Found):\n" + "\n".join(full_list))
 
