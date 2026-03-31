@@ -265,6 +265,33 @@ class CTIWorkbench:
         summary = summarizer(parser.document, 10)  # Get the top 10 sentences as the summary
         return textwrap.fill(" ".join([str(s) for s in summary]), width=80)
 
+    # Added to improve summary quality by extracting relevant content from HTML pages.
+    # This method removes non-content elements (scripts, styles, headers, etc.) and prioritizes article text for better summarization.
+    def extract_page_content(self, soup):
+        """Extracts better article content for summarization."""
+        for tag in soup(["script", "style", "noscript", "header", "footer", "aside", "nav", "form", "svg"]):
+            tag.decompose()
+
+        content_parts = []
+        if soup.title and soup.title.string:
+            content_parts.append(soup.title.string)
+
+        meta_desc = soup.find("meta", attrs={"name": "description"}) or soup.find("meta", attrs={"property": "og:description"})
+        if meta_desc and meta_desc.get("content"):
+            content_parts.append(meta_desc.get("content"))
+
+        for selector in ["article", "main", "section", "div", "p"]:
+            for elem in soup.select(selector):
+                text = elem.get_text(separator=' ', strip=True)
+                if text and len(text.split()) > 8:
+                    content_parts.append(text)
+
+        if not content_parts:
+            content_parts.append(soup.get_text(separator=' ', strip=True))
+
+        combined = ' '.join(content_parts)
+        return re.sub(r'\s+', ' ', combined)
+
     # The extract_context function analyzes the input text to identify relevant MITRE ATT&CK techniques based on predefined keywords. 
     # It also attempts to extract the name of the victim organization from the text using regular expressions. The function returns a dictionary containing the detected TTPs and the identified victim.
     def extract_context(self, text):
@@ -297,7 +324,10 @@ class CTIWorkbench:
             res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=10)
             soup = BeautifulSoup(res.text, 'html.parser')
             page_text = soup.get_text(separator=' ')
-            context = self.extract_context(page_text)
+            # Use extracted content for better summarization and context extraction (improved from raw page_text)
+            content_for_summary = self.extract_page_content(soup)
+            # Updated to use content_for_summary instead of raw page_text for more accurate TTP and victim detection
+            context = self.extract_context(content_for_summary)
             
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
             # Extraction logic
@@ -393,7 +423,8 @@ class CTIWorkbench:
                 f.write(f"SOURCE URL       : {url}\n")
                 f.write(f"TARGET COMPANY   : {', '.join(context['victims'])}\n\n")
                 f.write("=" *50 + "\nMITRE ATT&CK ANALYSIS:\n" + "=" *50 + f"\nDetected TTPs    : {context['ttps']}\n\n")
-                f.write(f"SUMMARY: {self.get_summary(page_text)}\n\n")
+                # Updated to use content_for_summary for better summary quality (improved from raw page_text)
+                f.write(f"SUMMARY: {self.get_summary(content_for_summary)}\n\n")
                 f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} IOC_Found):\n\n" + "\n".join(full_list) + "\n\n")
                 f.write("=" * 50 + "\nCVE REFERENCES:\n" + "=" * 50 + "\n\n")
                 f.write("Detected CVEs :\n" + ("\n".join(found_cves) if found_cves else "None"))
