@@ -471,10 +471,11 @@ class CTIWorkbench:
             "mitre_details": detail_lines
         }
 
-    # The generate_report function or   `chestrates the entire process of analyzing a given URL. It scrapes the webpage, extracts relevant IOCs, checks them against VirusTotal, and compiles a comprehensive report. 
+    # The generate_report function orchestrates the entire process of analyzing a given URL. It scrapes the webpage, extracts relevant IOCs, checks them against VirusTotal, and compiles a comprehensive report. 
     # The report includes detected TTPs, a summary of the page content, and categorized lists of malicious IOCs. The function also handles file management for storing reports and blocklists.
-    def generate_report(self, url):
-        logging.info(f"Starting analysis for: {url}")
+    # Added report_type parameter: "full" for complete report, "ioc" for IOCs only.
+    def generate_report(self, url, report_type="full"):
+        logging.info(f"Starting analysis for: {url} (Report Type: {report_type})")
         try:
             res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=10)
             soup = BeautifulSoup(res.text, 'html.parser')
@@ -527,6 +528,7 @@ class CTIWorkbench:
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
             mal_data = {"File_Hash": [], "Domain": [], "URL": [], "IPs": []}
+            clean_data = {"File_Hash": [], "Domain": [], "URL": [], "IPs": []}
             full_list = []
 
             # The process_ioc function is a helper function defined within generate_report to avoid code duplication when processing different types of IOCs (IPs, domains, URLs, and file hashes). 
@@ -559,42 +561,57 @@ class CTIWorkbench:
                         entry = f"{cat}: {ioc.ljust(45)} | {status}"
                         full_list.append(entry)
                         mal_data[cat].append(entry)
+                    else:
+                        # Collect clean IOCs (score 0, no malicious indicators)
+                        entry = f"{cat}: {ioc.ljust(45)} | {status}"
+                        clean_data[cat].append(entry)
 
-            process_ioc(found_ips, 'ip', 'IPs')
-            process_ioc(all_domains, 'domain', 'Domain')
-            process_ioc(found_urls, 'url', 'URL')
-            process_ioc(raw_hashes, 'hash', 'File_Hash')
+            process_ioc(found_ips, 'ip', 'IPs')# This line processes the list of found IP addresses by calling the process_ioc function with the appropriate parameters for IPs. It checks each IP against whitelists, blocklists, and VirusTotal, and categorizes them accordingly in the report.
+            process_ioc(all_domains, 'domain', 'Domain')# This line processes the list of found domains by calling the process_ioc function with the appropriate parameters for domains. It checks each domain against whitelists, blocklists, and VirusTotal, and categorizes them accordingly in the report.
+            process_ioc(found_urls, 'url', 'URL')# This line processes the list of found URLs by calling the process_ioc function with the appropriate parameters for URLs. It checks each URL against whitelists, blocklists, and VirusTotal, and categorizes them accordingly in the report.
+            process_ioc(raw_hashes, 'hash', 'File_Hash')# This line processes the list of found file hashes by calling the process_ioc function with the appropriate parameters for file hashes. It checks each hash against whitelists, blocklists, and VirusTotal, and categorizes them accordingly in the report.
 
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
+            clean_list = [item for sublist in clean_data.values() for item in sublist]
+
             # --- EXPORT TO TEXT FILES ---
             ts = datetime.now().strftime('%Y%m%d_%H%M%S')
-            report_path = f"{self.base_reports_dir}/ADVISORY_{ts}.txt"
+            if report_type == "ioc":
+                report_path = f"{self.base_reports_dir}/IOC_ONLY_{ts}.txt"
+            else:
+                report_path = f"{self.base_reports_dir}/ADVISORY_{ts}.txt"
             self._ensure_dir(report_path)
 
             with open(report_path, "w", encoding="utf-8") as f:
-                f.write("=" *50 + "\nReport:\n" + "=" *50 + f"\n")
-                f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-                f.write(f"SOURCE URL       : {url}\n")
-                f.write(f"TARGET COMPANY   : {', '.join(context['victims'])}\n\n")
-                # Write the MITRE ATT&CK section with all inferred context:
-                # - Detected TTPs: concatenated technique IDs and names
-                # - Attack Type: high-level behavior classification
-                # - MITRE Tactic(s): inferred stage(s) of the attack lifecycle
-                f.write("=" *50 + "\nMITRE ATT&CK ANALYSIS:\n" + "=" *50 + f"\nDetected TTPs: {context['ttps']}\n")
-                f.write(f"Attack Type      : {context.get('attack_types', 'Unknown')}\n")
-                f.write(f"MITRE Tactic(s)  : {context.get('tactics', 'Unknown')}\n\n")
-                if context.get('mitre_details'):
-                    # Add per-technique confidence and reasoning.
-                    f.write("Technique findings:\n")
-                    f.write("\n".join(context['mitre_details']) + "\n\n")
-                # Updated to use content_for_summary for better summary quality (improved from raw page_text)
-                f.write("SUMMARY:\n")
-                f.write(self.get_summary(content_for_summary) + "\n\n")
-                f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} IOC_Found):\n\n" + "\n".join(full_list) + "\n\n")
-                f.write("=" * 50 + "\nCVE REFERENCES:\n" + "=" * 50 + "\n\n")
-                f.write("Detected CVEs :\n" + ("\n".join(found_cves) if found_cves else "None"))
-                logging.info(f"Report generated with {len(full_list)} malicious IOCs found.")
+                if report_type == "full":
+                    f.write("=" *50 + "\nReport:\n" + "=" *50 + f"\n")
+                    f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    f.write(f"SOURCE URL       : {url}\n\n")
+                    f.write(f"TARGET COMPANY   : {', '.join(context['victims'])}\n\n")
+                    # Write the MITRE ATT&CK section with all inferred context:
+                    # - Detected TTPs: concatenated technique IDs and names
+                    # - Attack Type: high-level behavior classification
+                    # - MITRE Tactic(s): inferred stage(s) of the attack lifecycle
+                    f.write("=" *50 + "\nMITRE ATT&CK ANALYSIS:\n" + "=" *50 + f"\n\nDetected TTPs: {context['ttps']}\n")
+                    f.write(f"Attack Type      : {context.get('attack_types', 'Unknown')}\n")
+                    f.write(f"MITRE Tactic(s)  : {context.get('tactics', 'Unknown')}\n\n")
+                    if context.get('mitre_details'):
+                        # Add per-technique confidence and reasoning.
+                        f.write("Technique findings:\n")
+                        f.write("\n".join(context['mitre_details']) + "\n\n")
+                    # Updated to use content_for_summary for better summary quality (improved from raw page_text)
+                    f.write("=" *50 + "\nSUMMARY:\n" + "=" *50 + f"\n\n")
+                    f.write(self.get_summary(content_for_summary) + "\n\n")
+                    f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} IOC_Found), IPs: {len(found_ips)}, Domains: {len(all_domains)}, URLs: {len(found_urls)}, Hashes: {len(raw_hashes)}, CVE: {len(found_cves)}" "\n\n" + "\n".join(full_list) + "\n\n")
+                    f.write("=" * 50 + "\nCVE REFERENCES:\n" + "=" * 50 + "\n\n")
+                    f.write("Detected CVEs :\n" + ("\n".join(found_cves) if found_cves else "None"))
+                else:  # report_type == "ioc"
+                    f.write("=" *50 + "\nIOC Report:\n" + "=" *50 + f"\n")
+                    f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    f.write(f"SOURCE URL       : {url}\n\n")
+                    f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} IOC_Found), IPs: {len(found_ips)}, Domains: {len(all_domains)}, URLs: {len(found_urls)}, Hashes: {len(raw_hashes)}, CVE: {len(found_cves)}" "\n\n" + "\n".join(full_list) + "\n\n")
+                logging.info(f"Report generated with {len(full_list)} malicious IOCs and {len(clean_list)} clean IOCs found.")
 
             # If any malicious IOCs were found, also create a separate blocklist file for immediate use in defenses like firewalls or EDRs. 
             # This provides a quick reference for security teams to implement blocks without having to sift through the full report.
@@ -605,6 +622,20 @@ class CTIWorkbench:
                     for cat, items in mal_data.items(): # Iterate through each category (IPs, Domains, URLs, File Hashes)
                         if items: # Only write categories that have malicious IOCs
                             f.write(f"[{cat}]\n" + "\n".join(items) + "\n\n")
+
+            # If any clean IOCs were found, create a separate clean artifacts file for reference.
+            if clean_list:
+                clean_path = f"{self.clean_dir}/CLEAN_ARTIFACTS_{ts}.txt"
+                self._ensure_dir(clean_path)
+                with open(clean_path, "w", encoding="utf-8") as f:
+                    f.write("=" *50 + "\nClean Artifacts Report:\n" + "=" *50 + f"\n")
+                    f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    f.write(f"SOURCE URL       : {url}\n\n")
+                    f.write(f"Clean IOCs ({len(clean_list)} found)\n\n")
+                    for cat, items in clean_data.items():
+                        if items:
+                            f.write(f"[{cat}]\n" + "\n".join(items) + "\n\n")
+                logging.info(f"Clean artifacts saved to {clean_path}")
 
             logging.info(f"Success: Report generated at {report_path}\n{'='*60}")
             return report_path

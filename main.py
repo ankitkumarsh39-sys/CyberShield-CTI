@@ -3,7 +3,22 @@ def main():
     # Entry point for the application
     tool = CTIWorkbench()
     target = input("Paste TI URL: ")
-    result = tool.generate_report(target)
+    
+    # Ask user for report type
+    print("\nChoose report type:")
+    print("1. Full Advisory (includes MITRE analysis, summary, IOCs)")
+    print("2. Only IOCs (malicious indicators only)")
+    choice = input("Enter 1 or 2: ").strip()
+    
+    if choice == "1":
+        report_type = "full"
+    elif choice == "2":
+        report_type = "ioc"
+    else:
+        print("Invalid choice. Defaulting to Full Advisory.")
+        report_type = "full"
+    
+    result = tool.generate_report(target, report_type=report_type)
     if result:
         print(f"\n[+] Success: {result}")
     else:
