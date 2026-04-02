@@ -17,7 +17,7 @@ from dotenv import load_dotenv   # To load the VT_API_KEY from a hidden .env fil
 # --- Summarization libraries (NLP - Natural Language Processing) ---
 from sumy.parsers.plaintext import PlaintextParser  # Converts raw text into a format the AI can read
 from sumy.nlp.tokenizers import Tokenizer           # Breaks text down into individual words/sentences
-from sumy.summarizers.lsa import LsaSummarizer      # Uses Latent Semantic Analysis to pick the top 3 sentences     
+from sumy.summarizers.text_rank import TextRankSummarizer  # Uses TextRank to surface the most important statements
 
 # Suppress BeautifulSoup warnings to keep the terminal clean
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -40,7 +40,7 @@ if not VT_API_KEY:
 
 class CTIWorkbench: 
     # The __init__ method is the constructor for the CTIWorkbench class. 
-    # It initializes the engine by setting up necessary directories for reports, loading whitelists and blocklists from local text files, and defining a mapping of keywords to MITRE ATT&CK techniques. 
+    # It initializes the engine by setting up necessary directories for reports, loading whitelists and blocklists from local text files, and defining expanded MITRE ATT&CK detection rules for behavior-based inference. 
     # This setup ensures that the engine is ready to process threat intelligence data effectively while maintaining a structured environment for storing outputs and logs.
     def __init__(self):
         """Initializes the engine, sets up directories, and loads whitelists."""
@@ -59,19 +59,57 @@ class CTIWorkbench:
                 os.makedirs(folder)
                 logging.info(f"Created directory: {folder}")
 
-        # 2. Define the MITRE Map
-        self.mitre_map = {
-            "phishing": {"id": "T1566", "name": "Phishing"},
-            "clickfix": {"id": "T1204.002", "name": "User Execution: Malicious File"},
-            "win+r": {"id": "T1204", "name": "User Execution"},
-            "net use": {"id": "T1135", "name": "Network Share Discovery"},
-            "webdav": {"id": "T1133", "name": "External Remote Services"},
-            "persistence": {"id": "T1098", "name": "Account Manipulation"},
-            "c2": {"id": "T1071", "name": "Application Layer Protocol"},
-            "asar injection": {"id": "T1546", "name": "Event Triggered Execution"},
-            "lolbin": {"id": "T1218", "name": "System Binary Proxy Execution"},
-            "fake captcha": {"id": "T1204.001", "name": "User Execution: Malicious Link"}
-        }
+        # Expanded MITRE detection rules support behavior-based inference from article text.
+        # Each rule is a behavior pattern mapped to one or more ATT&CK techniques.
+        # - keywords: article phrases that trigger this rule
+        # - techniques: list of MITRE techniques/sub-techniques with tactic, confidence, and rationale
+        # - attack_type: a high-level attack category derived from the behavior
+        self.mitre_rules = [
+            {
+                "keywords": ["phishing", "phish", "fake documentation portal", "fake portal", "fake login page", "credential harvesting", "spearphishing", "phishing lure", "fake captcha"],
+                "techniques": [
+                    {"id": "T1566", "name": "Phishing", "tactic": "Initial Access", "confidence": "High", "reason": "Article text explicitly describes phishing lures, fake documentation portals, and credential-harvesting pages."},
+                    {"id": "T1204.001", "name": "User Execution: Malicious Link", "tactic": "Initial Access", "confidence": "Medium", "reason": "The fake portal and user-directed clicks imply a malicious link-based social engineering vector."}
+                ],
+                "attack_type": "Phishing"
+            },
+            {
+                "keywords": ["browser credential", "browser passwords", "browser logins", "saved passwords", "credential theft from browsers", "chrome password", "firefox password", "browser data", "cookies and autofill"],
+                "techniques": [
+                    {"id": "T1555.001", "name": "Credentials from Web Browsers", "tactic": "Credential Access", "confidence": "High", "reason": "The article clearly describes browser password and autofill theft by the malware."},
+                    {"id": "T1119", "name": "Automated Collection", "tactic": "Collection", "confidence": "Medium", "reason": "Stealer behavior automates the collection of stored browser credentials, cookies, and related artifacts."}
+                ],
+                "attack_type": "Credential Theft"
+            },
+            {
+                "keywords": ["stealer", "infostealer", "macos stealer", "macos stealer malware", "credential stealer", "steal credentials"],
+                "techniques": [
+                    {"id": "T1119", "name": "Automated Collection", "tactic": "Collection", "confidence": "High", "reason": "The article refers to stealer malware that automatically collects user data and credentials."}
+                ],
+                "attack_type": "Stealer"
+            },
+            {
+                "keywords": ["c2", "command-and-control", "command and control", "web panel", "c2 infrastructure", "control server", "beacon"],
+                "techniques": [
+                    {"id": "T1071.001", "name": "Application Layer Protocol", "tactic": "Command and Control", "confidence": "High", "reason": "The text mentions web-based C2 panels and command-and-control infrastructure over HTTP."}
+                ],
+                "attack_type": "Command and Control"
+            },
+            {
+                "keywords": ["exfiltration", "data staging", "compression using ditto", "compress stolen data", "stage data", "upload stolen data"],
+                "techniques": [
+                    {"id": "T1041", "name": "Exfiltration Over C2 Channel", "tactic": "Exfiltration", "confidence": "Medium", "reason": "The article describes data staging, compression, and exfiltration via the attacker’s C2 channel."}
+                ],
+                "attack_type": "Data Exfiltration"
+            },
+            {
+                "keywords": ["obfuscated", "defanged", "defanging", "stealth", "conceal", "hide", "evade detection"],
+                "techniques": [
+                    {"id": "T1027", "name": "Obfuscated Files or Information", "tactic": "Defense Evasion", "confidence": "Medium", "reason": "The text describes obfuscation and defanged indicators used to evade detection."}
+                ],
+                "attack_type": "Defense Evasion"
+            }
+        ]
                 
         # 3. Load local text files
         self.ip_whitelist = self._load_file('whitelist.txt')
@@ -257,13 +295,41 @@ class CTIWorkbench:
         time.sleep(base_sleep)
         return results
 
-    # The get_summary function uses the LSA summarization algorithm from the sumy library to generate a concise summary of the input text. 
-    # It processes the text, extracts key sentences, and formats the summary for better readability.
+    # The get_summary function uses the TextRank summarization algorithm from the sumy library to generate a detailed, attack-focused summary.
+    # It also prioritizes sentences that mention actors, targets, techniques, and campaign behavior.
     def get_summary(self, text):
         parser = PlaintextParser.from_string(' '.join(text.split()), Tokenizer("english"))
-        summarizer = LsaSummarizer()
-        summary = summarizer(parser.document, 10)  # Get the top 10 sentences as the summary
-        return textwrap.fill(" ".join([str(s) for s in summary]), width=80)
+        summarizer = TextRankSummarizer()
+        sentence_count = min(15, len(parser.document.sentences))
+        if sentence_count == 0:
+            return "No meaningful summary could be generated from the source text."
+
+        ranked_summary = [str(s) for s in summarizer(parser.document, sentence_count)]
+        keywords = [
+            "attack", "campaign", "target", "targeted", "malware", "exploit", "threat actor",
+            "actor", "payload", "c2", "command", "control", "ransom", "steal", "credential",
+            "phishing", "infection", "vulnerability", "backdoor", "persistence"
+        ]
+        sentences = re.split(r'(?<=[\.\?\!])\s+', text)
+        keyword_sentences = []
+        for sent in sentences:
+            lower_sent = sent.lower()
+            if any(keyword in lower_sent for keyword in keywords):
+                sent = sent.strip()
+                if sent and sent not in keyword_sentences:
+                    keyword_sentences.append(sent)
+                    if len(keyword_sentences) >= sentence_count:
+                        break
+
+        combined = []
+        for sent in ranked_summary + keyword_sentences:
+            if sent not in combined:
+                combined.append(sent)
+                if len(combined) >= sentence_count:
+                    break
+
+        summary_text = " ".join(combined)
+        return textwrap.fill(summary_text, width=80)
 
     # Added to improve summary quality by extracting relevant content from HTML pages.
     # This method removes non-content elements (scripts, styles, headers, etc.) and prioritizes article text for better summarization.
@@ -295,26 +361,115 @@ class CTIWorkbench:
     # The extract_context function analyzes the input text to identify relevant MITRE ATT&CK techniques based on predefined keywords. 
     # It also attempts to extract the name of the victim organization from the text using regular expressions. The function returns a dictionary containing the detected TTPs and the identified victim.
     def extract_context(self, text):
-        victims =[]
+        """
+        Analyze article text and return MITRE ATT&CK context.
+
+        This function performs the following steps:
+        1. Normalize the input text to lowercase for keyword matching.
+        2. Iterate through each behavior rule in self.mitre_rules.
+        3. If any rule keyword appears in the text, collect the rule's attack type,
+           the mapped techniques, and the corresponding MITRE tactic.
+        4. If no explicit rule matches, use a fallback for obvious phishing indicators.
+        5. Extract any victim organizations mentioned with targeted/attacked language.
+        6. Build a deduplicated list of detected TTPs and a set of attack types/tactics.
+        7. Return a structured dictionary with all inferred MITRE context.
+        """
+
+        victims = []
         text_lower = text.lower()
         found_ttps = []
-        for keyword, info in self.mitre_map.items():
-            if keyword in text_lower:
-                entry = f"{info['id']} ({info['name']})"
-                if entry not in found_ttps:
-                    found_ttps.append(entry)
+        found_details = []
+        attack_types = set()
+        tactics = set()
 
-                    victim_pattern = re.compile(
-                        r'\b([A-Z][A-Za-z0-9&.,\- ]{2,60}?)\b\s+(?:was\s+)?'
-                        r'(?:targeted|attacked|breached|compromised|hacked|hit|affected)',
-                        re.IGNORECASE
-                    )
-                    victims = victim_pattern.findall(text)
+        for rule in self.mitre_rules:
+            # If any rule keyword is present in the article, mark that behavior as seen.
+            if any(keyword in text_lower for keyword in rule["keywords"]):
+                if rule.get("attack_type"):
+                    attack_types.add(rule["attack_type"])
+                for tech in rule["techniques"]:
+                    # Avoid duplicate technique entries by checking the technique ID.
+                    if tech["id"] not in {d["id"] for d in found_details}:
+                        found_details.append(tech)
+                        tactics.add(tech["tactic"])
 
-            return {
-                    "ttps": ", ".join(found_ttps) if found_ttps else "T1204 (User Execution)",
-                    "victims": victims if victims else ["Unspecified"]
-            }
+        # Fallback to a basic phishing detection if no rule matched but phishing-like text is present.
+        if not found_details:
+            if "phishing" in text_lower or "fake portal" in text_lower or "credential harvesting" in text_lower:
+                found_details.append({
+                    "id": "T1566",
+                    "name": "Phishing",
+                    "tactic": "Initial Access",
+                    "confidence": "Medium",
+                    "reason": "The article shows a phishing-style engagement even though explicit keywords were limited."
+                })
+                tactics.add("Initial Access")
+                attack_types.add("Phishing")
+
+        # Extract victim organizations from text using improved patterns that handle
+        # various phrasing like "Company X was targeted", "victims include X", or "X breached".
+        # This uses multiple regex patterns for better coverage and deduplicates results.
+        victim_patterns = [
+            re.compile(
+                r'\b([A-Z][A-Za-z0-9&.,\- ]{2,60}?)\b\s+(?:was\s+)?'
+                r'(?:targeted|attacked|breached|compromised|hacked|hit|affected|exploited|infected)',
+                re.IGNORECASE
+            ),
+            re.compile(
+                r'(?:victims?|targets?|affected)\s+(?:include|are|were|:\s*)\s*([A-Z][A-Za-z0-9&.,\- ]{2,60}?(?:,\s*[A-Z][A-Za-z0-9&.,\- ]{2,60}?)*)',
+                re.IGNORECASE
+            ),
+            re.compile(
+                r'\b([A-Z][A-Za-z0-9&.,\- ]{2,60}?)\b\s+(?:company|organization|firm|corp|inc|llc|group)\s+(?:was\s+)?'
+                r'(?:targeted|attacked|breached|compromised|hacked)',
+                re.IGNORECASE
+            )
+        ]
+        
+        victims_set = set()
+        for pattern in victim_patterns:
+            matches = pattern.findall(text)
+            for match in matches:
+                # Handle comma-separated lists in the second pattern
+                if ',' in match:
+                    sub_matches = [m.strip() for m in match.split(',') if m.strip()]
+                    victims_set.update(sub_matches)
+                else:
+                    victims_set.add(match.strip())
+        
+        # Filter out common false positives (e.g., generic terms, short words)
+        filtered_victims = [
+            v for v in victims_set 
+            if len(v) > 3 and not any(word in v.lower() for word in ['the', 'and', 'but', 'for', 'with', 'this', 'that', 'these', 'those'])
+        ]
+        
+        victims = sorted(filtered_victims) if filtered_victims else ["Unspecified"]
+
+        for detail in found_details:
+            entry = f"{detail['id']} ({detail['name']})"
+            if entry not in found_ttps:
+                found_ttps.append(entry)
+
+        if not found_ttps:
+            # If nothing matches, default to the generic user execution technique,
+            # because most articles still describe some form of execution-based compromise.
+            found_ttps = ["T1204 (User Execution)"]
+            attack_types.add("Unknown")
+            tactics.add("Initial Access")
+
+        # Format the technique details so the report can show confidence and reasoning.
+        detail_lines = [
+            f"- {d['id']} ({d['name']}) [{d['confidence']}]: {d['reason']}"
+            for d in found_details
+        ]
+
+        return {
+            "ttps": ", ".join(found_ttps),
+            "victims": victims if victims else ["Unspecified"],
+            "attack_types": ", ".join(sorted(attack_types)) if attack_types else "Unknown",
+            "tactics": ", ".join(sorted(tactics)) if tactics else "Unknown",
+            "mitre_details": detail_lines
+        }
 
     # The generate_report function or   `chestrates the entire process of analyzing a given URL. It scrapes the webpage, extracts relevant IOCs, checks them against VirusTotal, and compiles a comprehensive report. 
     # The report includes detected TTPs, a summary of the page content, and categorized lists of malicious IOCs. The function also handles file management for storing reports and blocklists.
@@ -389,7 +544,7 @@ class CTIWorkbench:
                         continue
                     is_block = clean_val in self.manual_blocklist
 
-                    logging.info(f"Processing {ioc_type.upper()} IOC: raw={ioc[:80]} clean={clean_val[:80]}")
+                    logging.info(f"Processing {ioc_type.upper()} IOC: raw={ioc[:80]} Malicious_IOC={clean_val[:80]}")
                     # The vt_result variable is assigned a tuple based on whether the IOC is found in the manual blocklist. 
                     # If it is a blocklisted item, it is immediately categorized as a threat with a message indicating a blocklist match.
                     
@@ -422,9 +577,20 @@ class CTIWorkbench:
                 f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"SOURCE URL       : {url}\n")
                 f.write(f"TARGET COMPANY   : {', '.join(context['victims'])}\n\n")
-                f.write("=" *50 + "\nMITRE ATT&CK ANALYSIS:\n" + "=" *50 + f"\nDetected TTPs    : {context['ttps']}\n\n")
+                # Write the MITRE ATT&CK section with all inferred context:
+                # - Detected TTPs: concatenated technique IDs and names
+                # - Attack Type: high-level behavior classification
+                # - MITRE Tactic(s): inferred stage(s) of the attack lifecycle
+                f.write("=" *50 + "\nMITRE ATT&CK ANALYSIS:\n" + "=" *50 + f"\nDetected TTPs: {context['ttps']}\n")
+                f.write(f"Attack Type      : {context.get('attack_types', 'Unknown')}\n")
+                f.write(f"MITRE Tactic(s)  : {context.get('tactics', 'Unknown')}\n\n")
+                if context.get('mitre_details'):
+                    # Add per-technique confidence and reasoning.
+                    f.write("Technique findings:\n")
+                    f.write("\n".join(context['mitre_details']) + "\n\n")
                 # Updated to use content_for_summary for better summary quality (improved from raw page_text)
-                f.write(f"SUMMARY: {self.get_summary(content_for_summary)}\n\n")
+                f.write("SUMMARY:\n")
+                f.write(self.get_summary(content_for_summary) + "\n\n")
                 f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} IOC_Found):\n\n" + "\n".join(full_list) + "\n\n")
                 f.write("=" * 50 + "\nCVE REFERENCES:\n" + "=" * 50 + "\n\n")
                 f.write("Detected CVEs :\n" + ("\n".join(found_cves) if found_cves else "None"))
@@ -446,14 +612,3 @@ class CTIWorkbench:
         except Exception as e:
             logging.critical(f"FATAL ERROR in generate_report: {str(e)}")
             return None
-
-# The main block serves as the entry point for the script when executed directly.
-# It prompts the user to input a Threat Intelligence (TI) URL, then calls the generate_report method of the CTIWorkbench class to analyze the URL and produce a report.
-if __name__ == "__main__":
-    tool = CTIWorkbench()
-    target = input("Paste TI URL: ")
-    result = tool.generate_report(target)
-    if result:
-        print(f"\n[+] Success: {result}")
-    else:
-        print("\n[!] Execution failed. Check cyber_shield.log for details.")
