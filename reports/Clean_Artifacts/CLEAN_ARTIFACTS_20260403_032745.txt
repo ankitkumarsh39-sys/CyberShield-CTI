@@ -1,0 +1,20 @@
+==================================================
+Clean Artifacts Report:
+==================================================
+REPORT DATE      : 2026-04-03 03:27:45
+SOURCE URL       : https://www.netskope.com/blog/openclaw-trap-ai-assisted-lure-factory-targets-developers-gamers?_hsenc=p2ANqtz--JiOuoNlc46gnPaY4FRtI6ZoUSQIDC-WlfyGQmlQCUFncKmbbbmoue9JvDhEWBYp5Nn1fUV_RHOKn73y3s1h8oZe6GFw&_hsmi=410291196
+
+Clean IOCs (8 found)
+
+[File_Hash]
+File_Hash: 3fc5816afde3e58bf9fcaa1b3873f2d4bc8629ee7a8341a4a4979d2729cad5e6 | 0 hits (Re-analysis attempted but failed): 404)
+File_Hash: 8e322af81744217427abef3cab949aee1de70f1506f40e4e2d672af9e1f6ef0b | 0 hits (Re-analyzed)
+File_Hash: b54ea465f77f1eb726d3244aa52d13c103ad9c4fc5a15061b7067347896b433c | 0 hits (Re-analyzed)
+File_Hash: c7a657af5455812fb215a8888b7e3fd8fa1ba27672a3ed9021eb6004eff271ac | 0 hits (Re-analyzed)
+
+[Domain]
+Domain: github.io                                     | 0 hits (Re-analyzed)
+Domain: launch.bat                                    | 0 hits (Re-analysis attempted but failed): 400)
+Domain: readme.md                                     | 0 hits (Re-analyzed)
+Domain: t.me/numberlocationtrack                      | 0 hits (Re-analysis attempted but failed): 404)
+

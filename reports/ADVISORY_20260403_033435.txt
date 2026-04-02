@@ -1,0 +1,122 @@
+==================================================
+Report:
+==================================================
+REPORT DATE      : 2026-04-03 03:34:35
+SOURCE URL       : https://www.gendigital.com/blog/insights/research/voidstealer-abe-bypass?_hsenc=p2ANqtz-87Qhulcl0M17rJdPOOVPNGYskXYQKVXvAZ5LtDaaxLda177xl8ji-CF-I4d4aREaUsLAQ_qsqNHb9BZaK5G6CBiM3gTw&_hsmi=410066908
+
+TARGET COMPANY   : Unspecified
+
+==================================================
+MITRE ATT&CK ANALYSIS:
+==================================================
+
+Detected TTPs: T1555.001 (Credentials from Web Browsers), T1119 (Automated Collection), T1027 (Obfuscated Files or Information)
+Attack Type      : Credential Theft, Defense Evasion, Stealer
+MITRE Tactic(s)  : Collection, Credential Access, Defense Evasion
+
+Technique findings:
+- T1555.001 (Credentials from Web Browsers) [High]: The article clearly describes browser password and autofill theft by the malware.
+- T1119 (Automated Collection) [Medium]: Stealer behavior automates the collection of stored browser credentials, cookies, and related artifacts.
+- T1027 (Obfuscated Files or Information) [Medium]: The text describes obfuscation and defanged indicators used to evade detection.
+
+==================================================
+SUMMARY:
+==================================================
+
+Chrome passwords are encrypted and stored in a SQLite3 database located at
+%LOCALAPPDATA%\Google\Chrome\User Data\Default\Login Data (assuming standard
+Chrome installation on Windows) and can be accessed, for example, by running the
+following Python script: Figure 3: Python script for extracting encrypted
+passwords from Chrome The script output for a single record would look roughly
+as follows (note the v20 prefix in the encrypted password, indicating ABE-
+protected data): Figure 4: The output from the previous script (see Figure 3)
+The password value is encrypted using AES-GCM with the app_bound_key , which we
+will refer to as the v20_master_key going forward. To find the LEA instruction
+referencing the target string, VoidStealer scans the whole .text section and
+searches for the byte sequences 48 8D 0D (the beginning of the LEA instruction),
+extracts the following 4 bytes (the 32-bit displacement), and calculates the
+referenced address. IoC
+f783fde5cf7930e4b3054393efadd3675b505cbef8e9d7ae58aa35b435adeea4 (VoidStealer
+v2.0) Vojtěch Krejsa Threat Researcher at Gen Follow us for more Research
+VoidStealer: Debugging Chrome to Steal Its Secrets A Novel Debugger-based ABE
+Bypass Spotted in the Wild Vojtěch Krejsa Threat Researcher at Gen Published
+March 19, 2026 Read time 19 Minutes Written by Vojtěch Krejsa Threat Researcher
+at Gen Published March 19, 2026 Read time 19 Minutes Research VoidStealer:
+Debugging Chrome to Steal Its Secrets A Novel Debugger-based ABE Bypass Spotted
+in the Wild Vojtěch Krejsa Threat Researcher at Gen Published March 19, 2026
+Read time 19 Minutes Written by Vojtěch Krejsa Threat Researcher at Gen
+Published March 19, 2026 Read time 19 Minutes Research VoidStealer: Debugging
+Chrome to Steal Its Secrets A Novel Debugger-based ABE Bypass Spotted in the
+Wild Vojtěch Krejsa Threat Researcher at Gen Published March 19, 2026 Read time
+19 Minutes Written by Vojtěch Krejsa Threat Researcher at Gen Published March
+19, 2026 Read time 19 Minutes Research VoidStealer: Debugging Chrome to Steal
+Its Secrets A Novel Debugger-based ABE Bypass Spotted in the Wild Vojtěch Krejsa
+Threat Researcher at Gen Published March 19, 2026 Read time 19 Minutes Vojtěch
+Krejsa Threat Researcher at Gen Published March 19, 2026 Read time 19 Minutes
+Written by Vojtěch Krejsa Threat Researcher at Gen Published March 19, 2026 Read
+time 19 Minutes Written by Vojtěch Krejsa Threat Researcher at Gen Published
+March 19, 2026 Read time 19 Minutes Written by Vojtěch Krejsa Threat Researcher
+at Gen Published March 19, 2026 Read time 19 Minutes Written by Vojtěch Krejsa
+Threat Researcher at Gen Published March 19, 2026 Read time 19 Minutes Written
+by Vojtěch Krejsa Threat Researcher at Gen Published March 19, 2026 Read time 19
+Minutes Written by Vojtěch Krejsa Threat Researcher at Gen Published March 19,
+2026 Read time 19 Minutes Written by Vojtěch Krejsa Threat Researcher at Gen
+Published March 19, 2026 Read time 19 Minutes Share this article Key Points
+VoidStealer is the first infostealer observed in the wild adopting a novel
+debugger-based Application-Bound Encryption (ABE) bypass technique that
+leverages hardware breakpoints to extract the v20_master_key directly from
+browser memory. Gen Blogs | VoidStealer: Debugging Chrome to Steal Its Secrets A
+Novel Debugger-based ABE Bypass Spotted in the Wild Research VoidStealer:
+Debugging Chrome to Steal Its Secrets A Novel Debugger-based ABE Bypass Spotted
+in the Wild Vojtěch Krejsa Threat Researcher at Gen Published March 19, 2026
+Read time 19 Minutes Written by Vojtěch Krejsa Threat Researcher at Gen
+Published March 19, 2026 Read time 19 Minutes Share this article Key Points
+VoidStealer is the first infostealer observed in the wild adopting a novel
+debugger-based Application-Bound Encryption (ABE) bypass technique that
+leverages hardware breakpoints to extract the v20_master_key directly from
+browser memory. The bypass requires neither privilege escalation nor code
+injection, making it a stealthier approach compared to alternative ABE bypass
+methods. In this technical blog post, we dissect the bypass technique step-by-
+step, from locating the target address for breakpoint placement to extracting
+the v20_master_key . Introduction When Google introduced Application-Bound
+Encryption (ABE) in July 2024 with Chrome 127, it didn't mark the end of
+infostealers –⁠⁠⁠⁠⁠⁠ as expected, infostealers adopted quickly and came up with
+various methods to bypass it. Still, it undoubtedly raised the bar for accessing
+sensitive browser data, and, more importantly, significantly increased the
+visibility of such data theft attempts, as bypassing ABE now requires attackers
+to perform additional steps that are inherently more suspicious. Various bypass
+techniques have emerged since then, and since each comes with its own trade-
+offs, new approaches continue to appear as threat actors seek to minimize the
+footprint and evade detection. We demonstrate the technique on VoidStealer, the
+first emerging infostealer we have observed using this approach in the wild.
+VoidStealer VoidStealer is a MaaS infostealer that began being marketed on
+several darkweb forums since mid December 2025 and has been actively developed
+since then. Figure 1: VoidStealer offered on HackForums Considering the first
+version of VoidStealer from December 12, 2025, as the earliest date we have
+identified it being offered, the VoidStealer development timeline is
+approximately as follows (please note that exact dates may vary slightly, as we
+rely on announcements made by the malware developers themselves on HackForums):
+VoidStealer version Release Date v1.0 Dec 12, 2025 v1.1 Jan 16, 2026 v1.2 Jan
+19, 2026 v1.3 Feb 3, 2026 v1.4 Feb 4, 2026 v1.5 Feb 22, 2026 v1.6 Mar 3, 2026
+v1.7 Mar 9, 2026 v1.8 Mar 10, 2026 v1.9 Mar 10, 2026 v2.0 Mar 13, 2026 v2.1 Mar
+18, 2026 The version 2.0, reported on Mar 13, 2026, introduced the novel ABE
+bypass technique. Figure 2: VoidStealer v2.0 changelog To keep the blog post to
+the point, we focus mainly on the bypass technique itself rather than
+VoidStealer's capabilities. ABE Bypass(es) Similarly to other infostealers,
+VoidStealer does not rely on a single ABE-bypass technique but implements two
+distinct methods in case one fails. The second (novel) approach is stealthier in
+this regard – it relies solely on the WinAPI function ReadProcessMemory and
+debugger attachment, which are considerably less suspicious than direct browser
+memory injection.
+
+--------------------------------------------------
+MALICIOUS IOCs (1 IOC_Found), IPs: 0, Domains: 5, URLs: 0, Hashes: 1, CVE: 0
+
+File_Hash: f783fde5cf7930e4b3054393efadd3675b505cbef8e9d7ae58aa35b435adeea4 | 51 hits
+
+==================================================
+CVE REFERENCES:
+==================================================
+
+Detected CVEs :
+None

@@ -1,0 +1,38 @@
+==================================================
+IOC Report:
+==================================================
+REPORT DATE      : 2026-04-03 03:27:45
+SOURCE URL       : https://www.netskope.com/blog/openclaw-trap-ai-assisted-lure-factory-targets-developers-gamers?_hsenc=p2ANqtz--JiOuoNlc46gnPaY4FRtI6ZoUSQIDC-WlfyGQmlQCUFncKmbbbmoue9JvDhEWBYp5Nn1fUV_RHOKn73y3s1h8oZe6GFw&_hsmi=410291196
+
+--------------------------------------------------
+MALICIOUS IOCs (28 IOC_Found), IPs: 9, Domains: 9, URLs: 4, Hashes: 20, CVE: 0
+
+IPs: 213.176.73.130                                | 10 hits
+IPs: 213.176.73.159                                | 9 hits
+IPs: 213.176.73.80                                 | 7 hits
+IPs: 217.119.129.118                               | 2 hits (Re-analyzed)
+IPs: 217.119.129.121                               | 12 hits
+IPs: 217.119.129.122                               | 10 hits
+IPs: 217.119.129.76                                | 11 hits
+IPs: 89.169.12.241                                 | 9 hits
+IPs: 94.156.154.6                                  | 7 hits
+Domain: gmail[.]com                                   | 0 hits (Re-analyzed)
+Domain: ip-api.com                                    | 1 hits (Re-analyzed)
+URL: https://t.me/NumberLocationTrack              | 2 hits (Re-analyzed)
+File_Hash: 11c06aab7aa3f1857cc9add05b392ba6bd62a7fd2d168e41d9ba5557a96c78f0 | 38 hits
+File_Hash: 28d09366dc7842fe42f44a27cb54c6e1ba6769f42a27b99f5d455efb1e6de454 | 22 hits
+File_Hash: 30694a0101abfeea642cb9de7fb7eb66789eea74d8d7257b39822d7dab59445d | 45 hits
+File_Hash: 357cd0a1601d24bbb7949637b352b0ace1f30f51f788a03cafa98316068938e0 | 2 hits (Re-analyzed)
+File_Hash: 398ea394f9a4242ebe9fd67a5ca62445fc4a34b1731d4f99b8eea5e65a98ddcb | 36 hits
+File_Hash: 39d39e6726408e778c8ad3d85010e1db0a686ebec1f8807f96cf80be59dfdd59 | 2 hits (Re-analyzed)
+File_Hash: 5343326fb0b4f79c32276f08ffcc36bd88cde23aa19962bd1e8d8b80f5d33953 | 3 hits (Re-analyzed)
+File_Hash: 593916916552ce87cd6fde7353875e023cd8a89f13d222fc636634a43ff65cdb | 18 hits
+File_Hash: 66ee4143e50c42b26f1059a33860d49513194c6b049245c9a68a45dbefa40ec1 | 41 hits
+File_Hash: 964dfb63ff140149ed8b310dba63fd8d82a82dc9979348e93b3dd7206fd71d13 | 7 hits
+File_Hash: b1d3e7e81016561faddf7b0a6cb9a3bd0174064b3b309c6948f5f1e6688a1381 | 40 hits
+File_Hash: b1f9c4d82eb5f73b9081c3d414b3c053c1550e46fa21d30079134be3c0040ddb | 40 hits
+File_Hash: b5c571363632a6887c6e9471435ab0fdcbf16bae6dbdf28d0fc755a9d467e859 | 1 hits (Re-analyzed)
+File_Hash: b6e81d95c0c336e8b8bde3889f4df4ee17639f6ff055c631de19cab3c7efb63b | 10 hits
+File_Hash: c58720dcb30e5c887ff5bfd41bb46a611f2655128f1ef1a771e1745f24349dfe | 2 hits (Re-analyzed)
+File_Hash: c655c2d410e6b36d9ef1359aef67183bf76c193c609697492e41d30622f7ebd4 | 37 hits
+
