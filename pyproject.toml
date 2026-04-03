@@ -1,7 +1,12 @@
 [project]
 name = "cybershield-cti"
 version = "0.1.0"
-description = "Add your description here"
+description = "Python-based CTI automation for extracting, enriching, and reporting IOCs from threat blogs (VirusTotal integration)."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = []
+
+[project.urls]
+"Homepage" = "https://github.com/YOUR_USERNAME/CTI-Workbench-SOC"
+"Source" = "https://github.com/YOUR_USERNAME/CTI-Workbench-SOC"
+"Documentation" = "https://github.com/YOUR_USERNAME/CTI-Workbench-SOC#readme"
