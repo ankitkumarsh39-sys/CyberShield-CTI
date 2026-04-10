@@ -1,0 +1,8 @@
+{
+  "https://www.blackfog.com/venom-stealer-turns-clickfix-into-a-full-exfiltration-pipeline": {
+    "reports": {
+      "full": "reports/ADVISORY_20260410_172710.txt"
+    },
+    "last_analyzed": "2026-04-10T17:27:20.906600"
+  }
+}

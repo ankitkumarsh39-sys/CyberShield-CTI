@@ -3335,3 +3335,378 @@ Original error was:
 2026-04-03 03:34:49 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260403_033435.txt
 2026-04-03 03:34:49 - INFO - Success: Report generated at reports/ADVISORY_20260403_033435.txt
 ============================================================
+2026-04-03 19:12:24 - INFO - CyberShield-CTI Engine Initialized.
+2026-04-03 19:12:31 - INFO - Starting analysis for: https://www.blackfog.com/venom-stealer-turns-clickfix-into-a-full-exfiltration-pipeline/ (Report Type: ioc)
+2026-04-03 19:12:34 - INFO - Extracted counts of IOCs-> IPs: 0, Domains: 0, URLs: 0, Hashes: 0, CVE: 0
+2026-04-03 19:12:34 - INFO - Report generated with 0 malicious IOCs and 0 clean IOCs found.
+2026-04-03 19:12:34 - INFO - Success: Report generated at reports/IOC_ONLY_20260403_191234.txt
+============================================================
+2026-04-10 14:45:46 - INFO - CyberShield-CTI Engine Initialized.
+2026-04-10 14:45:52 - INFO - Starting analysis for: https://www.netskope.com/blog/from-clickfix-to-maas-exposing-a-modular-windows-rat-and-its-admin-panel (Report Type: full)
+2026-04-10 14:45:55 - INFO - Extracted counts of IOCs-> IPs: 0, Domains: 38, URLs: 0, Hashes: 0, CVE: 0
+2026-04-10 14:45:55 - INFO - Processing DOMAIN IOC: raw=admin.proto Malicious_IOC=admin.proto
+2026-04-10 14:45:55 - INFO - Querying VT for DOMAIN: admin.proto...
+2026-04-10 14:46:17 - INFO - Triggering Re-analysis for DOMAIN: admin.proto (Score: 0)
+2026-04-10 14:46:19 - INFO - Processing DOMAIN IOC: raw=api.ipify Malicious_IOC=api.ipify
+2026-04-10 14:46:19 - INFO - Querying VT for DOMAIN: api.ipify...
+2026-04-10 14:46:41 - INFO - Triggering Re-analysis for DOMAIN: api.ipify (Score: 0)
+2026-04-10 14:46:42 - INFO - Processing DOMAIN IOC: raw=blob.includes Malicious_IOC=blob.includes
+2026-04-10 14:46:42 - INFO - Querying VT for DOMAIN: blob.includes...
+2026-04-10 14:47:05 - INFO - Triggering Re-analysis for DOMAIN: blob.includes (Score: 0)
+2026-04-10 14:47:07 - INFO - Processing DOMAIN IOC: raw=blob.split Malicious_IOC=blob.split
+2026-04-10 14:47:07 - INFO - Querying VT for DOMAIN: blob.split...
+2026-04-10 14:47:29 - INFO - Triggering Re-analysis for DOMAIN: blob.split (Score: 0)
+2026-04-10 14:47:31 - INFO - Processing DOMAIN IOC: raw=buffer.concat Malicious_IOC=buffer.concat
+2026-04-10 14:47:31 - INFO - Querying VT for DOMAIN: buffer.concat...
+2026-04-10 14:47:54 - INFO - Triggering Re-analysis for DOMAIN: buffer.concat (Score: 0)
+2026-04-10 14:47:59 - INFO - Processing DOMAIN IOC: raw=buffer.from Malicious_IOC=buffer.from
+2026-04-10 14:47:59 - INFO - Querying VT for DOMAIN: buffer.from...
+2026-04-10 14:48:23 - INFO - Triggering Re-analysis for DOMAIN: buffer.from (Score: 0)
+2026-04-10 14:48:27 - INFO - Processing DOMAIN IOC: raw=client.sendmoduleresult Malicious_IOC=client.sendmoduleresult
+2026-04-10 14:48:27 - INFO - Querying VT for DOMAIN: client.sendmoduleresult...
+2026-04-10 14:48:51 - INFO - Triggering Re-analysis for DOMAIN: client.sendmoduleresult (Score: 0)
+2026-04-10 14:48:56 - INFO - Processing DOMAIN IOC: raw=cloud-verificate.com Malicious_IOC=cloud-verificate.com
+2026-04-10 14:48:56 - INFO - Querying VT for DOMAIN: cloud-verificate.com...
+2026-04-10 14:49:20 - INFO - Processing DOMAIN IOC: raw=cloud-verificate[.]com Malicious_IOC=cloud-verificate.com
+2026-04-10 14:49:20 - INFO - Querying VT for DOMAIN: cloud-verificate.com...
+2026-04-10 14:49:44 - INFO - Processing DOMAIN IOC: raw=config.operator Malicious_IOC=config.operator
+2026-04-10 14:49:44 - INFO - Querying VT for DOMAIN: config.operator...
+2026-04-10 14:50:07 - INFO - Triggering Re-analysis for DOMAIN: config.operator (Score: 0)
+2026-04-10 14:50:13 - INFO - Processing DOMAIN IOC: raw=config.tag Malicious_IOC=config.tag
+2026-04-10 14:50:13 - INFO - Querying VT for DOMAIN: config.tag...
+2026-04-10 14:50:36 - INFO - Triggering Re-analysis for DOMAIN: config.tag (Score: 0)
+2026-04-10 14:50:39 - INFO - Processing DOMAIN IOC: raw=crypto.createdecipheriv Malicious_IOC=crypto.createdecipheriv
+2026-04-10 14:50:39 - INFO - Querying VT for DOMAIN: crypto.createdecipheriv...
+2026-04-10 14:51:02 - INFO - Triggering Re-analysis for DOMAIN: crypto.createdecipheriv (Score: 0)
+2026-04-10 14:51:05 - INFO - Processing DOMAIN IOC: raw=current.includes Malicious_IOC=current.includes
+2026-04-10 14:51:05 - INFO - Querying VT for DOMAIN: current.includes...
+2026-04-10 14:51:28 - INFO - Triggering Re-analysis for DOMAIN: current.includes (Score: 0)
+2026-04-10 14:51:30 - INFO - Processing DOMAIN IOC: raw=decipher.final Malicious_IOC=decipher.final
+2026-04-10 14:51:30 - INFO - Querying VT for DOMAIN: decipher.final...
+2026-04-10 14:51:54 - INFO - Triggering Re-analysis for DOMAIN: decipher.final (Score: 1)
+2026-04-10 14:52:22 - INFO - Processing DOMAIN IOC: raw=decipher.update Malicious_IOC=decipher.update
+2026-04-10 14:52:22 - INFO - Querying VT for DOMAIN: decipher.update...
+2026-04-10 14:52:43 - INFO - Triggering Re-analysis for DOMAIN: decipher.update (Score: 0)
+2026-04-10 14:52:46 - INFO - Processing DOMAIN IOC: raw=fs.writefilesync Malicious_IOC=fs.writefilesync
+2026-04-10 14:52:46 - INFO - Querying VT for DOMAIN: fs.writefilesync...
+2026-04-10 14:53:08 - INFO - Triggering Re-analysis for DOMAIN: fs.writefilesync (Score: 0)
+2026-04-10 14:53:10 - INFO - Processing DOMAIN IOC: raw=grpc-client.connect Malicious_IOC=grpc-client.connect
+2026-04-10 14:53:10 - INFO - Querying VT for DOMAIN: grpc-client.connect...
+2026-04-10 14:53:32 - INFO - Triggering Re-analysis for DOMAIN: grpc-client.connect (Score: 0)
+2026-04-10 14:53:35 - INFO - Processing DOMAIN IOC: raw=json.parse Malicious_IOC=json.parse
+2026-04-10 14:53:35 - INFO - Querying VT for DOMAIN: json.parse...
+2026-04-10 14:53:56 - INFO - Triggering Re-analysis for DOMAIN: json.parse (Score: 0)
+2026-04-10 14:53:58 - INFO - Processing DOMAIN IOC: raw=json.stringify Malicious_IOC=json.stringify
+2026-04-10 14:53:58 - INFO - Querying VT for DOMAIN: json.stringify...
+2026-04-10 14:54:20 - INFO - Triggering Re-analysis for DOMAIN: json.stringify (Score: 0)
+2026-04-10 14:54:21 - INFO - Processing DOMAIN IOC: raw=logger.error Malicious_IOC=logger.error
+2026-04-10 14:54:21 - INFO - Querying VT for DOMAIN: logger.error...
+2026-04-10 14:54:44 - INFO - Triggering Re-analysis for DOMAIN: logger.error (Score: 0)
+2026-04-10 14:54:45 - INFO - Processing DOMAIN IOC: raw=logger.warn Malicious_IOC=logger.warn
+2026-04-10 14:54:45 - INFO - Querying VT for DOMAIN: logger.warn...
+2026-04-10 14:55:07 - INFO - Triggering Re-analysis for DOMAIN: logger.warn (Score: 0)
+2026-04-10 14:55:09 - INFO - Processing DOMAIN IOC: raw=math.floor Malicious_IOC=math.floor
+2026-04-10 14:55:09 - INFO - Querying VT for DOMAIN: math.floor...
+2026-04-10 14:55:31 - INFO - Triggering Re-analysis for DOMAIN: math.floor (Score: 0)
+2026-04-10 14:55:33 - INFO - Processing DOMAIN IOC: raw=math.random Malicious_IOC=math.random
+2026-04-10 14:55:33 - INFO - Querying VT for DOMAIN: math.random...
+2026-04-10 14:55:57 - INFO - Triggering Re-analysis for DOMAIN: math.random (Score: 0)
+2026-04-10 14:56:01 - INFO - Processing DOMAIN IOC: raw=nodeserver-setup-full.msi Malicious_IOC=nodeserver-setup-full.msi
+2026-04-10 14:56:01 - INFO - Querying VT for DOMAIN: nodeserver-setup-full.msi...
+2026-04-10 14:56:24 - INFO - Triggering Re-analysis for DOMAIN: nodeserver-setup-full.msi (Score: 0)
+2026-04-10 14:56:27 - INFO - Processing DOMAIN IOC: raw=object.keys Malicious_IOC=object.keys
+2026-04-10 14:56:27 - INFO - Querying VT for DOMAIN: object.keys...
+2026-04-10 14:56:49 - INFO - Triggering Re-analysis for DOMAIN: object.keys (Score: 0)
+2026-04-10 14:56:52 - INFO - Processing DOMAIN IOC: raw=os.arch Malicious_IOC=os.arch
+2026-04-10 14:56:52 - INFO - Querying VT for DOMAIN: os.arch...
+2026-04-10 14:57:15 - INFO - Triggering Re-analysis for DOMAIN: os.arch (Score: 0)
+2026-04-10 14:57:17 - INFO - Processing DOMAIN IOC: raw=os.hostname Malicious_IOC=os.hostname
+2026-04-10 14:57:17 - INFO - Querying VT for DOMAIN: os.hostname...
+2026-04-10 14:57:40 - INFO - Triggering Re-analysis for DOMAIN: os.hostname (Score: 0)
+2026-04-10 14:57:43 - INFO - Processing DOMAIN IOC: raw=os.platform Malicious_IOC=os.platform
+2026-04-10 14:57:43 - INFO - Querying VT for DOMAIN: os.platform...
+2026-04-10 14:58:06 - INFO - Triggering Re-analysis for DOMAIN: os.platform (Score: 0)
+2026-04-10 14:58:09 - INFO - Processing DOMAIN IOC: raw=parts.length Malicious_IOC=parts.length
+2026-04-10 14:58:09 - INFO - Querying VT for DOMAIN: parts.length...
+2026-04-10 14:58:32 - INFO - Triggering Re-analysis for DOMAIN: parts.length (Score: 0)
+2026-04-10 14:58:34 - INFO - Processing DOMAIN IOC: raw=path.join Malicious_IOC=path.join
+2026-04-10 14:58:34 - INFO - Querying VT for DOMAIN: path.join...
+2026-04-10 14:58:57 - INFO - Triggering Re-analysis for DOMAIN: path.join (Score: 0)
+2026-04-10 14:59:00 - INFO - Processing DOMAIN IOC: raw=process.env Malicious_IOC=process.env
+2026-04-10 14:59:00 - INFO - Querying VT for DOMAIN: process.env...
+2026-04-10 14:59:24 - INFO - Triggering Re-analysis for DOMAIN: process.env (Score: 0)
+2026-04-10 14:59:27 - INFO - Processing DOMAIN IOC: raw=setup.msi Malicious_IOC=setup.msi
+2026-04-10 14:59:27 - INFO - Querying VT for DOMAIN: setup.msi...
+2026-04-10 14:59:49 - INFO - Triggering Re-analysis for DOMAIN: setup.msi (Score: 0)
+2026-04-10 14:59:52 - INFO - Processing DOMAIN IOC: raw=stream.write Malicious_IOC=stream.write
+2026-04-10 14:59:52 - INFO - Querying VT for DOMAIN: stream.write...
+2026-04-10 15:00:14 - INFO - Triggering Re-analysis for DOMAIN: stream.write (Score: 0)
+2026-04-10 15:00:15 - INFO - Processing DOMAIN IOC: raw=string.fromcharcode Malicious_IOC=string.fromcharcode
+2026-04-10 15:00:15 - INFO - Querying VT for DOMAIN: string.fromcharcode...
+2026-04-10 15:00:38 - INFO - Triggering Re-analysis for DOMAIN: string.fromcharcode (Score: 0)
+2026-04-10 15:00:40 - INFO - Processing DOMAIN IOC: raw=support.proto Malicious_IOC=support.proto
+2026-04-10 15:00:40 - INFO - Querying VT for DOMAIN: support.proto...
+2026-04-10 15:01:01 - INFO - Triggering Re-analysis for DOMAIN: support.proto (Score: 0)
+2026-04-10 15:01:03 - INFO - Processing DOMAIN IOC: raw=vm.runinnewcontext Malicious_IOC=vm.runinnewcontext
+2026-04-10 15:01:03 - INFO - Querying VT for DOMAIN: vm.runinnewcontext...
+2026-04-10 15:01:25 - INFO - Triggering Re-analysis for DOMAIN: vm.runinnewcontext (Score: 0)
+2026-04-10 15:01:27 - INFO - Processing DOMAIN IOC: raw=worker.on Malicious_IOC=worker.on
+2026-04-10 15:01:27 - INFO - Querying VT for DOMAIN: worker.on...
+2026-04-10 15:01:48 - INFO - Triggering Re-analysis for DOMAIN: worker.on (Score: 0)
+2026-04-10 15:01:50 - INFO - Processing DOMAIN IOC: raw=yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion Malicious_IOC=yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion
+2026-04-10 15:01:50 - INFO - Querying VT for DOMAIN: yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion...
+2026-04-10 15:02:13 - INFO - Triggering Re-analysis for DOMAIN: yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion (Score: 5)
+2026-04-10 15:03:15 - INFO - Report generated with 3 malicious IOCs and 35 clean IOCs found.
+2026-04-10 15:03:15 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260410_150238.txt
+2026-04-10 15:03:15 - INFO - Success: Report generated at reports/ADVISORY_20260410_150238.txt
+============================================================
+2026-04-10 16:32:10 - INFO - CyberShield-CTI Engine Initialized.
+2026-04-10 16:32:14 - INFO - Starting analysis for: https://www.netskope.com/blog/from-clickfix-to-maas-exposing-a-modular-windows-rat-and-its-admin-panel (Report Type: full)
+2026-04-10 16:32:16 - INFO - Extracted counts of IOCs-> IPs: 0, Domains: 37, URLs: 0, Hashes: 0, CVE: 0
+2026-04-10 16:32:16 - INFO - Processing DOMAIN IOC: raw=admin.proto Malicious_IOC=admin.proto
+2026-04-10 16:32:16 - INFO - Querying VT for DOMAIN: admin.proto...
+2026-04-10 16:32:39 - INFO - Triggering Re-analysis for DOMAIN: admin.proto (Score: 0)
+2026-04-10 16:32:41 - INFO - Processing DOMAIN IOC: raw=api.ipify Malicious_IOC=api.ipify
+2026-04-10 16:32:41 - INFO - Querying VT for DOMAIN: api.ipify...
+2026-04-10 16:33:02 - INFO - Triggering Re-analysis for DOMAIN: api.ipify (Score: 0)
+2026-04-10 16:33:03 - INFO - Processing DOMAIN IOC: raw=blob.includes Malicious_IOC=blob.includes
+2026-04-10 16:33:03 - INFO - Querying VT for DOMAIN: blob.includes...
+2026-04-10 16:33:25 - INFO - Triggering Re-analysis for DOMAIN: blob.includes (Score: 0)
+2026-04-10 16:33:26 - INFO - Processing DOMAIN IOC: raw=blob.split Malicious_IOC=blob.split
+2026-04-10 16:33:26 - INFO - Querying VT for DOMAIN: blob.split...
+2026-04-10 16:33:49 - INFO - Triggering Re-analysis for DOMAIN: blob.split (Score: 0)
+2026-04-10 16:33:51 - INFO - Processing DOMAIN IOC: raw=buffer.concat Malicious_IOC=buffer.concat
+2026-04-10 16:33:51 - INFO - Querying VT for DOMAIN: buffer.concat...
+2026-04-10 16:34:13 - INFO - Triggering Re-analysis for DOMAIN: buffer.concat (Score: 0)
+2026-04-10 16:34:14 - INFO - Processing DOMAIN IOC: raw=buffer.from Malicious_IOC=buffer.from
+2026-04-10 16:34:14 - INFO - Querying VT for DOMAIN: buffer.from...
+2026-04-10 16:34:35 - INFO - Triggering Re-analysis for DOMAIN: buffer.from (Score: 0)
+2026-04-10 16:34:36 - INFO - Processing DOMAIN IOC: raw=client.sendmoduleresult Malicious_IOC=client.sendmoduleresult
+2026-04-10 16:34:36 - INFO - Querying VT for DOMAIN: client.sendmoduleresult...
+2026-04-10 16:34:57 - INFO - Triggering Re-analysis for DOMAIN: client.sendmoduleresult (Score: 0)
+2026-04-10 16:34:59 - INFO - Processing DOMAIN IOC: raw=cloud-verificate.com Malicious_IOC=cloud-verificate.com
+2026-04-10 16:34:59 - INFO - Querying VT for DOMAIN: cloud-verificate.com...
+2026-04-10 16:35:21 - ERROR - Network error during VT lookup for DOMAIN: HTTPSConnectionPool(host='www.virustotal.com', port=443): Max retries exceeded with url: /api/v3/domains/cloud-verificate.com (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1081)')))
+2026-04-10 16:35:21 - INFO - Processing DOMAIN IOC: raw=config.operator Malicious_IOC=config.operator
+2026-04-10 16:35:21 - INFO - Querying VT for DOMAIN: config.operator...
+2026-04-10 16:35:44 - INFO - Triggering Re-analysis for DOMAIN: config.operator (Score: 0)
+2026-04-10 16:35:45 - INFO - Processing DOMAIN IOC: raw=config.tag Malicious_IOC=config.tag
+2026-04-10 16:35:45 - INFO - Querying VT for DOMAIN: config.tag...
+2026-04-10 16:36:06 - INFO - Triggering Re-analysis for DOMAIN: config.tag (Score: 0)
+2026-04-10 16:36:08 - INFO - Processing DOMAIN IOC: raw=crypto.createdecipheriv Malicious_IOC=crypto.createdecipheriv
+2026-04-10 16:36:08 - INFO - Querying VT for DOMAIN: crypto.createdecipheriv...
+2026-04-10 16:36:29 - INFO - Triggering Re-analysis for DOMAIN: crypto.createdecipheriv (Score: 0)
+2026-04-10 16:36:31 - INFO - Processing DOMAIN IOC: raw=current.includes Malicious_IOC=current.includes
+2026-04-10 16:36:31 - INFO - Querying VT for DOMAIN: current.includes...
+2026-04-10 16:36:52 - INFO - Triggering Re-analysis for DOMAIN: current.includes (Score: 0)
+2026-04-10 16:36:53 - INFO - Processing DOMAIN IOC: raw=decipher.final Malicious_IOC=decipher.final
+2026-04-10 16:36:53 - INFO - Querying VT for DOMAIN: decipher.final...
+2026-04-10 16:37:15 - INFO - Triggering Re-analysis for DOMAIN: decipher.final (Score: 0)
+2026-04-10 16:37:38 - INFO - Processing DOMAIN IOC: raw=decipher.update Malicious_IOC=decipher.update
+2026-04-10 16:37:38 - INFO - Querying VT for DOMAIN: decipher.update...
+2026-04-10 16:37:59 - INFO - Triggering Re-analysis for DOMAIN: decipher.update (Score: 0)
+2026-04-10 16:38:00 - INFO - Processing DOMAIN IOC: raw=fs.writefilesync Malicious_IOC=fs.writefilesync
+2026-04-10 16:38:00 - INFO - Querying VT for DOMAIN: fs.writefilesync...
+2026-04-10 16:38:21 - INFO - Triggering Re-analysis for DOMAIN: fs.writefilesync (Score: 0)
+2026-04-10 16:38:24 - INFO - Processing DOMAIN IOC: raw=grpc-client.connect Malicious_IOC=grpc-client.connect
+2026-04-10 16:38:24 - INFO - Querying VT for DOMAIN: grpc-client.connect...
+2026-04-10 16:38:46 - INFO - Triggering Re-analysis for DOMAIN: grpc-client.connect (Score: 0)
+2026-04-10 16:38:47 - INFO - Processing DOMAIN IOC: raw=json.parse Malicious_IOC=json.parse
+2026-04-10 16:38:47 - INFO - Querying VT for DOMAIN: json.parse...
+2026-04-10 16:39:08 - INFO - Triggering Re-analysis for DOMAIN: json.parse (Score: 0)
+2026-04-10 16:39:10 - INFO - Processing DOMAIN IOC: raw=json.stringify Malicious_IOC=json.stringify
+2026-04-10 16:39:10 - INFO - Querying VT for DOMAIN: json.stringify...
+2026-04-10 16:39:32 - INFO - Triggering Re-analysis for DOMAIN: json.stringify (Score: 0)
+2026-04-10 16:39:34 - INFO - Processing DOMAIN IOC: raw=logger.error Malicious_IOC=logger.error
+2026-04-10 16:39:34 - INFO - Querying VT for DOMAIN: logger.error...
+2026-04-10 16:39:58 - INFO - Triggering Re-analysis for DOMAIN: logger.error (Score: 0)
+2026-04-10 16:40:00 - INFO - Processing DOMAIN IOC: raw=logger.warn Malicious_IOC=logger.warn
+2026-04-10 16:40:00 - INFO - Querying VT for DOMAIN: logger.warn...
+2026-04-10 16:40:23 - INFO - Triggering Re-analysis for DOMAIN: logger.warn (Score: 0)
+2026-04-10 16:40:26 - INFO - Processing DOMAIN IOC: raw=math.floor Malicious_IOC=math.floor
+2026-04-10 16:40:26 - INFO - Querying VT for DOMAIN: math.floor...
+2026-04-10 16:40:49 - INFO - Triggering Re-analysis for DOMAIN: math.floor (Score: 0)
+2026-04-10 16:40:52 - INFO - Processing DOMAIN IOC: raw=math.random Malicious_IOC=math.random
+2026-04-10 16:40:52 - INFO - Querying VT for DOMAIN: math.random...
+2026-04-10 16:41:14 - INFO - Triggering Re-analysis for DOMAIN: math.random (Score: 0)
+2026-04-10 16:41:17 - INFO - Processing DOMAIN IOC: raw=nodeserver-setup-full.msi Malicious_IOC=nodeserver-setup-full.msi
+2026-04-10 16:41:17 - INFO - Querying VT for DOMAIN: nodeserver-setup-full.msi...
+2026-04-10 16:41:40 - INFO - Triggering Re-analysis for DOMAIN: nodeserver-setup-full.msi (Score: 0)
+2026-04-10 16:41:42 - INFO - Processing DOMAIN IOC: raw=object.keys Malicious_IOC=object.keys
+2026-04-10 16:41:42 - INFO - Querying VT for DOMAIN: object.keys...
+2026-04-10 16:42:05 - INFO - Triggering Re-analysis for DOMAIN: object.keys (Score: 0)
+2026-04-10 16:42:07 - INFO - Processing DOMAIN IOC: raw=os.arch Malicious_IOC=os.arch
+2026-04-10 16:42:07 - INFO - Querying VT for DOMAIN: os.arch...
+2026-04-10 16:42:30 - INFO - Triggering Re-analysis for DOMAIN: os.arch (Score: 0)
+2026-04-10 16:42:33 - INFO - Processing DOMAIN IOC: raw=os.hostname Malicious_IOC=os.hostname
+2026-04-10 16:42:33 - INFO - Querying VT for DOMAIN: os.hostname...
+2026-04-10 16:42:56 - INFO - Triggering Re-analysis for DOMAIN: os.hostname (Score: 0)
+2026-04-10 16:42:59 - INFO - Processing DOMAIN IOC: raw=os.platform Malicious_IOC=os.platform
+2026-04-10 16:42:59 - INFO - Querying VT for DOMAIN: os.platform...
+2026-04-10 16:43:21 - INFO - Triggering Re-analysis for DOMAIN: os.platform (Score: 0)
+2026-04-10 16:43:24 - INFO - Processing DOMAIN IOC: raw=parts.length Malicious_IOC=parts.length
+2026-04-10 16:43:24 - INFO - Querying VT for DOMAIN: parts.length...
+2026-04-10 16:43:46 - INFO - Triggering Re-analysis for DOMAIN: parts.length (Score: 0)
+2026-04-10 16:43:49 - INFO - Processing DOMAIN IOC: raw=path.join Malicious_IOC=path.join
+2026-04-10 16:43:49 - INFO - Querying VT for DOMAIN: path.join...
+2026-04-10 16:44:11 - INFO - Triggering Re-analysis for DOMAIN: path.join (Score: 0)
+2026-04-10 16:44:14 - INFO - Processing DOMAIN IOC: raw=process.env Malicious_IOC=process.env
+2026-04-10 16:44:14 - INFO - Querying VT for DOMAIN: process.env...
+2026-04-10 16:44:37 - INFO - Triggering Re-analysis for DOMAIN: process.env (Score: 0)
+2026-04-10 16:44:39 - INFO - Processing DOMAIN IOC: raw=setup.msi Malicious_IOC=setup.msi
+2026-04-10 16:44:39 - INFO - Querying VT for DOMAIN: setup.msi...
+2026-04-10 16:45:02 - INFO - Triggering Re-analysis for DOMAIN: setup.msi (Score: 0)
+2026-04-10 16:45:04 - INFO - Processing DOMAIN IOC: raw=stream.write Malicious_IOC=stream.write
+2026-04-10 16:45:04 - INFO - Querying VT for DOMAIN: stream.write...
+2026-04-10 16:45:27 - INFO - Triggering Re-analysis for DOMAIN: stream.write (Score: 0)
+2026-04-10 16:45:30 - INFO - Processing DOMAIN IOC: raw=string.fromcharcode Malicious_IOC=string.fromcharcode
+2026-04-10 16:45:30 - INFO - Querying VT for DOMAIN: string.fromcharcode...
+2026-04-10 16:45:52 - INFO - Triggering Re-analysis for DOMAIN: string.fromcharcode (Score: 0)
+2026-04-10 16:45:55 - INFO - Processing DOMAIN IOC: raw=support.proto Malicious_IOC=support.proto
+2026-04-10 16:45:55 - INFO - Querying VT for DOMAIN: support.proto...
+2026-04-10 16:46:18 - INFO - Triggering Re-analysis for DOMAIN: support.proto (Score: 0)
+2026-04-10 16:46:21 - INFO - Processing DOMAIN IOC: raw=vm.runinnewcontext Malicious_IOC=vm.runinnewcontext
+2026-04-10 16:46:21 - INFO - Querying VT for DOMAIN: vm.runinnewcontext...
+2026-04-10 16:46:43 - INFO - Triggering Re-analysis for DOMAIN: vm.runinnewcontext (Score: 0)
+2026-04-10 16:46:46 - INFO - Processing DOMAIN IOC: raw=worker.on Malicious_IOC=worker.on
+2026-04-10 16:46:46 - INFO - Querying VT for DOMAIN: worker.on...
+2026-04-10 16:47:09 - INFO - Triggering Re-analysis for DOMAIN: worker.on (Score: 0)
+2026-04-10 16:47:11 - INFO - Processing DOMAIN IOC: raw=yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion Malicious_IOC=yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion
+2026-04-10 16:47:11 - INFO - Querying VT for DOMAIN: yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion...
+2026-04-10 16:47:35 - ERROR - Network error during VT lookup for DOMAIN: HTTPSConnectionPool(host='www.virustotal.com', port=443): Max retries exceeded with url: /api/v3/domains/yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1081)')))
+2026-04-10 16:48:05 - INFO - Report generated with 0 malicious IOCs and 37 clean IOCs found.
+2026-04-10 16:48:05 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260410_164735.txt
+2026-04-10 16:48:05 - INFO - Success: Report generated at reports/ADVISORY_20260410_164735.txt
+============================================================
+2026-04-10 16:56:25 - INFO - CyberShield-CTI Engine Initialized.
+2026-04-10 16:56:30 - INFO - Starting analysis for: https://www.netskope.com/blog/from-clickfix-to-maas-exposing-a-modular-windows-rat-and-its-admin-panel (Report Type: ioc)
+2026-04-10 16:56:32 - INFO - Extracted counts of IOCs-> IPs: 0, Domains: 37, URLs: 0, Hashes: 0, CVE: 0
+2026-04-10 16:56:32 - INFO - Processing DOMAIN IOC: raw=admin.proto Malicious_IOC=admin.proto
+2026-04-10 16:56:32 - INFO - Querying VT for DOMAIN: admin.proto...
+2026-04-10 16:56:54 - INFO - Triggering Re-analysis for DOMAIN: admin.proto (Score: 0)
+2026-04-10 16:56:56 - INFO - Processing DOMAIN IOC: raw=api.ipify Malicious_IOC=api.ipify
+2026-04-10 16:56:56 - INFO - Querying VT for DOMAIN: api.ipify...
+2026-04-10 16:57:17 - INFO - Triggering Re-analysis for DOMAIN: api.ipify (Score: 0)
+2026-04-10 16:57:19 - INFO - Processing DOMAIN IOC: raw=blob.includes Malicious_IOC=blob.includes
+2026-04-10 16:57:19 - INFO - Querying VT for DOMAIN: blob.includes...
+2026-04-10 16:57:41 - INFO - Triggering Re-analysis for DOMAIN: blob.includes (Score: 0)
+2026-04-10 16:57:43 - INFO - Processing DOMAIN IOC: raw=blob.split Malicious_IOC=blob.split
+2026-04-10 16:57:43 - INFO - Querying VT for DOMAIN: blob.split...
+2026-04-10 16:58:04 - INFO - Triggering Re-analysis for DOMAIN: blob.split (Score: 0)
+2026-04-10 16:58:05 - INFO - Processing DOMAIN IOC: raw=buffer.concat Malicious_IOC=buffer.concat
+2026-04-10 16:58:05 - INFO - Querying VT for DOMAIN: buffer.concat...
+2026-04-10 16:58:27 - INFO - Triggering Re-analysis for DOMAIN: buffer.concat (Score: 0)
+2026-04-10 16:58:28 - INFO - Processing DOMAIN IOC: raw=buffer.from Malicious_IOC=buffer.from
+2026-04-10 16:58:28 - INFO - Querying VT for DOMAIN: buffer.from...
+2026-04-10 16:58:51 - INFO - Triggering Re-analysis for DOMAIN: buffer.from (Score: 0)
+2026-04-10 16:58:52 - INFO - Processing DOMAIN IOC: raw=client.sendmoduleresult Malicious_IOC=client.sendmoduleresult
+2026-04-10 16:58:52 - INFO - Querying VT for DOMAIN: client.sendmoduleresult...
+2026-04-10 16:59:14 - INFO - Triggering Re-analysis for DOMAIN: client.sendmoduleresult (Score: 0)
+2026-04-10 16:59:15 - INFO - Processing DOMAIN IOC: raw=cloud-verificate.com Malicious_IOC=cloud-verificate.com
+2026-04-10 16:59:15 - INFO - Querying VT for DOMAIN: cloud-verificate.com...
+2026-04-10 16:59:36 - INFO - Processing DOMAIN IOC: raw=config.operator Malicious_IOC=config.operator
+2026-04-10 16:59:36 - INFO - Querying VT for DOMAIN: config.operator...
+2026-04-10 16:59:58 - INFO - Triggering Re-analysis for DOMAIN: config.operator (Score: 0)
+2026-04-10 16:59:59 - INFO - Processing DOMAIN IOC: raw=config.tag Malicious_IOC=config.tag
+2026-04-10 16:59:59 - INFO - Querying VT for DOMAIN: config.tag...
+2026-04-10 17:00:22 - INFO - Triggering Re-analysis for DOMAIN: config.tag (Score: 0)
+2026-04-10 17:00:23 - INFO - Processing DOMAIN IOC: raw=crypto.createdecipheriv Malicious_IOC=crypto.createdecipheriv
+2026-04-10 17:00:23 - INFO - Querying VT for DOMAIN: crypto.createdecipheriv...
+2026-04-10 17:00:44 - INFO - Triggering Re-analysis for DOMAIN: crypto.createdecipheriv (Score: 0)
+2026-04-10 17:00:46 - INFO - Processing DOMAIN IOC: raw=current.includes Malicious_IOC=current.includes
+2026-04-10 17:00:46 - INFO - Querying VT for DOMAIN: current.includes...
+2026-04-10 17:01:07 - INFO - Triggering Re-analysis for DOMAIN: current.includes (Score: 0)
+2026-04-10 17:01:08 - INFO - Processing DOMAIN IOC: raw=decipher.final Malicious_IOC=decipher.final
+2026-04-10 17:01:08 - INFO - Querying VT for DOMAIN: decipher.final...
+2026-04-10 17:01:30 - INFO - Triggering Re-analysis for DOMAIN: decipher.final (Score: 0)
+2026-04-10 17:01:53 - INFO - Processing DOMAIN IOC: raw=decipher.update Malicious_IOC=decipher.update
+2026-04-10 17:01:53 - INFO - Querying VT for DOMAIN: decipher.update...
+2026-04-10 17:02:15 - INFO - Triggering Re-analysis for DOMAIN: decipher.update (Score: 0)
+2026-04-10 17:02:17 - INFO - Processing DOMAIN IOC: raw=fs.writefilesync Malicious_IOC=fs.writefilesync
+2026-04-10 17:02:17 - INFO - Querying VT for DOMAIN: fs.writefilesync...
+2026-04-10 17:02:39 - INFO - Triggering Re-analysis for DOMAIN: fs.writefilesync (Score: 0)
+2026-04-10 17:02:40 - INFO - Processing DOMAIN IOC: raw=grpc-client.connect Malicious_IOC=grpc-client.connect
+2026-04-10 17:02:40 - INFO - Querying VT for DOMAIN: grpc-client.connect...
+2026-04-10 17:03:01 - INFO - Triggering Re-analysis for DOMAIN: grpc-client.connect (Score: 0)
+2026-04-10 17:03:03 - INFO - Processing DOMAIN IOC: raw=json.parse Malicious_IOC=json.parse
+2026-04-10 17:03:03 - INFO - Querying VT for DOMAIN: json.parse...
+2026-04-10 17:03:24 - INFO - Triggering Re-analysis for DOMAIN: json.parse (Score: 0)
+2026-04-10 17:03:26 - INFO - Processing DOMAIN IOC: raw=json.stringify Malicious_IOC=json.stringify
+2026-04-10 17:03:26 - INFO - Querying VT for DOMAIN: json.stringify...
+2026-04-10 17:03:47 - INFO - Triggering Re-analysis for DOMAIN: json.stringify (Score: 0)
+2026-04-10 17:03:49 - INFO - Processing DOMAIN IOC: raw=logger.error Malicious_IOC=logger.error
+2026-04-10 17:03:49 - INFO - Querying VT for DOMAIN: logger.error...
+2026-04-10 17:04:10 - INFO - Triggering Re-analysis for DOMAIN: logger.error (Score: 0)
+2026-04-10 17:04:12 - INFO - Processing DOMAIN IOC: raw=logger.warn Malicious_IOC=logger.warn
+2026-04-10 17:04:12 - INFO - Querying VT for DOMAIN: logger.warn...
+2026-04-10 17:04:33 - INFO - Triggering Re-analysis for DOMAIN: logger.warn (Score: 0)
+2026-04-10 17:04:35 - INFO - Processing DOMAIN IOC: raw=math.floor Malicious_IOC=math.floor
+2026-04-10 17:04:35 - INFO - Querying VT for DOMAIN: math.floor...
+2026-04-10 17:04:56 - INFO - Triggering Re-analysis for DOMAIN: math.floor (Score: 0)
+2026-04-10 17:04:57 - INFO - Processing DOMAIN IOC: raw=math.random Malicious_IOC=math.random
+2026-04-10 17:04:57 - INFO - Querying VT for DOMAIN: math.random...
+2026-04-10 17:05:19 - INFO - Triggering Re-analysis for DOMAIN: math.random (Score: 0)
+2026-04-10 17:05:20 - INFO - Processing DOMAIN IOC: raw=nodeserver-setup-full.msi Malicious_IOC=nodeserver-setup-full.msi
+2026-04-10 17:05:20 - INFO - Querying VT for DOMAIN: nodeserver-setup-full.msi...
+2026-04-10 17:05:42 - INFO - Triggering Re-analysis for DOMAIN: nodeserver-setup-full.msi (Score: 0)
+2026-04-10 17:05:43 - INFO - Processing DOMAIN IOC: raw=object.keys Malicious_IOC=object.keys
+2026-04-10 17:05:43 - INFO - Querying VT for DOMAIN: object.keys...
+2026-04-10 17:06:05 - INFO - Triggering Re-analysis for DOMAIN: object.keys (Score: 0)
+2026-04-10 17:06:06 - INFO - Processing DOMAIN IOC: raw=os.arch Malicious_IOC=os.arch
+2026-04-10 17:06:06 - INFO - Querying VT for DOMAIN: os.arch...
+2026-04-10 17:06:27 - INFO - Triggering Re-analysis for DOMAIN: os.arch (Score: 0)
+2026-04-10 17:06:28 - INFO - Processing DOMAIN IOC: raw=os.hostname Malicious_IOC=os.hostname
+2026-04-10 17:06:28 - INFO - Querying VT for DOMAIN: os.hostname...
+2026-04-10 17:06:52 - INFO - Triggering Re-analysis for DOMAIN: os.hostname (Score: 0)
+2026-04-10 17:06:53 - INFO - Processing DOMAIN IOC: raw=os.platform Malicious_IOC=os.platform
+2026-04-10 17:06:53 - INFO - Querying VT for DOMAIN: os.platform...
+2026-04-10 17:07:14 - INFO - Triggering Re-analysis for DOMAIN: os.platform (Score: 0)
+2026-04-10 17:07:16 - INFO - Processing DOMAIN IOC: raw=parts.length Malicious_IOC=parts.length
+2026-04-10 17:07:16 - INFO - Querying VT for DOMAIN: parts.length...
+2026-04-10 17:07:38 - INFO - Triggering Re-analysis for DOMAIN: parts.length (Score: 0)
+2026-04-10 17:07:40 - INFO - Processing DOMAIN IOC: raw=path.join Malicious_IOC=path.join
+2026-04-10 17:07:40 - INFO - Querying VT for DOMAIN: path.join...
+2026-04-10 17:08:01 - INFO - Triggering Re-analysis for DOMAIN: path.join (Score: 0)
+2026-04-10 17:08:03 - INFO - Processing DOMAIN IOC: raw=process.env Malicious_IOC=process.env
+2026-04-10 17:08:03 - INFO - Querying VT for DOMAIN: process.env...
+2026-04-10 17:08:24 - INFO - Triggering Re-analysis for DOMAIN: process.env (Score: 0)
+2026-04-10 17:08:25 - INFO - Processing DOMAIN IOC: raw=setup.msi Malicious_IOC=setup.msi
+2026-04-10 17:08:25 - INFO - Querying VT for DOMAIN: setup.msi...
+2026-04-10 17:08:48 - INFO - Triggering Re-analysis for DOMAIN: setup.msi (Score: 0)
+2026-04-10 17:08:50 - INFO - Processing DOMAIN IOC: raw=stream.write Malicious_IOC=stream.write
+2026-04-10 17:08:50 - INFO - Querying VT for DOMAIN: stream.write...
+2026-04-10 17:09:11 - INFO - Triggering Re-analysis for DOMAIN: stream.write (Score: 0)
+2026-04-10 17:09:12 - INFO - Processing DOMAIN IOC: raw=string.fromcharcode Malicious_IOC=string.fromcharcode
+2026-04-10 17:09:12 - INFO - Querying VT for DOMAIN: string.fromcharcode...
+2026-04-10 17:09:34 - INFO - Triggering Re-analysis for DOMAIN: string.fromcharcode (Score: 0)
+2026-04-10 17:09:36 - INFO - Processing DOMAIN IOC: raw=support.proto Malicious_IOC=support.proto
+2026-04-10 17:09:36 - INFO - Querying VT for DOMAIN: support.proto...
+2026-04-10 17:09:57 - INFO - Triggering Re-analysis for DOMAIN: support.proto (Score: 0)
+2026-04-10 17:09:58 - INFO - Processing DOMAIN IOC: raw=vm.runinnewcontext Malicious_IOC=vm.runinnewcontext
+2026-04-10 17:09:58 - INFO - Querying VT for DOMAIN: vm.runinnewcontext...
+2026-04-10 17:10:19 - INFO - Triggering Re-analysis for DOMAIN: vm.runinnewcontext (Score: 0)
+2026-04-10 17:10:21 - INFO - Processing DOMAIN IOC: raw=worker.on Malicious_IOC=worker.on
+2026-04-10 17:10:21 - INFO - Querying VT for DOMAIN: worker.on...
+2026-04-10 17:10:42 - INFO - Triggering Re-analysis for DOMAIN: worker.on (Score: 0)
+2026-04-10 17:10:44 - INFO - Processing DOMAIN IOC: raw=yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion Malicious_IOC=yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion
+2026-04-10 17:10:44 - INFO - Querying VT for DOMAIN: yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion...
+2026-04-10 17:11:05 - INFO - Triggering Re-analysis for DOMAIN: yuhvgbzsa66biqeatbmdvfo5b5jjefcmz5t2vjuvco5qtdkshfpabyid.onion (Score: 5)
+2026-04-10 17:11:27 - INFO - Report generated with 2 malicious IOCs and 35 clean IOCs found.
+2026-04-10 17:11:27 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260410_171127.txt
+2026-04-10 17:11:27 - INFO - Success: Report generated at reports/IOC_ONLY_20260410_171127.txt
+============================================================
+2026-04-10 17:14:25 - INFO - CyberShield-CTI Engine Initialized.
+2026-04-10 17:14:25 - INFO - Initialized missing JSON file: reports\vt_cache.json
+2026-04-10 17:14:25 - INFO - Initialized missing JSON file: reports\url_report_index.json
+2026-04-10 17:14:31 - INFO - Starting analysis for: https://www.blackfog.com/venom-stealer-turns-clickfix-into-a-full-exfiltration-pipeline/ (Report Type: full)
+2026-04-10 17:14:33 - INFO - Extracted counts of IOCs-> IPs: 0, Domains: 0, URLs: 0, Hashes: 0, CVE: 1
+2026-04-10 17:14:44 - INFO - Report generated with 0 malicious IOCs and 0 clean IOCs found.
+2026-04-10 17:14:44 - INFO - Success: Report generated at reports/ADVISORY_20260410_171433.txt
+============================================================
+2026-04-10 17:25:51 - INFO - CyberShield-CTI Engine Initialized.
+2026-04-10 17:27:08 - INFO - Starting analysis for: https://www.blackfog.com/venom-stealer-turns-clickfix-into-a-full-exfiltration-pipeline/ (Report Type: full)
+2026-04-10 17:27:10 - INFO - Extracted counts of IOCs-> IPs: 0, Domains: 0, URLs: 0, Hashes: 0, CVE: 0
+2026-04-10 17:27:20 - INFO - Report generated with 0 malicious IOCs and 0 clean IOCs found.
+2026-04-10 17:27:20 - INFO - Success: Report generated at reports/ADVISORY_20260410_172710.txt
+============================================================
+2026-04-10 17:29:58 - INFO - CyberShield-CTI Engine Initialized.
