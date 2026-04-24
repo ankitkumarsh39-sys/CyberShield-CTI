@@ -1,0 +1,459 @@
+================================================================================
+              ERROR ANALYSIS & EXPLANATION
+             CyberShield-CTI Project - cyber_shield.log
+================================================================================
+
+I found 6 major types of errors in your log file. Here's what each one means
+and why it happened:
+
+================================================================================
+ERROR #1: MISSING VIRUSTOTAL API KEY
+================================================================================
+
+ERROR MESSAGE:
+  2026-03-19 22:24:51 - CRITICAL - VirusTotal API key not found in 
+  environment variables. Please set VT_API_KEY in key.env.
+
+WHAT HAPPENED:
+  The program tried to start but couldn't find your VirusTotal API key.
+  This is a CRITICAL error that prevents the entire program from running.
+
+WHY IT HAPPENED:
+  You didn't create the .env file or the file didn't have the VT_API_KEY set.
+  
+  The code does this:
+    ┌─ load_dotenv(".env")  # Try to load .env file
+    ├─ VT_API_KEY = os.getenv("VT_API_KEY")  # Get VT_API_KEY from .env
+    └─ if not VT_API_KEY:  # If empty/missing
+         raise ValueError("Missing VirusTotal API Key...")
+
+HOW TO FIX IT:
+  1. Create a file named ".env" in your project root
+  2. Add this line:
+     VT_API_KEY=your_actual_virustotal_api_key_here
+  3. Replace "your_actual_virustotal_api_key_here" with real API key from:
+     https://www.virustotal.com → Settings → API Key
+  4. Save the file
+  5. Run the program again
+
+EXAMPLE .env file content:
+  VT_API_KEY=abc123def456ghi789jkl012mno345pqr678stu901v
+
+================================================================================
+ERROR #2: ATTRIBUTE MISSING - 'mitre_map'
+================================================================================
+
+ERROR MESSAGE:
+  2026-03-20 03:56:17 - CRITICAL - FATAL ERROR in generate_report: 
+  'CTIWorkbench' object has no attribute 'mitre_map'
+
+WHAT HAPPENED:
+  The program crashed while generating a report because it tried to access
+  an attribute called 'mitre_map' that doesn't exist.
+
+WHY IT HAPPENED:
+  Somewhere in the code, you (or someone) tried to use:
+    self.mitre_map  # This doesn't exist!
+  
+  But the actual attribute is called:
+    self.mitre_rules  # This is the correct name!
+
+  It's like trying to open a door labeled "mitre_map" when the actual door
+  is labeled "mitre_rules"!
+
+WHERE IN CODE:
+  In advisory_gen.py, in the __init__ method, the attribute is defined as:
+    self.mitre_rules = [...]  # Correct name
+  
+  But somewhere in generate_report or extract_context, the code probably has:
+    self.mitre_map  # Wrong name!
+
+HOW TO FIX IT:
+  1. Open advisory_gen.py
+  2. Search for "mitre_map" (use Ctrl+F)
+  3. Replace all occurrences of "mitre_map" with "mitre_rules"
+  4. Save and run again
+
+PYTHON LESSON:
+  This error is called an AttributeError. It happens when you try to access
+  an attribute (property) that doesn't exist on an object.
+  
+  Real world analogy:
+    student.grade_A = 95  # Define grade_A
+    print(student.grade_B)  # Try to access grade_B (doesn't exist!)
+    # Error: 'Student' object has no attribute 'grade_B'
+
+================================================================================
+ERROR #3: MISSING FUNCTION ARGUMENTS
+================================================================================
+
+ERROR MESSAGE:
+  2026-03-20 04:30:59 - CRITICAL - FATAL ERROR in generate_report: 
+  CTIWorkbench.generate_report.<locals>.process_ioc() missing 2 required 
+  positional arguments: 'start_num' and 'total_all'
+
+WHAT HAPPENED:
+  You called a function but didn't provide all the required parameters.
+  The function expects 2 extra arguments that weren't provided.
+
+WHY IT HAPPENED:
+  Someone changed the function definition to require more parameters:
+  
+  OLD VERSION:
+    def process_ioc(ioc_list, ioc_type, cat):
+      # Does stuff
+  
+  NEW VERSION (with changes):
+    def process_ioc(ioc_list, ioc_type, cat, start_num, total_all):
+      # Does stuff
+  
+  But the CALLING CODE wasn't updated:
+    OLD CALL:
+      process_ioc(found_ips, 'ip', 'IPs')
+    
+    NEW CALL (required):
+      process_ioc(found_ips, 'ip', 'IPs', 1, 100)
+
+HOW TO FIX IT:
+  Option 1: Update the function calls to include the new parameters
+    process_ioc(found_ips, 'ip', 'IPs', start_num=1, total_all=len(found_ips))
+    process_ioc(all_domains, 'domain', 'Domain', start_num=2, total_all=len(all_domains))
+    etc.
+  
+  Option 2: Remove the new parameters from function definition (if not needed)
+    def process_ioc(ioc_list, ioc_type, cat):
+      # Go back to old version
+
+PYTHON LESSON:
+  This is a TypeError - parameter mismatch.
+  
+  When you define a function:
+    def add_numbers(a, b, c):  # Requires 3 parameters
+      return a + b + c
+  
+  You MUST provide all 3 when calling it:
+    result = add_numbers(1, 2, 3)  # Correct
+    result = add_numbers(1, 2)     # Error! Missing c
+    
+================================================================================
+ERROR #4: SSL CERTIFICATE VERIFICATION FAILED
+================================================================================
+
+ERROR MESSAGE:
+  2026-03-20 04:54:55 - ERROR - Re-analysis failed: 
+  HTTPSConnectionPool(host='www.virustotal.com', port=443): 
+  Max retries exceeded with url: /api/v3/domains/telegram.me 
+  (Caused by SSLError(SSLCertVerificationError(1, 
+  '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: 
+  self-signed certificate in certificate chain (_ssl.c:1081)')))
+
+WHAT HAPPENED:
+  When trying to connect to VirusTotal (HTTPS), the SSL certificate
+  validation failed. This is a SECURITY CHECK - your computer doesn't
+  trust the certificate presented by VirusTotal.
+
+WHY IT HAPPENED:
+  This can happen due to:
+  
+  1. CORPORATE FIREWALL/PROXY
+     Your company's firewall intercepts HTTPS and replaces certificates.
+     This is very common in corporate networks.
+  
+  2. SSL/TLS CERTIFICATE ISSUE
+     The certificate chain on your system is incomplete or outdated.
+  
+  3. ANTIVIRUS/SECURITY SOFTWARE
+     Some antivirus programs intercept HTTPS connections.
+  
+  4. NETWORK ISSUES
+     Corrupted data or MITM (Man-in-the-Middle) attack (unlikely).
+
+THE GOOD NEWS:
+  The code ALREADY handles this! Look at this part:
+    try:
+        res = self.session.get(api_url, timeout=10)
+    except requests.exceptions.SSLError as ssl_err:
+        logging.warning(f"SSL verification failed for VT lookup...")
+        res = self.session.get(api_url, timeout=10, verify=False)
+  
+  The program automatically retries WITHOUT SSL verification (verify=False).
+
+HOW TO FIX IT:
+  1. Check if you're behind a corporate firewall/proxy
+  2. If yes, configure proxy settings in Python:
+     
+     In your code, add:
+       import os
+       os.environ['REQUESTS_CA_BUNDLE'] = 'C:\\path\\to\\corporate\\cert.pem'
+     
+     Or update Python's certificate store
+  
+  3. If still failing, the error logs show it's handled gracefully
+     The program continues anyway (just with verify=False)
+
+SECURITY NOTE:
+  verify=False means the program doesn't check if the certificate is legit.
+  This is okay in this case because:
+  • We're just querying public APIs
+  • No sensitive data is being sent
+  • This is a workaround, not best practice
+  
+  But in production/security-critical apps, you should fix the certificate issue!
+
+PYTHON LESSON:
+  SSL/TLS = Secure connection protocol
+  Certificate = Digital proof of identity (like ID card for websites)
+  
+  When you visit https://example.com:
+    Browser says: "Hi, I need to verify you're really example.com"
+    Server says: "Here's my certificate"
+    Browser checks: "Is this certificate valid? Signed by trusted authority?"
+    
+  If check fails:
+    Browser says: "I don't trust you!"
+    Connection blocked!
+
+================================================================================
+ERROR #5: I/O OPERATION ON CLOSED FILE
+================================================================================
+
+ERROR MESSAGE:
+  2026-03-20 05:43:16 - CRITICAL - FATAL ERROR in generate_report: 
+  I/O operation on closed file.
+
+WHAT HAPPENED:
+  The program tried to write to a file that was already closed.
+  This is like trying to write in a notebook that you already put away!
+
+WHY IT HAPPENED:
+  This happens when:
+  
+  Problem Scenario:
+    with open(report_path, "w") as f:
+        f.write("Line 1\n")
+        f.write("Line 2\n")
+    # File automatically closes here ^^^
+    
+    # Now trying to use f again:
+    f.write("Line 3\n")  # ERROR! File is closed!
+
+  In your code, this might happen if:
+    1. You close a file but then try to write to it again
+    2. You have multiple file handles to same file
+    3. File object is passed around and closed prematurely
+
+HOW TO FIX IT:
+  Make sure all file operations are inside the "with" block:
+  
+  WRONG:
+    with open(report_path, "w") as f:
+        f.write("Line 1\n")
+    # File closes here
+    f.write("Line 2\n")  # ERROR!
+  
+  CORRECT:
+    with open(report_path, "w") as f:
+        f.write("Line 1\n")
+        f.write("Line 2\n")  # Still inside with block, file is open
+  # File closes here
+  
+  Or reopen the file:
+    with open(report_path, "w") as f:
+        f.write("Line 1\n")
+    
+    with open(report_path, "a") as f:  # "a" = append
+        f.write("Line 2\n")
+
+PYTHON LESSON:
+  File operations:
+    open()   = Open file and get file handle
+    write()  = Write data (file must be open)
+    close()  = Close file (file must be open first)
+    with     = Context manager - auto-closes file
+  
+  "with" is the BEST practice:
+    with open("file.txt", "w") as f:
+        f.write("Hello")
+    # Automatically closes f, even if error happens
+
+================================================================================
+ERROR #6: NETWORK TIMEOUT
+================================================================================
+
+ERROR MESSAGE:
+  2026-03-20 06:06:47 - ERROR - Re-analysis failed: 
+  HTTPSConnectionPool(host='www.virustotal.com', port=443): 
+  Read timed out. (read timeout=5)
+
+WHAT HAPPENED:
+  The program asked VirusTotal for data but waited too long for a response.
+  The server took longer than 5 seconds to respond, so the connection was
+  cancelled (timeout).
+
+WHY IT HAPPENED:
+  Multiple possible reasons:
+  
+  1. VirusTotal Server Slow
+     Their servers might be overloaded or having issues
+  
+  2. Network Latency
+     Your internet connection is slow
+  
+  3. Firewall/Proxy Delay
+     Corporate firewall is slow to process requests
+  
+  4. Your Computer Busy
+     Your PC is processing too many IOCs, taking too long between requests
+  
+  5. ISP Issues
+     Your Internet Service Provider has latency
+
+THE GOOD NEWS:
+  The code handles this! Look at the retry logic:
+    if "rate limit" in msg.lower() or "429" in msg:
+        wait_time = base_sleep * (2 ** retries)
+        logging.warning(f"Rate limit hit...")
+        time.sleep(wait_time)
+        retries += 1
+        continue
+
+HOW TO FIX IT:
+  1. Increase timeout (in advisory_gen.py):
+     OLD:
+       res = self.session.get(api_url, timeout=10)
+     
+     NEW:
+       res = self.session.get(api_url, timeout=30)  # 30 seconds instead of 10
+  
+  2. Add retry logic with exponential backoff (already in code):
+     First retry: wait 2 seconds
+     Second retry: wait 4 seconds
+     Third retry: wait 8 seconds
+     etc.
+  
+  3. Check your internet connection
+  
+  4. Try during less busy times
+
+PYTHON LESSON:
+  timeout = Maximum time to wait for response (in seconds)
+  
+  requests.get(url, timeout=5):
+    "Wait max 5 seconds for server response"
+    If server doesn't respond in 5 seconds → error
+    
+  Exponential backoff = Gradually increase wait time
+    1st attempt: immediate
+    2nd attempt: wait 2s before retry
+    3rd attempt: wait 4s before retry
+    This prevents overwhelming a busy server!
+
+================================================================================
+SUMMARY OF ALL ERRORS
+================================================================================
+
+┌─ Error #1: Missing API Key
+│  Severity: CRITICAL (program won't start)
+│  Fix: Create .env file with VT_API_KEY
+│
+├─ Error #2: Wrong attribute name (mitre_map vs mitre_rules)
+│  Severity: CRITICAL (program crashes)
+│  Fix: Replace mitre_map with mitre_rules in code
+│
+├─ Error #3: Missing function arguments (start_num, total_all)
+│  Severity: CRITICAL (program crashes)
+│  Fix: Update function calls to include new parameters
+│
+├─ Error #4: SSL Certificate verification failed
+│  Severity: WARNING (but handled automatically)
+│  Fix: Check corporate firewall/proxy settings
+│  Status: Auto-retries with verify=False
+│
+├─ Error #5: I/O operation on closed file
+│  Severity: CRITICAL (report generation fails)
+│  Fix: Keep all writes inside "with" block
+│
+└─ Error #6: Network timeout
+   Severity: WARNING (but handled automatically)
+   Fix: Increase timeout value or check internet
+   Status: Auto-retries with exponential backoff
+
+================================================================================
+HOW TO PREVENT THESE ERRORS IN FUTURE
+================================================================================
+
+BEST PRACTICES FOR PYTHON:
+
+1. SETUP FILES CORRECTLY
+   ✓ Always create .env before running
+   ✓ Use environment variables for secrets
+   ✓ Don't hardcode API keys in code
+
+2. ERROR HANDLING
+   ✓ Use try/except for risky operations
+   ✓ Log errors properly
+   ✓ Provide fallback behavior
+
+3. FILE OPERATIONS
+   ✓ Always use "with" for files
+   ✓ Keep all operations inside "with" block
+   ✓ Test file existence before using
+
+4. API REQUESTS
+   ✓ Set reasonable timeouts
+   ✓ Implement retry logic
+   ✓ Use exponential backoff
+   ✓ Handle SSL certificate errors
+
+5. TESTING
+   ✓ Test with different URLs
+   ✓ Test with missing files
+   ✓ Test with API errors
+   ✓ Test with network issues
+
+6. LOGGING
+   ✓ Log at appropriate levels (INFO, WARNING, ERROR, CRITICAL)
+   ✓ Include context in messages
+   ✓ Review logs regularly
+
+================================================================================
+WHAT TO DO NOW
+================================================================================
+
+ACTION PLAN:
+
+Step 1: Fix Error #1 (API Key)
+  [ ] Create .env file
+  [ ] Add VT_API_KEY=<your_key>
+  [ ] Save file
+
+Step 2: Fix Error #2 (mitre_map attribute)
+  [ ] Open advisory_gen.py
+  [ ] Search for "mitre_map"
+  [ ] Replace with "mitre_rules"
+  [ ] Save file
+
+Step 3: Fix Error #3 (Missing arguments)
+  [ ] Find process_ioc function definition
+  [ ] Check if it has start_num and total_all parameters
+  [ ] Update all function calls to include these parameters
+  [ ] Save file
+
+Step 4: Fix Error #5 (Closed file)
+  [ ] Find all file operations
+  [ ] Make sure they're inside "with" blocks
+  [ ] Check for any file.write() outside "with"
+  [ ] Save file
+
+Step 5: Test
+  [ ] Run: python main.py
+  [ ] Enter a test URL
+  [ ] Check for errors
+  [ ] Review cyber_shield.log
+
+Step 6: Optimize (if still getting timeouts)
+  [ ] Increase timeout from 10 to 30 seconds
+  [ ] Or reduce number of IOCs being queried
+  [ ] Save file
+
+================================================================================

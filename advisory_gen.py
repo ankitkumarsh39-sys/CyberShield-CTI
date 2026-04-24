@@ -223,8 +223,16 @@ class CTIWorkbench:
                 score = cache_entry['score']
                 status = cache_entry.get('status', f"{score} hits (cached)")
                 if score > 0 or cache_age < self.vt_cache_max_age_seconds:
-                    logging.info(f"Using cached VT result for {ioc_type.upper()} {val}: {status} (age {int(cache_age)}s)")
-                    return score, status
+                    logging.info(f"Cached VT result available for {ioc_type.upper()} {val}: {status} (age {int(cache_age)}s)")
+                    while True:
+                        use_cache = input(f"Cached VT data found for {ioc_type.upper()} '{val}'. Use cached result? [y/N]: ").strip().lower()
+                        if use_cache in {'y', 'yes'}:
+                            return score, status
+                        if use_cache in {'n', 'no', ''}:
+                            logging.info(f"User declined cached VT result for {ioc_type.upper()} {val}; forcing re-analysis.")
+                            force_reanalysis = True
+                            break
+                        print("Please enter 'y' or 'n'.")
 
         endpoints = {
             "ip": "ip_addresses",
@@ -578,8 +586,8 @@ class CTIWorkbench:
             def normalize_ip(ip):# This function takes an IP address that may be defanged (e.g., using [.] or (.) instead of .) and normalizes it back to the standard format.
                 ip = ip.replace("[.]", ".").replace("(.)", ".")# By replacing common defanging patterns with a standard dot, this function ensures that all IP addresses are in a consistent format for further processing and analysis.
                 return ip
-            def normalize_ioc(ioc):
-                return (
+            def normalize_ioc(ioc, ioc_type=None):
+                cleaned = (
                     ioc.replace("[.]", ".")
                        .replace("(.)", ".")
                        .replace("[://]", "://")
@@ -589,8 +597,11 @@ class CTIWorkbench:
                        .replace("hxxp", "http")
                        .replace("fxp", "ftp")
                        .strip()
-                       .lower()
                 )
+                # Preserve URL path case because VirusTotal URL lookups can be case-sensitive in the path/query component.
+                if ioc_type == 'url':
+                    return cleaned
+                return cleaned.lower()
             found_ips = sorted(set(normalize_ip(ip) for ip in found_ips))# This line applies the normalize_ip function to each found IP address, ensuring that all IPs are in a consistent format. The sorted and set functions are used to remove duplicates and maintain an ordered list of unique IP addresses.
 
             raw_hashes = sorted(list(set(iocextract.extract_hashes(page_text))))
@@ -649,10 +660,11 @@ class CTIWorkbench:
                     # The cleaning step normalizes the IOC by replacing common obfuscation patterns (like [.] or hxxp) with their standard forms. 
                     # This helps in accurately checking against whitelists and blocklists, as well as querying VirusTotal. By converting to lowercase, 
                     # it also ensures that the checks are case-insensitive, which is important for consistency.
-                    clean_val = normalize_ioc(ioc)# This line process_ioc does the "Refanging"
-                    if any(w in clean_val for w in self.ip_whitelist + self.domain_whitelist):
+                    clean_val = normalize_ioc(ioc, ioc_type)# This line process_ioc does the "Refanging"
+                    clean_lookup = clean_val.lower() if ioc_type in {'url', 'domain', 'hash'} else clean_val
+                    if any(w in clean_lookup for w in self.ip_whitelist + self.domain_whitelist):
                         continue
-                    is_block = clean_val in self.manual_blocklist
+                    is_block = clean_lookup in self.manual_blocklist
 
                     logging.info(f"Processing {ioc_type.upper()} IOC: raw={ioc[:80]} Malicious_IOC={clean_val[:80]}")
                     # The vt_result variable is assigned a tuple based on whether the IOC is found in the manual blocklist. 
