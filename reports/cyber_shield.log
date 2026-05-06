@@ -3775,3 +3775,182 @@ Original error was:
 2026-04-10 20:19:04 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260410_201904.txt
 2026-04-10 20:19:04 - INFO - Success: Report generated at reports/IOC_ONLY_20260410_201904.txt
 ============================================================
+2026-05-06 15:56:59 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-06 15:57:04 - INFO - Starting analysis for: https://www.trendmicro.com/en_us/research/26/d/inside-shadow-earth-053.html (Report Type: full)
+2026-05-06 15:57:06 - INFO - Extracted counts of IOCs-> IPs: 4, Domains: 27, URLs: 0, Hashes: 4, CVE: 5
+2026-05-06 15:57:06 - INFO - Processing IP IOC: raw=141.164.46.77 Malicious_IOC=141.164.46.77
+2026-05-06 15:57:11 - INFO - Triggering re-analysis for IP: 141.164.46.77 (Score: 4)
+2026-05-06 15:57:15 - INFO - Processing IP IOC: raw=194.38.11.3 Malicious_IOC=194.38.11.3
+2026-05-06 15:57:17 - INFO - Processing IP IOC: raw=209.141.40.254 Malicious_IOC=209.141.40.254
+2026-05-06 15:57:20 - INFO - Processing IP IOC: raw=96.9.125.227 Malicious_IOC=96.9.125.227
+2026-05-06 15:57:22 - INFO - Processing DOMAIN IOC: raw=2.aspx Malicious_IOC=2.aspx
+2026-05-06 15:57:25 - INFO - Triggering re-analysis for DOMAIN: 2.aspx (Score: 0)
+2026-05-06 15:57:25 - INFO - Processing DOMAIN IOC: raw=6t8bljp.log Malicious_IOC=6t8bljp.log
+2026-05-06 15:57:28 - INFO - Triggering re-analysis for DOMAIN: 6t8bljp.log (Score: 0)
+2026-05-06 15:57:28 - INFO - Processing DOMAIN IOC: raw=9xf5wld.log Malicious_IOC=9xf5wld.log
+2026-05-06 15:57:31 - INFO - Triggering re-analysis for DOMAIN: 9xf5wld.log (Score: 0)
+2026-05-06 15:57:31 - INFO - Processing DOMAIN IOC: raw=c06kcq2.log Malicious_IOC=c06kcq2.log
+2026-05-06 15:57:34 - INFO - Triggering re-analysis for DOMAIN: c06kcq2.log (Score: 0)
+2026-05-06 15:57:34 - INFO - Processing DOMAIN IOC: raw=charcode.aspx Malicious_IOC=charcode.aspx
+2026-05-06 15:57:36 - INFO - Triggering re-analysis for DOMAIN: charcode.aspx (Score: 0)
+2026-05-06 15:57:37 - INFO - Processing DOMAIN IOC: raw=client.toml Malicious_IOC=client.toml
+2026-05-06 15:57:39 - INFO - Triggering re-analysis for DOMAIN: client.toml (Score: 0)
+2026-05-06 15:57:40 - INFO - Processing DOMAIN IOC: raw=d5plaa1.log Malicious_IOC=d5plaa1.log
+2026-05-06 15:57:42 - INFO - Triggering re-analysis for DOMAIN: d5plaa1.log (Score: 0)
+2026-05-06 15:57:43 - INFO - Processing DOMAIN IOC: raw=data.aspx Malicious_IOC=data.aspx
+2026-05-06 15:57:45 - INFO - Triggering re-analysis for DOMAIN: data.aspx (Score: 0)
+2026-05-06 15:57:45 - INFO - Processing DOMAIN IOC: raw=error.aspx Malicious_IOC=error.aspx
+2026-05-06 15:57:48 - INFO - Triggering re-analysis for DOMAIN: error.aspx (Score: 0)
+2026-05-06 15:57:48 - INFO - Processing DOMAIN IOC: raw=errorfe.aspx Malicious_IOC=errorfe.aspx
+2026-05-06 15:57:51 - INFO - Triggering re-analysis for DOMAIN: errorfe.aspx (Score: 0)
+2026-05-06 15:57:52 - INFO - Processing DOMAIN IOC: raw=graphics-hook-filter32.dll Malicious_IOC=graphics-hook-filter32.dll
+2026-05-06 15:57:54 - INFO - Triggering re-analysis for DOMAIN: graphics-hook-filter32.dll (Score: 0)
+2026-05-06 15:57:55 - INFO - Processing DOMAIN IOC: raw=i.aspx Malicious_IOC=i.aspx
+2026-05-06 15:57:57 - INFO - Triggering re-analysis for DOMAIN: i.aspx (Score: 0)
+2026-05-06 15:57:58 - INFO - Processing DOMAIN IOC: raw=imjp14k.dll Malicious_IOC=imjp14k.dll
+2026-05-06 15:58:00 - INFO - Triggering re-analysis for DOMAIN: imjp14k.dll (Score: 0)
+2026-05-06 15:58:00 - INFO - Processing DOMAIN IOC: raw=management.powershell Malicious_IOC=management.powershell
+2026-05-06 15:58:03 - INFO - Triggering re-analysis for DOMAIN: management.powershell (Score: 0)
+2026-05-06 15:58:03 - INFO - Processing DOMAIN IOC: raw=microsoft.exchange Malicious_IOC=microsoft.exchange
+2026-05-06 15:58:06 - INFO - Triggering re-analysis for DOMAIN: microsoft.exchange (Score: 0)
+2026-05-06 15:58:10 - INFO - Processing DOMAIN IOC: raw=mps.dll Malicious_IOC=mps.dll
+2026-05-06 15:58:12 - INFO - Triggering re-analysis for DOMAIN: mps.dll (Score: 0)
+2026-05-06 15:58:12 - INFO - Processing DOMAIN IOC: raw=office365-update.com Malicious_IOC=office365-update.com
+2026-05-06 15:58:15 - INFO - Processing DOMAIN IOC: raw=page.aspx Malicious_IOC=page.aspx
+2026-05-06 15:58:17 - INFO - Triggering re-analysis for DOMAIN: page.aspx (Score: 0)
+2026-05-06 15:58:18 - INFO - Processing DOMAIN IOC: raw=signout.aspx Malicious_IOC=signout.aspx
+2026-05-06 15:58:20 - INFO - Triggering re-analysis for DOMAIN: signout.aspx (Score: 0)
+2026-05-06 15:58:21 - INFO - Processing DOMAIN IOC: raw=timeinlogout.aspx Malicious_IOC=timeinlogout.aspx
+2026-05-06 15:58:23 - INFO - Triggering re-analysis for DOMAIN: timeinlogout.aspx (Score: 0)
+2026-05-06 15:58:23 - INFO - Processing DOMAIN IOC: raw=timeout.aspx Malicious_IOC=timeout.aspx
+2026-05-06 15:58:26 - INFO - Triggering re-analysis for DOMAIN: timeout.aspx (Score: 0)
+2026-05-06 15:58:26 - INFO - Processing DOMAIN IOC: raw=tosbtkbd.dll Malicious_IOC=tosbtkbd.dll
+2026-05-06 15:58:28 - INFO - Triggering re-analysis for DOMAIN: tosbtkbd.dll (Score: 0)
+2026-05-06 15:58:29 - INFO - Processing DOMAIN IOC: raw=tunnel.ashx Malicious_IOC=tunnel.ashx
+2026-05-06 15:58:31 - INFO - Triggering re-analysis for DOMAIN: tunnel.ashx (Score: 0)
+2026-05-06 15:58:32 - INFO - Processing DOMAIN IOC: raw=uxtheme.dll Malicious_IOC=uxtheme.dll
+2026-05-06 15:58:34 - INFO - Triggering re-analysis for DOMAIN: uxtheme.dll (Score: 0)
+2026-05-06 15:58:35 - INFO - Processing DOMAIN IOC: raw=vmb9ait.log Malicious_IOC=vmb9ait.log
+2026-05-06 15:58:37 - INFO - Triggering re-analysis for DOMAIN: vmb9ait.log (Score: 0)
+2026-05-06 15:58:37 - INFO - Processing DOMAIN IOC: raw=warn.aspx Malicious_IOC=warn.aspx
+2026-05-06 15:58:40 - INFO - Triggering re-analysis for DOMAIN: warn.aspx (Score: 0)
+2026-05-06 15:58:40 - INFO - Processing DOMAIN IOC: raw=zimbra-beta.info Malicious_IOC=zimbra-beta.info
+2026-05-06 15:58:43 - INFO - Processing HASH IOC: raw=2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2 Malicious_IOC=2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2
+2026-05-06 15:58:45 - INFO - Triggering re-analysis for HASH: 2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2 (Score: 0)
+2026-05-06 15:58:49 - INFO - Processing HASH IOC: raw=4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8 Malicious_IOC=4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8
+2026-05-06 15:58:51 - INFO - Triggering re-analysis for HASH: 4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8 (Score: 1)
+2026-05-06 15:58:56 - INFO - Processing HASH IOC: raw=8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78 Malicious_IOC=8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78
+2026-05-06 15:58:58 - INFO - Triggering re-analysis for HASH: 8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78 (Score: 0)
+2026-05-06 15:59:02 - INFO - Processing HASH IOC: raw=d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3 Malicious_IOC=d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3
+2026-05-06 15:59:05 - INFO - Triggering re-analysis for HASH: d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3 (Score: 0)
+2026-05-06 15:59:35 - INFO - Report generated with 7 malicious IOCs and 28 clean IOCs found.
+2026-05-06 15:59:35 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260506_155909.txt
+2026-05-06 15:59:35 - INFO - Success: Report generated at reports/ADVISORY_20260506_155909.txt
+============================================================
+2026-05-06 16:05:07 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-06 16:05:16 - INFO - Starting analysis for: https://www.trendmicro.com/en_us/research/26/d/inside-shadow-earth-053.html# (Report Type: ioc)
+2026-05-06 16:05:19 - INFO - Extracted counts of IOCs-> IPs: 4, Domains: 27, URLs: 0, Hashes: 4, CVE: 5
+2026-05-06 16:05:19 - INFO - Processing IP IOC: raw=141.164.46.77 Malicious_IOC=141.164.46.77
+2026-05-06 16:05:19 - INFO - Cached VT result available for IP 141.164.46.77: 4 hits (Re-analyzed) (age 483s)
+2026-05-06 16:05:34 - INFO - User declined cached VT result for IP 141.164.46.77; forcing re-analysis.
+2026-05-06 16:05:37 - INFO - Triggering re-analysis for IP: 141.164.46.77 (Score: 4)
+2026-05-06 16:05:41 - INFO - Processing IP IOC: raw=194.38.11.3 Malicious_IOC=194.38.11.3
+2026-05-06 16:05:41 - INFO - Cached VT result available for IP 194.38.11.3: 17 hits (age 503s)
+2026-05-06 16:05:44 - INFO - User declined cached VT result for IP 194.38.11.3; forcing re-analysis.
+2026-05-06 16:05:46 - INFO - Processing IP IOC: raw=209.141.40.254 Malicious_IOC=209.141.40.254
+2026-05-06 16:05:46 - INFO - Cached VT result available for IP 209.141.40.254: 7 hits (age 506s)
+2026-05-06 16:05:49 - INFO - User declined cached VT result for IP 209.141.40.254; forcing re-analysis.
+2026-05-06 16:05:51 - INFO - Processing IP IOC: raw=96.9.125.227 Malicious_IOC=96.9.125.227
+2026-05-06 16:05:51 - INFO - Cached VT result available for IP 96.9.125.227: 7 hits (age 509s)
+2026-05-06 16:05:53 - INFO - User declined cached VT result for IP 96.9.125.227; forcing re-analysis.
+2026-05-06 16:05:55 - INFO - Processing DOMAIN IOC: raw=2.aspx Malicious_IOC=2.aspx
+2026-05-06 16:05:55 - INFO - Cached VT result available for DOMAIN 2.aspx: 0 hits (age 510s)
+2026-05-06 16:05:57 - INFO - User declined cached VT result for DOMAIN 2.aspx; forcing re-analysis.
+2026-05-06 16:06:00 - INFO - Triggering re-analysis for DOMAIN: 2.aspx (Score: 0)
+2026-05-06 16:06:01 - INFO - Processing DOMAIN IOC: raw=6t8bljp.log Malicious_IOC=6t8bljp.log
+2026-05-06 16:06:01 - INFO - Cached VT result available for DOMAIN 6t8bljp.log: 0 hits (age 513s)
+2026-05-06 16:06:04 - INFO - User declined cached VT result for DOMAIN 6t8bljp.log; forcing re-analysis.
+2026-05-06 16:06:06 - INFO - Triggering re-analysis for DOMAIN: 6t8bljp.log (Score: 0)
+2026-05-06 16:06:07 - INFO - Processing DOMAIN IOC: raw=9xf5wld.log Malicious_IOC=9xf5wld.log
+2026-05-06 16:06:07 - INFO - Cached VT result available for DOMAIN 9xf5wld.log: 0 hits (age 516s)
+2026-05-06 16:06:10 - INFO - User declined cached VT result for DOMAIN 9xf5wld.log; forcing re-analysis.
+2026-05-06 16:06:12 - INFO - Triggering re-analysis for DOMAIN: 9xf5wld.log (Score: 0)
+2026-05-06 16:06:13 - INFO - Processing DOMAIN IOC: raw=c06kcq2.log Malicious_IOC=c06kcq2.log
+2026-05-06 16:06:13 - INFO - Cached VT result available for DOMAIN c06kcq2.log: 0 hits (age 519s)
+2026-05-06 16:06:14 - INFO - User declined cached VT result for DOMAIN c06kcq2.log; forcing re-analysis.
+2026-05-06 16:06:17 - INFO - Triggering re-analysis for DOMAIN: c06kcq2.log (Score: 0)
+2026-05-06 16:06:17 - INFO - Processing DOMAIN IOC: raw=charcode.aspx Malicious_IOC=charcode.aspx
+2026-05-06 16:06:17 - INFO - Cached VT result available for DOMAIN charcode.aspx: 0 hits (age 520s)
+2026-05-06 16:06:36 - INFO - User declined cached VT result for DOMAIN charcode.aspx; forcing re-analysis.
+2026-05-06 16:06:38 - INFO - Triggering re-analysis for DOMAIN: charcode.aspx (Score: 0)
+2026-05-06 16:06:38 - INFO - Processing DOMAIN IOC: raw=client.toml Malicious_IOC=client.toml
+2026-05-06 16:06:38 - INFO - Cached VT result available for DOMAIN client.toml: 0 hits (age 539s)
+2026-05-06 16:06:43 - INFO - User declined cached VT result for DOMAIN client.toml; forcing re-analysis.
+2026-05-06 16:06:46 - INFO - Triggering re-analysis for DOMAIN: client.toml (Score: 0)
+2026-05-06 16:06:46 - INFO - Processing DOMAIN IOC: raw=d5plaa1.log Malicious_IOC=d5plaa1.log
+2026-05-06 16:06:46 - INFO - Cached VT result available for DOMAIN d5plaa1.log: 0 hits (age 543s)
+2026-05-06 16:06:47 - INFO - User declined cached VT result for DOMAIN d5plaa1.log; forcing re-analysis.
+2026-05-06 16:06:50 - INFO - Triggering re-analysis for DOMAIN: d5plaa1.log (Score: 0)
+2026-05-06 16:06:50 - INFO - Processing DOMAIN IOC: raw=data.aspx Malicious_IOC=data.aspx
+2026-05-06 16:06:50 - INFO - Cached VT result available for DOMAIN data.aspx: 0 hits (age 545s)
+2026-05-06 16:07:31 - INFO - User declined cached VT result for DOMAIN data.aspx; forcing re-analysis.
+2026-05-06 16:07:35 - INFO - Triggering re-analysis for DOMAIN: data.aspx (Score: 0)
+2026-05-06 16:07:35 - INFO - Processing DOMAIN IOC: raw=error.aspx Malicious_IOC=error.aspx
+2026-05-06 16:07:35 - INFO - Cached VT result available for DOMAIN error.aspx: 0 hits (age 587s)
+2026-05-06 16:07:37 - INFO - User declined cached VT result for DOMAIN error.aspx; forcing re-analysis.
+2026-05-06 16:07:39 - INFO - Triggering re-analysis for DOMAIN: error.aspx (Score: 0)
+2026-05-06 16:07:40 - INFO - Processing DOMAIN IOC: raw=errorfe.aspx Malicious_IOC=errorfe.aspx
+2026-05-06 16:07:40 - INFO - Cached VT result available for DOMAIN errorfe.aspx: 0 hits (age 588s)
+2026-05-06 16:07:41 - INFO - User declined cached VT result for DOMAIN errorfe.aspx; forcing re-analysis.
+2026-05-06 16:07:44 - INFO - Triggering re-analysis for DOMAIN: errorfe.aspx (Score: 0)
+2026-05-06 16:07:44 - INFO - Processing DOMAIN IOC: raw=graphics-hook-filter32.dll Malicious_IOC=graphics-hook-filter32.dll
+2026-05-06 16:07:44 - INFO - Cached VT result available for DOMAIN graphics-hook-filter32.dll: 0 hits (age 590s)
+2026-05-06 16:07:46 - INFO - User declined cached VT result for DOMAIN graphics-hook-filter32.dll; forcing re-analysis.
+2026-05-06 16:07:49 - INFO - Triggering re-analysis for DOMAIN: graphics-hook-filter32.dll (Score: 0)
+2026-05-06 16:07:49 - INFO - Processing DOMAIN IOC: raw=i.aspx Malicious_IOC=i.aspx
+2026-05-06 16:07:49 - INFO - Cached VT result available for DOMAIN i.aspx: 0 hits (age 592s)
+2026-05-06 16:07:51 - INFO - User declined cached VT result for DOMAIN i.aspx; forcing re-analysis.
+2026-05-06 16:07:53 - INFO - Triggering re-analysis for DOMAIN: i.aspx (Score: 0)
+2026-05-06 16:07:54 - INFO - Processing DOMAIN IOC: raw=imjp14k.dll Malicious_IOC=imjp14k.dll
+2026-05-06 16:07:54 - INFO - Cached VT result available for DOMAIN imjp14k.dll: 0 hits (age 593s)
+2026-05-06 16:07:56 - INFO - Processing DOMAIN IOC: raw=management.powershell Malicious_IOC=management.powershell
+2026-05-06 16:07:56 - INFO - Cached VT result available for DOMAIN management.powershell: 0 hits (age 593s)
+2026-05-06 16:07:58 - INFO - Processing DOMAIN IOC: raw=microsoft.exchange Malicious_IOC=microsoft.exchange
+2026-05-06 16:07:58 - INFO - Cached VT result available for DOMAIN microsoft.exchange: 0 hits (Re-analyzed) (age 588s)
+2026-05-06 16:08:01 - INFO - Processing DOMAIN IOC: raw=mps.dll Malicious_IOC=mps.dll
+2026-05-06 16:08:01 - INFO - Cached VT result available for DOMAIN mps.dll: 0 hits (age 588s)
+2026-05-06 16:08:02 - INFO - Processing DOMAIN IOC: raw=office365-update.com Malicious_IOC=office365-update.com
+2026-05-06 16:08:02 - INFO - Cached VT result available for DOMAIN office365-update.com: 15 hits (age 587s)
+2026-05-06 16:08:03 - INFO - Processing DOMAIN IOC: raw=page.aspx Malicious_IOC=page.aspx
+2026-05-06 16:08:03 - INFO - Cached VT result available for DOMAIN page.aspx: 0 hits (age 585s)
+2026-05-06 16:08:04 - INFO - Processing DOMAIN IOC: raw=signout.aspx Malicious_IOC=signout.aspx
+2026-05-06 16:08:04 - INFO - Cached VT result available for DOMAIN signout.aspx: 0 hits (age 584s)
+2026-05-06 16:08:06 - INFO - Processing DOMAIN IOC: raw=timeinlogout.aspx Malicious_IOC=timeinlogout.aspx
+2026-05-06 16:08:06 - INFO - Cached VT result available for DOMAIN timeinlogout.aspx: 0 hits (age 582s)
+2026-05-06 16:08:07 - INFO - Processing DOMAIN IOC: raw=timeout.aspx Malicious_IOC=timeout.aspx
+2026-05-06 16:08:07 - INFO - Cached VT result available for DOMAIN timeout.aspx: 0 hits (age 581s)
+2026-05-06 16:08:08 - INFO - Processing DOMAIN IOC: raw=tosbtkbd.dll Malicious_IOC=tosbtkbd.dll
+2026-05-06 16:08:08 - INFO - Cached VT result available for DOMAIN tosbtkbd.dll: 0 hits (age 579s)
+2026-05-06 16:08:08 - INFO - Processing DOMAIN IOC: raw=tunnel.ashx Malicious_IOC=tunnel.ashx
+2026-05-06 16:08:08 - INFO - Cached VT result available for DOMAIN tunnel.ashx: 0 hits (age 576s)
+2026-05-06 16:08:09 - INFO - Processing DOMAIN IOC: raw=uxtheme.dll Malicious_IOC=uxtheme.dll
+2026-05-06 16:08:09 - INFO - Cached VT result available for DOMAIN uxtheme.dll: 0 hits (age 575s)
+2026-05-06 16:08:10 - INFO - Processing DOMAIN IOC: raw=vmb9ait.log Malicious_IOC=vmb9ait.log
+2026-05-06 16:08:10 - INFO - Cached VT result available for DOMAIN vmb9ait.log: 0 hits (age 573s)
+2026-05-06 16:08:11 - INFO - Processing DOMAIN IOC: raw=warn.aspx Malicious_IOC=warn.aspx
+2026-05-06 16:08:11 - INFO - Cached VT result available for DOMAIN warn.aspx: 0 hits (age 571s)
+2026-05-06 16:08:16 - INFO - Processing DOMAIN IOC: raw=zimbra-beta.info Malicious_IOC=zimbra-beta.info
+2026-05-06 16:08:16 - INFO - Cached VT result available for DOMAIN zimbra-beta.info: 17 hits (age 573s)
+2026-05-06 16:08:20 - INFO - User declined cached VT result for DOMAIN zimbra-beta.info; forcing re-analysis.
+2026-05-06 16:08:22 - INFO - Processing HASH IOC: raw=2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2 Malicious_IOC=2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2
+2026-05-06 16:08:22 - INFO - Cached VT result available for HASH 2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2: 0 hits (Re-analyzed) (age 573s)
+2026-05-06 16:08:25 - INFO - Processing HASH IOC: raw=4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8 Malicious_IOC=4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8
+2026-05-06 16:08:25 - INFO - Cached VT result available for HASH 4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8: 1 hits (Re-analyzed) (age 569s)
+2026-05-06 16:08:27 - INFO - Processing HASH IOC: raw=8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78 Malicious_IOC=8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78
+2026-05-06 16:08:27 - INFO - Cached VT result available for HASH 8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78: 0 hits (Re-analyzed) (age 564s)
+2026-05-06 16:08:27 - INFO - Processing HASH IOC: raw=d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3 Malicious_IOC=d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3
+2026-05-06 16:08:27 - INFO - Cached VT result available for HASH d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3: 0 hits (Re-analyzed) (age 558s)
+2026-05-06 16:08:28 - INFO - Report generated with 7 malicious IOCs and 28 clean IOCs found.
+2026-05-06 16:08:28 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260506_160828.txt
+2026-05-06 16:08:28 - INFO - Success: Report generated at reports/IOC_ONLY_20260506_160828.txt
+============================================================

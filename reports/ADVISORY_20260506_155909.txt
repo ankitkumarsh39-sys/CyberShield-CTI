@@ -1,0 +1,162 @@
+==================================================
+Report:
+==================================================
+REPORT DATE      : 2026-05-06 15:59:09
+SOURCE URL       : https://www.trendmicro.com/en_us/research/26/d/inside-shadow-earth-053.html
+
+TARGET COMPANY   : Brazil, Defense evasion RingQ In one, In one, Microsoft Exchange or IIS infrastructure, SHADOW-EARTH-053 also, SHADOW-EARTH-053 independently, a European government belonging to NATO was also, dclist, to SHADOW-EARTH-054 was detected in organizations previously
+
+==================================================
+MITRE ATT&CK ANALYSIS:
+==================================================
+
+Detected TTPs    : T1566 (Phishing), T1204.001 (User Execution: Malicious Link), T1071.001 (Application Layer Protocol), T1041 (Exfiltration Over C2 Channel), T1027 (Obfuscated Files or Information)
+Matched MITRE Codes: None
+Attack Type      : Command and Control, Data Exfiltration, Defense Evasion, Phishing
+MITRE Tactic(s)  : Command and Control, Defense Evasion, Exfiltration, Initial Access
+
+Technique findings:
+- T1566 (Phishing) [High]: Article text explicitly describes phishing lures, fake documentation portals, and credential-harvesting pages.
+- T1204.001 (User Execution: Malicious Link) [Medium]: The fake portal and user-directed clicks imply a malicious link-based social engineering vector.
+- T1071.001 (Application Layer Protocol) [High]: The text mentions web-based C2 panels and command-and-control infrastructure over HTTP.
+- T1041 (Exfiltration Over C2 Channel) [Medium]: The article describes data staging, compression, and exfiltration via the attacker’s C2 channel.
+- T1027 (Obfuscated Files or Information) [Medium]: The text describes obfuscation and defanged indicators used to evade detection.
+
+==================================================
+SUMMARY:
+==================================================
+
+Across observed intrusions, the threat actor consistently used the same loading
+mechanism, composed of three different files: A legitimate and signed file
+vulnerable to DLL sideloading A malicious DLL that loads the payload from the
+disk or from the registry The encrypted ShadowPad payload, which is stored in
+the registry and deleted after its first use The following four vulnerable
+executables were abused: SHA-256 Original filename Threat actor filename
+Sideloaded DLL Authenticode signer
+4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8 GameHook.exe
+runtimebroker.exe nvcontainer.exe graphics-hook-filter32.dll ORANGE VIEW LIMITED
+2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2 imecmnt.exe
+RuntimeBroker.exe osppsvc.exe imjp14k.dll Microsoft Corporation
+8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78 xReport.exe N/A
+Uxtheme.dll Mainline Net Holdings Limited
+d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3 LUManager.EXE
+RAVCpl64.exe MPS.dll Samsung Electronics CO., LTD. Table 1. Collection and
+exfiltration We observed the attacker deploying the RAR executable, and in one
+instance, we saw the creation of a password-protected RAR archive containing
+messages (a PST file) from an executive in the targeted company. Tags Malware |
+APT & Targeted Attacks | Research | Articles, News, Reports | Cyber Threats
+Authors Daniel Lunghi Threat Researcher Lucas Silva Incident Response Analyst
+Contact Us Related Articles Supporting the National Cyber Strategy: How TrendAI™
+Helps InstallFix and Claude Code: How Fake Install Pages Lead to Real Compromise
+Quasar Linux (QLNX) – A Silent Foothold in the Supply Chain: Inside a Full-
+Featured Linux RAT With Rootkit, PAM Backdoor, Credential Harvesting
+Capabilities See all articles APT & Targeted Attacks Inside Shadow-Earth-053: A
+China-Aligned Cyberespionage Campaign Against Government and Defense Sectors in
+Asia A China-aligned threat group is exploiting unpatched Microsoft Exchange
+vulnerabilities to conduct cyberespionage against government and critical
+infrastructure targets across Asia and beyond. Across observed intrusions, the
+threat actor consistently used the same loading mechanism, composed of three
+different files: A legitimate and signed file vulnerable to DLL sideloading A
+malicious DLL that loads the payload from the disk or from the registry The
+encrypted ShadowPad payload, which is stored in the registry and deleted after
+its first use The following four vulnerable executables were abused: Key
+takeaways A newly identified set of China-aligned campaigns is targeting
+government entities and critical infrastructure across South, East, and
+Southeast Asia, as well as one NATO member state. SHADOW-EARTH-053 SHADOW-
+EARTH-054 Infection Vector Microsoft Exchange Vulnerabilities Microsoft Exchange
+Vulnerabilities Malware Toolkit ShadowPad TosBtKbd.dll registry loader mdync.exe
+malware Custom loaders VShell Loader Filenames RuntimeBroker.exe nvcontainer.exe
+osppsvc.exe CIATosBtKbd.exe RuntimeBroker.exe
+SystemEventsBrokerTrustedService.exe identity_helper.exe Post-Exploitation
+Toolkit evil-createdump.exe IOX (Named explorer.exe ) evil-createdump.exe IOX
+(Named explorer.exe or svchost.exe ) Custom Tools for Launching Privileged
+Processes Targeted Regions South Asia Southeast Asia East Asia Europe South Asia
+Southeast Asia East Asia Latin America SHADOW-EARTH-053 SHADOW-EARTH-054
+Infection Vector Microsoft Exchange Vulnerabilities Microsoft Exchange
+Vulnerabilities Malware Toolkit ShadowPad TosBtKbd.dll registry loader mdync.exe
+malware Custom loaders VShell Loader Filenames RuntimeBroker.exe nvcontainer.exe
+osppsvc.exe CIATosBtKbd.exe RuntimeBroker.exe
+SystemEventsBrokerTrustedService.exe identity_helper.exe Post-Exploitation
+Toolkit evil-createdump.exe IOX (Named explorer.exe ) evil-createdump.exe IOX
+(Named explorer.exe or svchost.exe ) Custom Tools for Launching Privileged
+Processes Targeted Regions South Asia Southeast Asia East Asia Europe South Asia
+Southeast Asia East Asia Latin America SHADOW-EARTH-053 SHADOW-EARTH-054
+Infection Vector Microsoft Exchange Vulnerabilities Microsoft Exchange
+Vulnerabilities Malware Toolkit ShadowPad TosBtKbd.dll registry loader mdync.exe
+malware Custom loaders VShell Loader Filenames RuntimeBroker.exe nvcontainer.exe
+osppsvc.exe CIATosBtKbd.exe RuntimeBroker.exe
+SystemEventsBrokerTrustedService.exe identity_helper.exe Post-Exploitation
+Toolkit evil-createdump.exe IOX (Named explorer.exe ) evil-createdump.exe IOX
+(Named explorer.exe or svchost.exe ) Custom Tools for Launching Privileged
+Processes Targeted Regions South Asia Southeast Asia East Asia Europe South Asia
+Southeast Asia East Asia Latin America Although both groups exhibit significant
+overlaps in victimology and TTPs, we have chosen to categorize them into two
+distinct temporary intrusion sets based on the details outlined above. Malware |
+APT & Targeted Attacks | Research | Articles, News, Reports | Cyber Threats
+Related Articles Supporting the National Cyber Strategy: How TrendAI™ Helps
+InstallFix and Claude Code: How Fake Install Pages Lead to Real Compromise
+Quasar Linux (QLNX) – A Silent Foothold in the Supply Chain: Inside a Full-
+Featured Linux RAT With Rootkit, PAM Backdoor, Credential Harvesting
+Capabilities See all articles Related Articles Supporting the National Cyber
+Strategy: How TrendAI™ Helps InstallFix and Claude Code: How Fake Install Pages
+Lead to Real Compromise Quasar Linux (QLNX) – A Silent Foothold in the Supply
+Chain: Inside a Full-Featured Linux RAT With Rootkit, PAM Backdoor, Credential
+Harvesting Capabilities See all articles Related Articles Supporting the
+National Cyber Strategy: How TrendAI™ Helps InstallFix and Claude Code: How Fake
+Install Pages Lead to Real Compromise Quasar Linux (QLNX) – A Silent Foothold in
+the Supply Chain: Inside a Full-Featured Linux RAT With Rootkit, PAM Backdoor,
+Credential Harvesting Capabilities Trend Vision One™ - Proactive Security Starts
+Here. Inside Shadow-Earth-053: A China-Aligned Cyberespionage Campaign Against
+Government and Defense Sectors in Asia | Trend Micro (US) A China-aligned threat
+group is exploiting unpatched Microsoft Exchange vulnerabilities to conduct
+cyberespionage against government and critical infrastructure targets across
+Asia and beyond. APT & Targeted Attacks Inside Shadow-Earth-053: A China-Aligned
+Cyberespionage Campaign Against Government and Defense Sectors in Asia A China-
+aligned threat group is exploiting unpatched Microsoft Exchange vulnerabilities
+to conduct cyberespionage against government and critical infrastructure targets
+across Asia and beyond. By: Daniel Lunghi, Lucas Silva Apr 30, 2026 Read time: (
+words) Save to Folio Key takeaways A newly identified set of China-aligned
+campaigns is targeting government entities and critical infrastructure across
+South, East, and Southeast Asia, as well as one NATO member state. Nearly half
+the targets were also compromised by a related intrusion set (SHADOW-EARTH-054),
+sharing identical tool hashes and overlapping TTPs, though evidence suggests
+independent exploitation of the same vulnerabilities rather than direct
+operational coordination. The group exploits N-day vulnerabilities in internet-
+facing Microsoft Exchange and Internet Information Services (IIS) servers (e.g.,
+ProxyLogon chain), then deploys web shells (GODZILLA) for persistent access and
+stages ShadowPad implants via DLL sideloading of legitimate signed executables.
+SHADOW-EARTH-053's successful exploitation of these long-patched issues confirms
+that organizations still running legacy or unpatched Exchange servers remain at
+significant risk of mailbox compromise, credential theft, and prolonged attacker
+access. Summary Through ongoing analysis of ShadowPad implants targeting South
+and Southeast Asia, TrendAI™ Research has uncovered a series of new related
+campaigns that are tracked under a temporary intrusion set (a provisional
+cluster of related activity pending formal attribution) designated SHADOW-
+EARTH-053, which we assess to be aligned with China's broader strategic
+interests . Our telemetry indicates that this group has targeted government
+entities and critical infrastructure sectors across at least eight countries
+over the past year. Our investigation yielded detailed insight into the
+attacker’s tactics, techniques, and procedures (TTPs), including the attack
+flow, initial access vectors, and covert communication channels.
+
+--------------------------------------------------
+MALICIOUS IOCs (7 IOC_Found), IPs: 4, Domains: 27, URLs: 0, Hashes: 4, CVE: 5
+
+IPs: 141.164.46.77                                 | 4 hits (Re-analyzed)
+IPs: 194.38.11.3                                   | 17 hits
+IPs: 209.141.40.254                                | 7 hits
+IPs: 96.9.125.227                                  | 7 hits
+Domain: office365-update.com                          | 15 hits
+Domain: zimbra-beta.info                              | 17 hits
+File_Hash: 4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8 | 1 hits (Re-analyzed)
+
+==================================================
+CVE REFERENCES:
+==================================================
+
+Detected CVEs :
+CVE-2021-26855
+CVE-2021-26857
+CVE-2021-26858
+CVE-2021-27065
+CVE-2025-55182

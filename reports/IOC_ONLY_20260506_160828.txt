@@ -1,0 +1,17 @@
+==================================================
+IOC Report:
+==================================================
+REPORT DATE      : 2026-05-06 16:08:28
+SOURCE URL       : https://www.trendmicro.com/en_us/research/26/d/inside-shadow-earth-053.html#
+
+--------------------------------------------------
+MALICIOUS IOCs (7 IOC_Found), IPs: 4, Domains: 27, URLs: 0, Hashes: 4, CVE: 5
+
+IPs: 141.164.46.77                                 | 4 hits (Re-analyzed)
+IPs: 194.38.11.3                                   | 17 hits
+IPs: 209.141.40.254                                | 7 hits
+IPs: 96.9.125.227                                  | 7 hits
+Domain: office365-update.com                          | 15 hits
+Domain: zimbra-beta.info                              | 17 hits
+File_Hash: 4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8 | 1 hits (Re-analyzed)
+
