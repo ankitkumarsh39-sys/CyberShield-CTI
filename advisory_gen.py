@@ -69,6 +69,8 @@ class CTIWorkbench:
         self.vt_cache_max_age_seconds = 7 * 24 * 60 * 60  # one week for zero-score cache reuse
         self.vt_cache = self._load_json(self.vt_cache_path)
         self.url_report_index = self._load_json(self.url_report_index_path)
+        self.vt_cache_prompt_mode = os.getenv('VT_CACHE_PROMPT', 'auto').strip().lower()
+        self.vt_cache_prompt_choice = None
 
         # Expanded MITRE detection rules support behavior-based inference from article text.
         # Each rule is a behavior pattern mapped to one or more ATT&CK techniques.
@@ -223,16 +225,31 @@ class CTIWorkbench:
                 score = cache_entry['score']
                 status = cache_entry.get('status', f"{score} hits (cached)")
                 if score > 0 or cache_age < self.vt_cache_max_age_seconds:
-                    logging.info(f"Cached VT result available for {ioc_type.upper()} {val}: {status} (age {int(cache_age)}s)")
-                    while True:
-                        use_cache = input(f"Cached VT data found for {ioc_type.upper()} '{val}'. Use cached result? [y/N]: ").strip().lower()
-                        if use_cache in {'y', 'yes'}:
+                    if self.vt_cache_prompt_mode == 'interactive':
+                        if self.vt_cache_prompt_choice is None:
+                            while True:
+                                use_cache = input(
+                                    f"Cached VT data found for {ioc_type.upper()} '{val}'. "
+                                    "Use cached result for all cached IOCs this run? [Y/n]: "
+                                ).strip().lower()
+                                if use_cache in {'y', 'yes', ''}:
+                                    self.vt_cache_prompt_choice = True
+                                    break
+                                if use_cache in {'n', 'no'}:
+                                    self.vt_cache_prompt_choice = False
+                                    break
+                                print("Please enter 'y' or 'n'.")
+
+                        if self.vt_cache_prompt_choice:
+                            logging.info(f"Using cached VT result for {ioc_type.upper()} {val}: {status} (age {int(cache_age)}s)")
                             return score, status
-                        if use_cache in {'n', 'no', ''}:
-                            logging.info(f"User declined cached VT result for {ioc_type.upper()} {val}; forcing re-analysis.")
-                            force_reanalysis = True
-                            break
-                        print("Please enter 'y' or 'n'.")
+                        logging.info(f"User declined cached VT result for {ioc_type.upper()} {val}; forcing re-analysis.")
+                        force_reanalysis = True
+                    elif self.vt_cache_prompt_mode == 'force_reanalysis':
+                        pass
+                    else:
+                        logging.info(f"Using cached VT result for {ioc_type.upper()} {val}: {status} (age {int(cache_age)}s)")
+                        return score, status
 
         endpoints = {
             "ip": "ip_addresses",
