@@ -4052,3 +4052,35 @@ Original error was:
 2026-04-24 16:47:05 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260424_164705.txt
 2026-04-24 16:47:05 - INFO - Success: Report generated at reports/IOC_ONLY_20260424_164705.txt
 ============================================================
+2026-04-24 18:08:49 - INFO - CyberShield-CTI Engine Initialized.
+2026-04-24 18:08:55 - INFO - Starting analysis for: https://cybersecuritynews.com/checkmarx-kics-compromised/ (Report Type: full)
+2026-04-24 18:08:58 - INFO - Extracted counts of IOCs-> IPs: 1, Domains: 4, URLs: 2, Hashes: 2, CVE: 0
+2026-04-24 18:08:58 - INFO - Processing IP IOC: raw=94.154.172.43 Malicious_IOC=94.154.172.43
+2026-04-24 18:08:58 - INFO - Cached VT result available for IP 94.154.172.43: 18 hits (age 4945s)
+2026-04-24 18:09:08 - INFO - User declined cached VT result for IP 94.154.172.43; forcing re-analysis.
+2026-04-24 18:09:11 - INFO - Processing DOMAIN IOC: raw=audit.checkmarx Malicious_IOC=audit.checkmarx
+2026-04-24 18:09:11 - INFO - Cached VT result available for DOMAIN audit.checkmarx: 0 hits (age 4956s)
+2026-04-24 18:09:13 - INFO - User declined cached VT result for DOMAIN audit.checkmarx; forcing re-analysis.
+2026-04-24 18:09:16 - INFO - Triggering re-analysis for DOMAIN: audit.checkmarx (Score: 0)
+2026-04-24 18:09:16 - INFO - Processing DOMAIN IOC: raw=cybersecuritynews.com Malicious_IOC=cybersecuritynews.com
+2026-04-24 18:09:16 - INFO - Cached VT result available for DOMAIN cybersecuritynews.com: 0 hits (Re-analyzed) (age 4954s)
+2026-04-24 18:09:18 - INFO - User declined cached VT result for DOMAIN cybersecuritynews.com; forcing re-analysis.
+2026-04-24 18:09:20 - INFO - Triggering re-analysis for DOMAIN: cybersecuritynews.com (Score: 0)
+2026-04-24 18:09:24 - INFO - Processing DOMAIN IOC: raw=format-check.yml Malicious_IOC=format-check.yml
+2026-04-24 18:09:24 - INFO - Cached VT result available for DOMAIN format-check.yml: 0 hits (age 4960s)
+2026-04-24 18:09:32 - INFO - Processing DOMAIN IOC: raw=litellm.mrcloudbook Malicious_IOC=litellm.mrcloudbook
+2026-04-24 18:09:32 - INFO - Cached VT result available for DOMAIN litellm.mrcloudbook: 0 hits (age 4965s)
+2026-04-24 18:09:35 - INFO - Processing URL IOC: raw=https://audit.checkmarx[.]cx/v1/telemetry Malicious_IOC=https://audit.checkmarx.cx/v1/telemetry
+2026-04-24 18:09:35 - INFO - Cached VT result available for URL https://audit.checkmarx.cx/v1/telemetry: 23 hits (age 4965s)
+2026-04-24 18:09:36 - INFO - Processing URL IOC: raw=https://cybersecuritynews.com Malicious_IOC=https://cybersecuritynews.com
+2026-04-24 18:09:36 - INFO - Cached VT result available for URL https://cybersecuritynews.com: 0 hits (Re-analyzed) (age 4960s)
+2026-04-24 18:09:43 - INFO - Processing HASH IOC: raw=24680027afadea90c7c713821e214b15cb6c922e67ac01109fb1edb3ee4741d9 Malicious_IOC=24680027afadea90c7c713821e214b15cb6c922e67ac01109fb1edb3ee4741d9
+2026-04-24 18:09:43 - INFO - Cached VT result available for HASH 24680027afadea90c7c713821e214b15cb6c922e67ac01109fb1edb3ee4741d9: 12 hits (age 4964s)
+2026-04-24 18:09:47 - INFO - User declined cached VT result for HASH 24680027afadea90c7c713821e214b15cb6c922e67ac01109fb1edb3ee4741d9; forcing re-analysis.
+2026-04-24 18:09:49 - INFO - Processing HASH IOC: raw=2a6a35f06118ff7d61bfd36a5788557b695095e7c9a609b4a01956883f146f50 Malicious_IOC=2a6a35f06118ff7d61bfd36a5788557b695095e7c9a609b4a01956883f146f50
+2026-04-24 18:09:49 - INFO - Cached VT result available for HASH 2a6a35f06118ff7d61bfd36a5788557b695095e7c9a609b4a01956883f146f50: 5 hits (Re-analyzed) (age 4964s)
+2026-04-24 18:09:51 - INFO - User declined cached VT result for HASH 2a6a35f06118ff7d61bfd36a5788557b695095e7c9a609b4a01956883f146f50; forcing re-analysis.
+2026-04-24 18:09:55 - INFO - Report generated with 4 malicious IOCs and 5 clean IOCs found.
+2026-04-24 18:09:55 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260424_180953.txt
+2026-04-24 18:09:55 - INFO - Success: Report generated at reports/ADVISORY_20260424_180953.txt
+============================================================

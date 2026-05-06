@@ -188,7 +188,7 @@ class CTIWorkbench:
             normalized = normalized[:-1]
         return normalized
 
-    # to filter out false positives and trigger re-analysis for low-score IOCs, improving accuracy.
+    # To filter out false positives and trigger re-analysis for low-score IOCs, improving accuracy.
     # This function queries the VirusTotal API for the given IOC and returns the number of malicious hits along with a status message.
     def get_vt_data(self, ioc_type, ioc_value, force_reanalysis=False):
 
