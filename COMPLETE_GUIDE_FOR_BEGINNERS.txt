@@ -1,0 +1,1435 @@
+================================================================================
+    COMPLETE BEGINNER'S GUIDE: CyberShield-CTI PROJECT
+    A Step-by-Step Explanation for New Python Developers
+================================================================================
+
+TABLE OF CONTENTS:
+1. What is this project about?
+2. Project high-level overview
+3. File structure and purposes
+4. Key concepts you need to understand
+5. Dependencies (libraries) explained
+6. Line-by-line code breakdown
+7. How to setup and run the project
+8. Example workflow
+9. Python concepts used
+10. Troubleshooting
+
+================================================================================
+SECTION 1: WHAT IS THIS PROJECT ABOUT?
+================================================================================
+
+Imagine you're a security analyst working for a company. Every day, you read 
+security blogs and articles that talk about cyber attacks. These articles 
+mention:
+  - IP addresses of bad servers
+  - Dangerous websites (domains)
+  - File hashes of malware
+  - Links to malicious content
+
+Currently, you have to manually:
+  1. Read the article
+  2. Find all these indicators
+  3. Check each one with VirusTotal (a malware detection service)
+  4. Create a blocklist for your company's firewall
+
+This project AUTOMATES all of this!
+
+CyberShield-CTI does:
+  ✓ Reads a threat intelligence blog URL
+  ✓ Extracts all IOCs (Indicators of Compromise): IPs, domains, URLs, hashes
+  ✓ Checks each IOC against VirusTotal API
+  ✓ Filters out false positives (legitimate websites)
+  ✓ Identifies attack techniques (MITRE ATT&CK framework)
+  ✓ Creates a summary and blocklist
+  ✓ Saves everything to reports
+
+Result: What would take 30 minutes of manual work now takes 2 minutes!
+
+================================================================================
+SECTION 2: PROJECT HIGH-LEVEL OVERVIEW
+================================================================================
+
+The project has two main Python files:
+
+  FILE 1: main.py
+  ├─ This is the ENTRY POINT (where users start)
+  ├─ Asks user for a URL
+  ├─ Asks what type of report they want
+  └─ Calls the main engine in advisory_gen.py
+
+  FILE 2: advisory_gen.py
+  ├─ Contains the CTIWorkbench CLASS (the main engine)
+  ├─ Extracts IOCs from web pages
+  ├─ Queries VirusTotal API
+  ├─ Generates reports
+  └─ Saves blocklists
+
+WORKFLOW:
+User Input → main.py → advisory_gen.py → Reports & Blocklists
+
+================================================================================
+SECTION 3: FILE STRUCTURE AND PURPOSES
+================================================================================
+
+Your project directory contains:
+
+┌─ main.py
+│  Purpose: Entry script that prompts user and coordinates the analysis
+│  
+├─ advisory_gen.py
+│  Purpose: Contains all the logic for extraction, enrichment, and reporting
+│  
+├─ requirements.txt
+│  Purpose: Lists all Python libraries this project needs
+│  
+├─ .env or key.env
+│  Purpose: Stores your VirusTotal API key (SECRET! Don't share!)
+│  
+├─ whitelist.txt
+│  Purpose: List of legitimate IOCs to ignore (one per line)
+│  Example: google.com, microsoft.com
+│  
+├─ blocklist.txt
+│  Purpose: Previously known malicious IOCs (for faster blocking)
+│  
+└─ reports/ (folder)
+   ├─ ADVISORY_*.txt → Full reports with analysis
+   ├─ IOC_ONLY_*.txt → Just the malicious indicators
+   ├─ Malicious_IOCs/ → URGENT_BLOCKLIST_*.txt for firewalls
+   ├─ Clean_Artifacts/ → Legitimate IOCs found
+   ├─ cyber_shield.log → Activity log for debugging
+   ├─ vt_cache.json → Cached VirusTotal lookups (to save API calls)
+   └─ url_report_index.json → Index of previously analyzed URLs
+
+================================================================================
+SECTION 4: KEY CONCEPTS YOU NEED TO UNDERSTAND
+================================================================================
+
+CONCEPT 1: IOC (Indicator of Compromise)
+─────────────────────────────────────────
+An IOC is a piece of technical evidence that shows a compromise/attack happened.
+Types of IOCs this project finds:
+
+  1. IP ADDRESS
+     Example: 192.168.1.1
+     Also defanged: 192[.]168[.]1[.]1
+     Why? IP addresses can be owned by attackers and used for attacks
+  
+  2. DOMAIN NAME
+     Example: evil-domain.com
+     Also defanged: evil-domain[.]com
+     Why? Malware phones home to attacker-controlled domains
+  
+  3. URL (full web address)
+     Example: http://attacker.com/malware.exe
+     Also defanged: hxxp://attacker[.]com/malware[.]exe
+     Why? Could be a phishing link or malware download location
+  
+  4. FILE HASH (MD5, SHA1, SHA256)
+     Example: d41d8cd98f00b204e9800998ecf8427e (MD5)
+     Why? Unique fingerprint of a malware file
+  
+  5. CVE (vulnerability reference)
+     Example: CVE-2024-1234
+     Why? Attackers exploit known vulnerabilities
+
+CONCEPT 2: DEFANGING
+────────────────────
+Threat researchers replace characters in IOCs to prevent accidental clicks:
+  
+  NORMAL              →  DEFANGED
+  ─────────────────────────────────
+  http://             →  hxxp://
+  https://            →  hxxps://
+  .                   →  [.] or (.)
+  
+Example:
+  Original: http://malware-site.com/payload.exe
+  Defanged: hxxp://malware-site[.]com/payload[.]exe
+
+Why? So if someone accidentally copies it, their browser won't open it!
+
+This project REVERSES defanging to check IOCs properly.
+
+CONCEPT 3: VirusTotal API
+──────────────────────────
+VirusTotal is a service that checks if a file/URL/IP is malicious.
+It runs the indicator through 70+ antivirus engines.
+
+Example response:
+  "This file was flagged as malware by 25 antivirus companies"
+
+Your project queries this API to get a "malicious hits" score.
+
+CONCEPT 4: MITRE ATT&CK Framework
+──────────────────────────────────
+This is a database of adversary tactics and techniques.
+
+Example:
+  ├─ TACTIC: "Initial Access" (how attacker gets in)
+  │  ├─ TECHNIQUE: T1566 - Phishing
+  │  ├─ TECHNIQUE: T1200 - Hardware Additions
+  │  └─ TECHNIQUE: T1199 - Trusted Relationship
+  │
+  ├─ TACTIC: "Command & Control" (how attacker controls infected system)
+  │  ├─ TECHNIQUE: T1071 - Application Layer Protocol
+  │  └─ TECHNIQUE: T1008 - Fallback Channels
+
+Your project reads the article and detects which attack techniques were used!
+
+CONCEPT 5: CACHING
+───────────────────
+Why check the same IOC twice? That wastes API calls and money!
+
+The project saves VirusTotal results to vt_cache.json so it can reuse them.
+Example:
+  First time: Query VirusTotal for IP 1.2.3.4 → Result: 15 hits
+  Second time: Read from cache → Result: 15 hits (instant, free!)
+
+CONCEPT 6: WHITELISTING & BLOCKLISTING
+───────────────────────────────────────
+Not all IOCs found are malicious. Sometimes legitimate services appear in articles.
+
+  WHITELIST: "Ignore these IOCs" (e.g., google.com is legit)
+  BLOCKLIST: "These are definitely malicious" (pre-known threats)
+
+The project checks both before flagging something as dangerous.
+
+================================================================================
+SECTION 5: DEPENDENCIES (LIBRARIES) EXPLAINED
+================================================================================
+
+A library is pre-written code that does specific tasks. You import it to use it.
+
+Here's what each library does:
+
+┌─ requests (HTTP Library)
+│  What: Makes web requests (like when browser visits a website)
+│  Used for: Fetching the threat intelligence blog URL
+│  Example: requests.get("https://securityblog.com/article")
+│
+├─ beautifulsoup4 (HTML Parser)
+│  What: Reads HTML and extracts clean text
+│  Used for: Removing scripts/ads/navigation and getting article text
+│  Example: Converts messy HTML → readable text
+│
+├─ iocextract (IOC Extractor)
+│  What: Specialized library to find file hashes, IPs, domains
+│  Used for: Extract_hashes() to find MD5/SHA1/SHA256
+│  Example: Finds "d41d8cd98f00b204e9800998ecf8427e" in text
+│
+├─ python-dotenv (Configuration)
+│  What: Safely loads secret settings from .env file
+│  Used for: Loading VT_API_KEY without hardcoding it
+│  Example: load_dotenv(".env") → loads API key securely
+│
+├─ sumy + nltk (Text Summarization)
+│  What: Natural Language Processing to summarize text
+│  Used for: Create 1-2 paragraph summary of threat article
+│  Example: 10-page article → 5-sentence summary
+│
+├─ re (Regular Expressions)
+│  What: Pattern matching in text (built-in Python library)
+│  Used for: Find IPs, URLs, CVEs using patterns
+│  Example: Find "CVE-2024-1234" format in any text
+│
+├─ json (Data Format)
+│  What: Save/load structured data (built-in Python library)
+│  Used for: Cache storage and index management
+│  Example: {"score": 25, "status": "malicious"}
+│
+└─ logging (Event Tracking)
+   What: Records what the program did (built-in Python library)
+   Used for: Create audit trail in cyber_shield.log
+   Example: Tracks every check, error, and action
+
+================================================================================
+SECTION 6: LINE-BY-LINE CODE BREAKDOWN
+================================================================================
+
+═════════════════════════════════════════════════════════════════════════════
+FILE 1: main.py (THE ENTRY POINT)
+═════════════════════════════════════════════════════════════════════════════
+
+Line 1: import os
+────────────────────
+import = Load a library
+os = Operating System library (for file operations)
+Purpose: Not heavily used here, but imported for future features
+
+Line 2: from advisory_gen import CTIWorkbench
+────────────────────────────────────────────
+from X import Y = Import specific class/function from file X
+advisory_gen = Our main code file
+CTIWorkbench = The main ENGINE CLASS in advisory_gen.py
+Purpose: Brings in the main tool we'll use
+
+Line 3: def main():
+──────────────────
+def = Define a new function
+main() = Function name (standard Python convention for entry point)
+Purpose: Main function runs when script is executed
+
+Line 4:     tool = CTIWorkbench()
+────────────────────────────────
+Instantiation = Creating an object from a class
+CTIWorkbench() = Creates an instance of the CTIWorkbench class
+tool = Variable storing this instance
+What it does: 
+  • Creates necessary directories (reports/, Malicious_IOCs/, etc)
+  • Loads whitelist.txt and blocklist.txt
+  • Initializes VirusTotal API session
+  • Sets up logging
+
+Line 5:     target = input("Paste TI URL: ").strip()
+───────────────────────────────────────────────────
+input() = Shows prompt and waits for user to type
+.strip() = Removes spaces before and after (whitespace trimming)
+target = Stores the URL the user provides
+Example:
+  User types: "  https://securityblog.com/threat  "
+  After strip(): "https://securityblog.com/threat"
+
+Line 7-8: print() statements
+──────────────────────────────
+Shows menu to user for choosing report type
+(These are simple display lines)
+
+Line 9:     choice = input("Enter 1 or 2: ").strip()
+─────────────────────────────────────────────────────
+Gets user's choice and removes spaces
+
+Line 11-15: if/elif/else logic
+───────────────────────────────
+if choice == "1":
+  report_type = "full"    # Full advisory with MITRE analysis
+elif choice == "2":
+  report_type = "ioc"     # Only the IOCs list
+else:
+  report_type = "full"    # Default if user enters invalid choice
+
+This is a CONDITIONAL statement (only runs certain code based on condition)
+
+Line 17:     norm_url = tool._normalize_url(target)
+─────────────────────────────────────────────────
+Normalizes the URL (removes trailing slash, #anchors)
+Helps avoid duplicate analyses of same URL
+
+Line 18:     existing_report = tool.url_report_index.get(norm_url, {}).get("reports", {}).get(report_type)
+──────────────────────────────────────────────────────────────────────────────
+Checks if we already analyzed this URL before
+Avoids re-analyzing same content
+
+Line 20-42: If-statement block checking for existing report
+────────────────────────────────────────────────────────────
+Gives user options:
+  1. Use existing report (fast, saved result)
+  2. Regenerate using cached VirusTotal data
+  3. Force fresh VirusTotal checks
+
+This saves time and API quota!
+
+Line 44:     result = tool.generate_report(target, report_type=report_type, reuse_choice=reuse_choice)
+────────────────────────────────────────────────────────────────────────────────────────────────────
+THE MAIN ACTION!
+Calls the generate_report function from CTIWorkbench
+Passes:
+  • target = URL to analyze
+  • report_type = "full" or "ioc"
+  • reuse_choice = User's choice about caching
+Returns: Path to generated report or None if failed
+
+Line 45-49: Print result to user
+─────────────────────────────────
+if result:
+  Prints success message with report path
+else:
+  Tells user to check log file for errors
+
+Line 52-53: Main guard
+──────────────────────
+if __name__ == "__main__":
+    main()
+
+This means:
+  "If this script is run directly (not imported), then execute main()"
+Prevents running main() if this file is imported elsewhere
+
+═════════════════════════════════════════════════════════════════════════════
+FILE 2: advisory_gen.py (THE MAIN ENGINE)
+═════════════════════════════════════════════════════════════════════════════
+
+SECTION 1: IMPORTS (Libraries)
+──────────────────────────────
+
+Line 1-3: System & Subprocess
+import sys
+import subprocess
+Purpose: Potential future use for CLI features
+
+Line 4: from nltk import text
+Purpose: Natural Language Toolkit (NLP)
+
+Line 5: import requests
+Purpose: Make HTTP requests to websites and APIs
+Used for: Fetching blog content and querying VirusTotal
+
+Line 6: import re
+Purpose: Regular Expressions (pattern matching)
+Used for: Finding IPs, URLs, domains in text
+
+Line 7: import iocextract
+Purpose: Specialized library for finding hashes
+Used for: Extract MD5, SHA1, SHA256 from text
+
+Line 8-11: System utilities
+import os          # File operations
+import time        # Delays/rate limiting
+import textwrap    # Format text width
+import base64       # Encoding (for VirusTotal API)
+Purpose: Various utility functions
+
+Line 12: import json
+Purpose: Save/load structured data
+Used for: Cache management
+
+Line 13: import warnings
+Purpose: Suppress unwanted warning messages
+
+Line 14: import logging
+Purpose: Create audit trail log file
+
+Line 15-16: from bs4 import BeautifulSoup
+Purpose: HTML parsing library
+Used for: Extract clean text from web pages
+
+Line 17: from datetime import datetime
+Purpose: Work with dates and times
+Used for: Timestamps in reports and filenames
+
+Line 18: from dotenv import load_dotenv
+Purpose: Load API keys from .env file
+Used for: Load VT_API_KEY securely
+
+Line 19-21: from sumy import ...
+Purpose: Text summarization using TextRank algorithm
+Used for: Create 5-sentence summary of article
+
+SECTION 2: CONFIGURATION
+────────────────────────
+
+Line 23: warnings.filterwarnings("ignore", category=UserWarning)
+Purpose: Hide non-critical warning messages (cleanup terminal)
+
+Line 26-31: Logging setup
+logging.basicConfig(
+    filename='reports/cyber_shield.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+Purpose: Create a log file that records everything the program does
+Log location: reports/cyber_shield.log
+Log format: [Date Time] - [Severity] - [Message]
+
+Line 34-37: API Key Configuration
+load_dotenv(".env")
+VT_API_KEY = os.getenv("VT_API_KEY")
+
+if not VT_API_KEY:
+    raise ValueError("Missing VirusTotal API Key...")
+Purpose: 
+  • Load API key from .env file
+  • If key not found, STOP and show error
+  • This prevents querying VirusTotal without credentials
+
+SECTION 3: CTIWorkbench CLASS
+─────────────────────────────
+
+Line 39: class CTIWorkbench:
+Purpose: Define main class (blueprint for the engine)
+All the analysis logic is inside this class
+
+Method 1: __init__ (Constructor)
+───────────────────────────────
+def __init__(self):
+    logging.info("CyberShield-CTI Engine Initialized.")
+    
+Purpose: Initialize the engine when created
+Runs automatically when: tool = CTIWorkbench()
+
+Line 42: self.headers = {'Accept': 'application/json', 'x-apikey': VT_API_KEY}
+Purpose: HTTP headers for VirusTotal API requests
+Think: "Here's my API key so VT knows who's asking"
+
+Line 45-49: Directory setup
+self.base_reports_dir = 'reports'
+self.malicious_dir = 'reports/Malicious_IOCs'
+self.clean_dir = 'reports/Clean_Artifacts'
+
+for folder in [...]:
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+Purpose: Create necessary folders if they don't exist
+This is "self-healing" - the program fixes itself if folders are missing!
+
+Line 52-58: Session and Cache configuration
+self.session = requests.Session()
+self.session.headers.update(self.headers)
+self.cache_dir = self.base_reports_dir
+self.vt_cache_path = os.path.join(self.cache_dir, 'vt_cache.json')
+self.url_report_index_path = os.path.join(self.cache_dir, 'url_report_index.json')
+self.vt_cache_max_age_seconds = 7 * 24 * 60 * 60  # one week
+
+Purpose: 
+  • Create HTTP session for VT queries
+  • Set up cache files for storing results
+  • max_age = 7 days (cache is valid for 1 week)
+
+Line 59-60: Load cache files
+self.vt_cache = self._load_json(self.vt_cache_path)
+self.url_report_index = self._load_json(self.url_report_index_path)
+
+Purpose: Load previously cached results
+
+Line 62-108: MITRE Rules Definition
+self.mitre_rules = [
+    {
+        "keywords": ["phishing", "phish", ...],
+        "techniques": [
+            {"id": "T1566", "name": "Phishing", ...},
+            ...
+        ],
+        "attack_type": "Phishing"
+    },
+    ...
+]
+
+Purpose: Define rules for detecting attack techniques
+How it works:
+  • If article contains keyword "phishing"
+  • Then mark technique T1566 as used
+  • Classify as "Phishing" attack
+  • Add tactic "Initial Access"
+
+This maps article text to MITRE ATT&CK framework!
+
+Line 109-110: Load whitelist and blocklist
+self.ip_whitelist = self._load_file('whitelist.txt')
+self.manual_blocklist = self._load_file('blocklist.txt')
+self.domain_whitelist = ['google.com', 'microsoft.com', ...]
+
+Purpose: Load lists of:
+  • Legitimate IPs to ignore
+  • Known malicious indicators
+  • Common legitimate domains
+
+═══════════════════════════════════════════════════════════════════════════
+
+HELPER METHODS
+──────────────
+
+Method: _ensure_dir(self, file_path)
+──────────────────────────────────────
+def _ensure_dir(self, file_path):
+    directory = os.path.dirname(file_path)
+    if directory and not os.path.exists(directory):
+        os.makedirs(directory)
+
+Purpose: Create parent directory if missing
+This prevents "Directory doesn't exist" errors when writing files
+
+Method: _load_file(self, filename)
+─────────────────────────────────
+if os.path.exists(filename):
+    with open(filename, 'r') as f:
+        return [line.strip().lower() for line in f if line.strip()]
+else:
+    with open(filename, 'w') as f:
+        f.write(f"# CyberShield-CTI: {filename} database\n")
+    return []
+
+Purpose: Load text file or create it if missing
+This is SELF-HEALING - doesn't crash if file is missing!
+Example:
+  whitelist.txt exists? Read and return list
+  whitelist.txt missing? Create it and return empty list
+
+Method: _load_json(self, file_path)
+──────────────────────────────────
+Similar to _load_file but for JSON files
+Reads or creates JSON cache files
+
+Method: _get_url_id(self, url)
+─────────────────────────────
+def _get_url_id(self, url):
+    return base64.urlsafe_b64encode(url.encode()).decode().strip("=")
+
+Purpose: Convert URL to format VirusTotal API expects
+VirusTotal requires URLs to be base64 encoded
+Example: "http://evil.com" → "aHR0cDovL2V2aWwuY29t"
+
+═══════════════════════════════════════════════════════════════════════════
+
+MAIN METHOD: get_vt_data (Query VirusTotal)
+──────────────────────────────────────────
+
+def get_vt_data(self, ioc_type, ioc_value, force_reanalysis=False):
+
+Purpose: Query VirusTotal for a single IOC
+Returns: (score, status_message)
+  score = Number of antivirus engines that flagged it
+  status_message = Description (e.g., "15 hits", "0 hits", "Cached")
+
+FLOW INSIDE get_vt_data:
+
+Step 1: Deobfuscate (Refang)
+────────────────────────────
+def deobfuscate(ioc_value):
+    replacements = {
+        "[.]": ".",
+        "(.)": ".",
+        "hxxp://": "http://",
+        ...
+    }
+    for k, v in replacements.items():
+        val = val.replace(k, v)
+    return val
+
+Purpose: Convert defanged IOCs back to normal
+Example: "malware[.]com" → "malware.com"
+Why? VirusTotal wants normal format, not defanged
+
+Step 2: Check Cache
+───────────────────
+cache_key = f"{ioc_type}:{val}"
+cache_entry = self.vt_cache.get(cache_key)
+
+if cache_entry and not force_reanalysis:
+    if cache_entry['score'] > 0 or cache_age < 604800:  # 7 days
+        return score, status
+        
+Purpose: If we already checked this IOC, return cached result
+Saves API calls and money!
+
+Step 3: Query VirusTotal API
+──────────────────────────────
+endpoints = {
+    "ip": "ip_addresses",
+    "domain": "domains",
+    "hash": "files",
+    "url": "urls"
+}
+
+resource_id = self._get_url_id(val) if ioc_type == "url" else val
+api_url = f"https://www.virustotal.com/api/v3/{endpoints.get(ioc_type)}/{resource_id}"
+
+res = self.session.get(api_url, timeout=10)
+
+Purpose: Make HTTP request to VirusTotal
+Constructs URL like:
+  https://www.virustotal.com/api/v3/domains/malware.com
+  https://www.virustotal.com/api/v3/ip_addresses/1.2.3.4
+  etc.
+
+Step 4: Extract malicious score
+─────────────────────────────────
+if res.status_code == 200:
+    malicious = res.json()['data']['attributes']['last_analysis_stats'].get('malicious', 0)
+
+Purpose: Parse JSON response and get malicious count
+Example response:
+  {
+    "data": {
+      "attributes": {
+        "last_analysis_stats": {
+          "malicious": 15,
+          "suspicious": 2,
+          "undetected": 53
+        }
+      }
+    }
+  }
+malicious = 15
+
+Step 5: Cache the result
+────────────────────────
+cache_payload = {
+    'score': malicious,
+    'status': status,
+    'last_checked': datetime.now().isoformat()
+}
+self.vt_cache[cache_key] = cache_payload
+self._save_json(self.vt_cache_path, self.vt_cache)
+
+Purpose: Save result so we don't need to query again
+
+Step 6: Re-analyze if low score
+────────────────────────────────
+if malicious <= 5:  # Low detection
+    rescan_url = f"{api_url}/analyse"
+    post_res = self.session.post(rescan_url, timeout=10)
+    
+Purpose: If VirusTotal shows low detection (<5 engines), trigger fresh scan
+Why? Malware changes constantly. Maybe it's new and not widely detected yet.
+Fresh scan might catch updated signatures.
+
+═══════════════════════════════════════════════════════════════════════════
+
+METHOD: extract_context (Detect MITRE Techniques)
+──────────────────────────────────────────────
+
+def extract_context(self, text):
+    """Analyze article text and return MITRE ATT&CK context."""
+
+Purpose: Read article and identify attack techniques used
+
+FLOW:
+
+Step 1: Iterate through rules
+──────────────────────────────
+for rule in self.mitre_rules:
+    if any(keyword in text_lower for keyword in rule["keywords"]):
+        # Mark this technique as detected
+        found_details.append(rule["techniques"])
+
+Purpose: Check if article mentions keywords like "phishing", "stealer", etc.
+
+Step 2: Extract victims
+───────────────────────
+victim_patterns = [
+    re.compile(r'([A-Z][A-Za-z0-9&.,\-]{2,60})\s+(?:was\s+)?'
+              r'(?:targeted|attacked|breached|compromised|hacked|affected)'),
+    ...
+]
+
+Purpose: Find organization names mentioned with attack keywords
+Example: "Company ABC was targeted"
+Extracts: "Company ABC"
+
+Step 3: Return structured data
+───────────────────────────────
+return {
+    "ttps": "T1566, T1204",  # Detected techniques
+    "victims": ["Company ABC", "Company XYZ"],
+    "attack_types": "Phishing, Credential Theft",
+    "tactics": "Initial Access, Credential Access",
+    "mitre_details": [...]  # Detailed explanations
+}
+
+═══════════════════════════════════════════════════════════════════════════
+
+MAIN METHOD: generate_report (The Orchestrator)
+─────────────────────────────────────────────
+
+def generate_report(self, url, report_type="full", reuse_choice=None):
+    """Orchestrates the entire analysis process."""
+
+Purpose: Main method that does the heavy lifting
+- Fetches webpage
+- Extracts all IOCs
+- Queries VirusTotal
+- Generates reports
+- Saves blocklists
+
+FLOW:
+
+Step 1: Check for existing analysis
+───────────────────────────────────
+norm_url = self._normalize_url(url)
+report_entry = self.url_report_index.get(norm_url, {})
+existing_report = report_entry.get("reports", {}).get(report_type)
+
+Purpose: Avoid re-analyzing same URL
+
+Step 2: Fetch webpage
+─────────────────────
+res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=10)
+soup = BeautifulSoup(res.text, 'html.parser')
+
+Purpose:
+  • requests.get() = Fetch HTML from URL
+  • User-Agent = Pretend to be Firefox browser (some sites block bots)
+  • timeout=10 = Wait max 10 seconds
+  • BeautifulSoup() = Parse HTML into readable format
+
+Step 3: Extract clean text
+──────────────────────────
+page_text = soup.get_text(separator=' ')
+content_for_summary = self.extract_page_content(soup)
+
+Purpose: 
+  • Remove scripts, ads, navigation
+  • Get just the article text
+
+Step 4: Extract context (MITRE detection)
+──────────────────────────────────────────
+context = self.extract_context(content_for_summary)
+
+Purpose: Identify attack techniques, victims, tactics
+
+Step 5: Extract IOCs (Main extraction logic)
+─────────────────────────────────────────────
+Step 5a: Extract IPs
+───────────────────
+found_ips = sorted(list(set(re.findall(
+    r'\b(?:\d{12}|(?:\d{1,3}(?:\[\.\]|\.|\(\.\))){3}\d{1,3})\b',
+    page_text
+))))
+
+Purpose: Find IP addresses using regex pattern
+Pattern explanation:
+  \b = Word boundary (start of word)
+  \d{1,3} = 1-3 digits (0-255 range for IP octet)
+  (?:\[\.\]|\.|\(\.\)) = Either [.] or . or (.) (defanged dot)
+  {3} = Repeat 3 times (for first 3 octets)
+  \d{1,3} = Last octet
+  \b = Word boundary (end of word)
+
+Examples it finds:
+  192.168.1.1
+  192[.]168[.]1[.]1
+  192(.)168(.)1(.)1
+
+Step 5b: Normalize IPs
+──────────────────────
+def normalize_ip(ip):
+    ip = ip.replace("[.]", ".").replace("(.)", ".")
+    return ip
+
+Purpose: Convert "192[.]168[.]1[.]1" → "192.168.1.1"
+
+found_ips = sorted(set(normalize_ip(ip) for ip in found_ips))
+
+Purpose:
+  • Normalize all IPs
+  • Remove duplicates (set)
+  • Sort alphabetically (sorted)
+
+Step 5c: Extract Hashes
+───────────────────────
+raw_hashes = sorted(list(set(iocextract.extract_hashes(page_text))))
+
+Purpose:
+  • iocextract library finds MD5/SHA1/SHA256 hashes
+  • Remove duplicates (set)
+  • Sort (sorted)
+  • Convert to list
+
+Step 5d: Extract Domains
+────────────────────────
+ignored_ext = ['.exe', '.png', '.asar', '.zip', '.txt', '.js', '.json', '.jpg', '.get']
+
+all_domains = sorted(
+    set(
+        normalize_ioc(d)
+        for d in re.findall(
+            r'\b[a-zA-Z0-9-]{1,63}(?:\[\.\]|\(\.\)|\.)(?:[a-z]{2,})(?:\/[^\s]*)?\b',
+            page_text,
+            re.IGNORECASE
+        )
+        if not any(ext in normalize_ioc(d) for ext in ignored_ext)
+    )
+)
+
+Purpose: Find domain names
+Regex breakdown:
+  \b = Word boundary
+  [a-zA-Z0-9-]{1,63} = Domain name (letters, numbers, hyphens)
+  (?:\[\.\]|\(\.\)|\.)) = Defanged or normal dot
+  (?:[a-z]{2,}) = TLD (com, org, net, etc.)
+  (?:\/[^\s]*)? = Optional path after domain
+
+Filtering:
+  • Ignore .exe, .png, etc. (those are file extensions, not domains)
+  • Only keep things that look like domains
+
+Step 5e: Extract URLs
+─────────────────────
+found_urls = sorted(list(set(re.findall(
+    r'(?:http|hxxp)s?(?:\[\:\/\/\]|\:\/\/)[a-zA-Z0-9\-\.\[\]]+(?:(?:\/|\%2F)[\w\.\-\/\=\?\&\%\+\[\]]+)?',
+    page_text
+))))
+
+Purpose: Find full URLs
+Regex looks for:
+  • http or hxxp (with optional s)
+  • :// or [://] or [:://]
+  • Domain name
+  • Optional path
+
+Step 5f: Extract CVEs
+─────────────────────
+raw_cves = re.findall(
+    r'\bCVE[\s\-_–—]?(\d{4})[\s\-_–—]?(\d{4,7})\b',
+    cve_source,
+    re.IGNORECASE
+)
+found_cves = sorted(list(set(f"CVE-{y}-{n}".upper() for y, n in raw_cves)))
+
+Purpose: Find CVE references like CVE-2024-1234
+Handles variations:
+  CVE-2024-1234
+  CVE 2024 1234
+  CVE_2024_1234
+  etc.
+
+Step 6: Process IOCs through VirusTotal
+───────────────────────────────────────
+def process_ioc(ioc_list, ioc_type, cat):
+    for ioc in ioc_list:
+        print(f"[*] Checking for {cat}: {ioc[:80]}...")
+        
+        # Normalize (deobfuscate)
+        clean_val = normalize_ioc(ioc, ioc_type)
+        clean_lookup = clean_val.lower() if ioc_type in {'url', 'domain', 'hash'} else clean_val
+        
+        # Check whitelist
+        if any(w in clean_lookup for w in self.ip_whitelist + self.domain_whitelist):
+            continue  # Skip this IOC (it's legitimate)
+        
+        # Check manual blocklist
+        is_block = clean_lookup in self.manual_blocklist
+        
+        # Query VirusTotal
+        vt_result = (1, "[!] BLOCKLIST MATCH") if is_block else self.get_vt_data(ioc_type, clean_val, force_reanalysis=force_vt_reanalysis)
+        hits, status = vt_result
+        
+        # Categorize as malicious or clean
+        if hits > 0 or "\\" in ioc or "hxxp" in ioc.lower() or "[.]" in ioc:
+            mal_data[cat].append(entry)  # Malicious
+        else:
+            clean_data[cat].append(entry)  # Clean (legitimate)
+
+process_ioc(found_ips, 'ip', 'IPs')
+process_ioc(all_domains, 'domain', 'Domain')
+process_ioc(found_urls, 'url', 'URL')
+process_ioc(raw_hashes, 'hash', 'File_Hash')
+
+Purpose: Check each IOC type against VirusTotal and categorize
+
+Step 7: Generate report files
+──────────────────────────────
+ts = datetime.now().strftime('%Y%m%d_%H%M%S')  # Timestamp
+
+if report_type == "full":
+    report_path = f"{self.base_reports_dir}/ADVISORY_{ts}.txt"
+else:
+    report_path = f"{self.base_reports_dir}/IOC_ONLY_{ts}.txt"
+
+with open(report_path, "w", encoding="utf-8") as f:
+    f.write("=" *50 + "\nReport:\n" + "=" *50 + "\n")
+    f.write(f"REPORT DATE      : {datetime.now()}\n")
+    f.write(f"SOURCE URL       : {url}\n\n")
+    f.write(f"TARGET COMPANY   : {', '.join(context['victims'])}\n\n")
+    f.write("=" *50 + "\nMITRE ATT&CK ANALYSIS:\n" + "=" *50 + "\n")
+    f.write(f"Detected TTPs    : {context['ttps']}\n")
+    f.write(f"Attack Type      : {context['attack_types']}\n")
+    f.write(f"MITRE Tactic(s)  : {context['tactics']}\n\n")
+    f.write(self.get_summary(summary_for_report) + "\n\n")
+    f.write(f"MALICIOUS IOCs ({len(full_list)}):\n")
+    f.write("\n".join(full_list) + "\n\n")
+
+Purpose: Write report to file with all analysis
+
+Step 8: Generate blocklist for firewall
+────────────────────────────────────────
+if full_list:
+    blocklist_path = f"{self.malicious_dir}/URGENT_BLOCKLIST_{ts}.txt"
+    with open(blocklist_path, "w", encoding="utf-8") as f:
+        for cat, items in mal_data.items():
+            if items:
+                f.write(f"[{cat}]\n" + "\n".join(items) + "\n\n")
+
+Purpose: Create blocklist that can be imported into firewalls/EDR tools
+Example format:
+  [IPs]
+  IPs: 192.168.1.1          | 25 hits
+  IPs: 10.0.0.1             | 30 hits
+  
+  [Domain]
+  Domain: malware.com       | 40 hits
+  
+  [URL]
+  URL: http://evil.com/payload.exe | 50 hits
+  
+  [File_Hash]
+  File_Hash: d41d8cd98f00b204e9800998ecf8427e | 35 hits
+
+Step 9: Update index and return
+──────────────────────────────
+index = self.url_report_index.setdefault(norm_url, {"reports": {}, "last_analyzed": None})
+index["reports"][report_type] = report_path
+index["last_analyzed"] = datetime.now().isoformat()
+self._save_json(self.url_report_index_path, self.url_report_index)
+
+return report_path
+
+Purpose:
+  • Remember that we analyzed this URL
+  • Save timestamp of analysis
+  • Return path to generated report
+
+================================================================================
+SECTION 7: HOW TO SETUP AND RUN THE PROJECT
+================================================================================
+
+STEP 1: Get your VirusTotal API Key
+────────────────────────────────────
+1. Go to https://www.virustotal.com/
+2. Create an account (free)
+3. Click Settings → API Key
+4. Copy your API key (looks like: abcdefghijklmnopqrstuvwxyz1234567890)
+
+STEP 2: Create .env file in project root
+──────────────────────────────────────────
+Create new file called: .env
+
+Content:
+  VT_API_KEY=abcdefghijklmnopqrstuvwxyz1234567890
+
+(Replace with YOUR actual API key)
+
+STEP 3: Create virtual environment (Optional but recommended)
+──────────────────────────────────────────────────────────────
+Open terminal/command prompt and type:
+
+Windows:
+  python -m venv .venv
+  .venv\Scripts\activate
+
+Mac/Linux:
+  python -m venv .venv
+  source .venv/bin/activate
+
+STEP 4: Install dependencies
+──────────────────────────────
+pip install -r requirements.txt
+
+This installs all the libraries: requests, beautifulsoup4, etc.
+
+STEP 5: Run the program
+────────────────────────
+python main.py
+
+Then:
+  1. Enter a URL (threat intelligence blog)
+  2. Choose report type (1 for full, 2 for IOCs only)
+  3. Program analyzes the URL
+  4. Results saved to reports/ folder
+
+EXAMPLE SESSION:
+─────────────────
+
+$ python main.py
+
+Paste TI URL: https://securityblog.com/apt-analysis
+
+Choose report type:
+1. Full Advisory (includes MITRE analysis, summary, IOCs)
+2. Only IOCs (malicious indicators only)
+Enter 1 or 2: 1
+
+[*] Checking for IP: 192.168.1.1...
+[*] Checking for Domain: evil.com...
+[*] Checking for URL: http://malware.com/payload.exe...
+[*] Checking for File_Hash: d41d8cd98f00b204e9800998ecf8427e...
+
+[+] Success: reports/ADVISORY_20240424_143838.txt
+
+Report created! Check reports/ folder.
+
+================================================================================
+SECTION 8: EXAMPLE WORKFLOW
+================================================================================
+
+SCENARIO: You read about a new malware campaign and want to extract IOCs
+
+STEP 1: Copy URL from your browser
+┌─ URL: https://security-blog.com/macos-stealer-2024
+└─ Contains: IPs, domains, URLs, file hashes related to malware
+
+STEP 2: Run the project
+┌─ python main.py
+├─ Paste URL: https://security-blog.com/macos-stealer-2024
+├─ Choose type: 1 (Full Advisory)
+└─ Press Enter
+
+STEP 3: Automatic processing
+┌─ Fetches webpage
+├─ Extracts text with BeautifulSoup
+├─ Finds patterns:
+│  ├─ IPs: 192.168.1.1, 10.0.0.1 (5 found)
+│  ├─ Domains: malware.com, badactor.net (12 found)
+│  ├─ URLs: http://evil.com/payload.exe (8 found)
+│  ├─ Hashes: d41d8cd98f00b204e9800998ecf8427e (3 found)
+│  └─ CVEs: CVE-2024-1234, CVE-2024-5678 (2 found)
+├─ For each IOC:
+│  ├─ Check if whitelisted → Skip if legitimate
+│  ├─ Check manual blocklist → Mark if known malicious
+│  ├─ Query VirusTotal → Get malicious engine count
+│  └─ Categorize as malicious/clean
+├─ Detect attack techniques:
+│  ├─ Found "stealer" keyword → T1119 (Automated Collection)
+│  ├─ Found "credential theft" → T1555.001 (Credentials from Web Browsers)
+│  └─ Classify as "Credential Theft" attack
+└─ Generate report
+
+STEP 4: Output files created
+┌─ reports/ADVISORY_20240424_143838.txt
+│  ├─ Header with analysis date, URL, victim company
+│  ├─ MITRE ATT&CK section:
+│  │  ├─ Detected TTPs: T1119, T1555.001
+│  │  ├─ Attack Type: Credential Theft
+│  │  ├─ Tactics: Collection, Credential Access
+│  │  └─ Confidence levels for each technique
+│  ├─ Summary: 5-sentence overview of threat
+│  └─ Full list of 28 malicious IOCs
+│
+├─ reports/Malicious_IOCs/URGENT_BLOCKLIST_20240424_143838.txt
+│  ├─ [IPs]
+│  │  ├─ IPs: 192.168.1.1          | 25 hits
+│  │  └─ IPs: 10.0.0.1             | 30 hits
+│  ├─ [Domain]
+│  │  ├─ Domain: malware.com       | 40 hits
+│  │  └─ Domain: badactor.net      | 35 hits
+│  ├─ [URL]
+│  │  └─ URL: http://evil.com/payload.exe | 50 hits
+│  └─ [File_Hash]
+│     ├─ File_Hash: d41d8cd98f00b204e9800998ecf8427e | 35 hits
+│     └─ File_Hash: e41d8cd98f00b204e9800998ecf8427f | 42 hits
+│
+├─ reports/Clean_Artifacts_20240424_143838.txt
+│  └─ IOCs that had 0 malicious hits
+│
+├─ reports/cyber_shield.log
+│  ├─ 2024-04-24 14:38:00 - INFO - CyberShield-CTI Engine Initialized.
+│  ├─ 2024-04-24 14:38:01 - INFO - Processing IP IOC: 192.168.1.1
+│  ├─ 2024-04-24 14:38:02 - INFO - VT Result for IP 192.168.1.1: 25 hits
+│  ├─ ...
+│  └─ 2024-04-24 14:38:45 - INFO - Success: Report generated
+│
+└─ reports/url_report_index.json
+   └─ {
+        "https://security-blog.com/macos-stealer-2024": {
+          "reports": {
+            "full": "reports/ADVISORY_20240424_143838.txt"
+          },
+          "last_analyzed": "2024-04-24T14:38:45"
+        }
+      }
+
+STEP 5: Use blocklist in your security tools
+┌─ Open firewall configuration
+├─ Import URGENT_BLOCKLIST_20240424_143838.txt
+├─ Block all those IPs/domains/URLs
+└─ Now your network is protected against this campaign!
+
+================================================================================
+SECTION 9: PYTHON CONCEPTS USED IN THIS PROJECT
+================================================================================
+
+CONCEPT 1: Variables and Data Types
+────────────────────────────────────
+variable_name = value
+
+Examples in project:
+  target = input("Paste TI URL: ")           # String
+  found_ips = [...]                          # List
+  malicious = 25                             # Integer
+  context = {"ttps": "T1566", "victims": []}  # Dictionary
+  is_block = True                            # Boolean
+
+CONCEPT 2: Functions
+────────────────────
+def function_name(parameter1, parameter2):
+    # Do something
+    return result
+
+Example:
+  def normalize_ip(ip):
+      ip = ip.replace("[.]", ".")
+      return ip
+  
+  result = normalize_ip("192[.]168[.]1[.]1")  # Returns: "192.168.1.1"
+
+CONCEPT 3: Classes and Objects
+───────────────────────────────
+class ClassName:
+    def __init__(self):
+        # Initialize
+    
+    def method_name(self):
+        # Do something
+    
+object = ClassName()  # Create instance
+object.method_name()  # Call method
+
+Example in project:
+  class CTIWorkbench:
+      def __init__(self):
+          self.headers = {...}
+      
+      def generate_report(self, url):
+          # Analyze URL
+  
+  tool = CTIWorkbench()  # Create instance
+  tool.generate_report("https://blog.com/threat")  # Call method
+
+CONCEPT 4: Lists and Loops
+──────────────────────────
+found_ips = ["192.168.1.1", "10.0.0.1", "172.16.0.1"]
+
+for ip in found_ips:
+    print(ip)
+
+# Output:
+# 192.168.1.1
+# 10.0.0.1
+# 172.16.0.1
+
+Example in project:
+  for ioc in ioc_list:
+      clean_val = normalize_ioc(ioc)
+      score, status = self.get_vt_data(ioc_type, clean_val)
+      mal_data[cat].append(entry)
+
+CONCEPT 5: Conditionals (if/elif/else)
+───────────────────────────────────────
+if condition1:
+    # Do this
+elif condition2:
+    # Do that
+else:
+    # Default behavior
+
+Example in project:
+  if choice == "1":
+      report_type = "full"
+  elif choice == "2":
+      report_type = "ioc"
+  else:
+      report_type = "full"
+
+CONCEPT 6: Dictionaries (Key-value pairs)
+──────────────────────────────────────────
+context = {
+    "ttps": "T1566, T1204",
+    "victims": ["Company A", "Company B"],
+    "attack_types": "Phishing"
+}
+
+Accessing:
+  print(context["ttps"])  # Output: T1566, T1204
+  print(context["victims"])  # Output: ['Company A', 'Company B']
+
+CONCEPT 7: Lists and Sets
+──────────────────────────
+found_ips = ["192.168.1.1", "10.0.0.1", "192.168.1.1"]  # List with duplicate
+
+unique_ips = set(found_ips)  # Remove duplicates
+# Output: {'192.168.1.1', '10.0.0.1'}
+
+unique_ips_sorted = sorted(unique_ips)  # Sort alphabetically
+# Output: ['10.0.0.1', '192.168.1.1']
+
+unique_ips_list = list(unique_ips_sorted)  # Convert back to list
+
+CONCEPT 8: String Methods
+──────────────────────────
+string = "  Hello World  "
+
+string.strip()      # Remove spaces: "Hello World"
+string.lower()      # Lowercase: "  hello world  "
+string.replace("World", "Python")  # Replace: "  Hello Python  "
+string.split(" ")   # Split: ["", "", "Hello", "World", "", ""]
+
+Example in project:
+  target = input("Paste TI URL: ").strip()  # Remove spaces from input
+  clean_val = normalize_ioc(ioc, ioc_type).lower()  # Lowercase for comparison
+  ioc.replace("[.]", ".")  # Replace defanged dot
+
+CONCEPT 9: List Comprehensions
+───────────────────────────────
+Compact way to create lists
+
+Traditional way:
+  result = []
+  for item in items:
+      result.append(item * 2)
+
+List comprehension way:
+  result = [item * 2 for item in items]
+
+Example in project:
+  found_ttps = [f"{detail['id']} ({detail['name']})" for detail in found_details]
+  
+  This creates list of technique IDs from details list
+
+CONCEPT 10: Exception Handling (try/except)
+────────────────────────────────────────────
+try:
+    # Try to do something risky
+    res = requests.get(url, timeout=10)
+except Exception as e:
+    # If error happens, catch it
+    logging.error(f"Network error: {str(e)}")
+    return None
+
+Purpose: Prevent program from crashing on errors
+
+Example in project:
+  try:
+      malicious = res.json()['data']['attributes']['last_analysis_stats'].get('malicious', 0)
+  except KeyError:
+      logging.error("Unexpected response format from VirusTotal API")
+      return 0, "VT Lookup Failed"
+
+================================================================================
+SECTION 10: TROUBLESHOOTING
+================================================================================
+
+PROBLEM 1: "Missing VirusTotal API Key"
+────────────────────────────────────────
+Error message: ValueError: Missing VirusTotal API Key. Check cyber_shield.log
+
+Solution:
+  1. Create .env file in project root
+  2. Add line: VT_API_KEY=your_actual_api_key
+  3. Make sure no typos in filename (.env, not .ENV)
+  4. Save file
+  5. Run again
+
+PROBLEM 2: "No module named 'requests'"
+─────────────────────────────────────────
+Error: ModuleNotFoundError: No module named 'requests'
+
+Solution:
+  1. Make sure requirements.txt is in project root
+  2. Run: pip install -r requirements.txt
+  3. Wait for installation to complete
+  4. Run python main.py again
+
+PROBLEM 3: "Connection timeout"
+────────────────────────────────
+Error: requests.exceptions.ConnectTimeout
+
+Reason: Website took too long to respond (>10 seconds)
+
+Solution:
+  1. Check internet connection
+  2. Website might be down
+  3. Try different URL
+  4. Try again later
+
+PROBLEM 4: "404 Not Found" from VirusTotal
+────────────────────────────────────────────
+Error: HTTP 404 when querying VirusTotal
+
+Reason: IOC format is wrong or API key is invalid
+
+Solution:
+  1. Check .env file has correct API key
+  2. Make sure API key has no spaces
+  3. Check VirusTotal is not blocked by firewall
+
+PROBLEM 5: "Reports folder is empty"
+──────────────────────────────────────
+After running, no files in reports/ folder
+
+Reason: 
+  • No IOCs found in URL
+  • URL had only legitimate content
+  • Program crashed silently
+
+Solution:
+  1. Check cyber_shield.log for errors
+  2. Check console output for error messages
+  3. Try different URL with malware indicators
+  4. Verify IOCs actually exist in webpage
+
+PROBLEM 6: "SSL verification failed"
+──────────────────────────────────────
+Error: SSLError: [SSL: CERTIFICATE_VERIFY_FAILED]
+
+Reason: Website has SSL certificate issues
+
+Solution:
+  • Program auto-retries with verify=False
+  • Should work automatically
+  • If still fails, might be network/proxy issue
+
+================================================================================
+SECTION 11: QUICK REFERENCE
+================================================================================
+
+QUICK COMMAND GUIDE:
+
+Setup project:
+  python -m venv .venv
+  .venv\Scripts\activate  (Windows) or source .venv/bin/activate (Mac/Linux)
+  pip install -r requirements.txt
+
+Run project:
+  python main.py
+
+Common inputs:
+  URL: https://securityblog.com/threat-analysis
+  Report type: 1 (for full) or 2 (for IOCs only)
+
+Check results:
+  cd reports/
+  cat ADVISORY_*.txt (view full report)
+  cat URGENT_BLOCKLIST_*.txt (view blocklist)
+  tail cyber_shield.log (view recent logs)
+
+Update API key:
+  Edit .env file
+  Save
+  Run python main.py again
+
+Add whitelist items:
+  Edit whitelist.txt
+  Add one IOC per line
+  Run again
+
+================================================================================
+COMMON ERRORS AND FIXES
+================================================================================
+
+Error: "No IOCs found for this URL"
+  → Try different URL with actual malicious indicators
+  → Check if URL has IOCs formatted differently
+
+Error: "Rate limit hit (429)"
+  → VirusTotal API limit reached
+  → Program waits and retries automatically
+  → Try again in few minutes
+
+Error: "UnicodeDecodeError"
+  → Website has non-UTF-8 characters
+  → Program tries to handle it
+  → Check cyber_shield.log for details
+
+Error: "BeautifulSoup parse error"
+  → Website HTML is malformed
+  → BeautifulSoup is lenient, usually works
+  → Try different parser or URL
+
+================================================================================
+
+That's it! You now have a complete understanding of:
+
+✓ What the project does
+✓ How each file works
+✓ Every line of code explained
+✓ How to set it up
+✓ How to run it
+✓ Python concepts used
+✓ How to troubleshoot
+
+Ready to become a threat intelligence analyst!
+
+================================================================================
