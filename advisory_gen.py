@@ -1,3 +1,4 @@
+import csv
 import sys               # For handling command-line arguments (if needed in the future)
 import subprocess        # For potential future use (e.g., running external tools or scripts)
 from nltk import text    # For potential future use in more advanced NLP tasks (currently using sumy for summarization)
@@ -14,6 +15,11 @@ import logging           # For creating a professional 'cyber_shield.log' audit 
 from bs4 import BeautifulSoup    # For parsing HTML and extracting clean text from web pages
 from datetime import datetime    # For adding timestamps to report filenames and logs
 from dotenv import load_dotenv   # To load the VT_API_KEY from a hidden .env file (Security)
+
+try:
+    import msvcrt
+except ImportError:
+    msvcrt = None
 
 # --- Summarization libraries (NLP - Natural Language Processing) ---
 from sumy.parsers.plaintext import PlaintextParser  # Converts raw text into a format the AI can read
@@ -40,6 +46,10 @@ if not VT_API_KEY:
     logging.critical("VirusTotal API key not found in environment variables.")
     raise ValueError("Missing VirusTotal API Key. Check cyber_shield.log for details.")
 
+class AnalysisCancelled(Exception):
+    """Raised when the user cancels analysis during IOC processing."""
+    pass
+
 class CTIWorkbench: 
     # The __init__ method is the constructor for the CTIWorkbench class. 
     # It initializes the engine by setting up necessary directories for reports, loading whitelists and blocklists from local text files, and defining expanded MITRE ATT&CK detection rules for behavior-based inference. 
@@ -64,6 +74,7 @@ class CTIWorkbench:
         self.session = requests.Session()
         self.session.headers.update(self.headers)
         self.cache_dir = self.base_reports_dir
+        self.cancel_requested = False
         self.vt_cache_path = os.path.join(self.cache_dir, 'vt_cache.json')
         self.url_report_index_path = os.path.join(self.cache_dir, 'url_report_index.json')
         self.vt_cache_max_age_seconds = 7 * 24 * 60 * 60  # one week for zero-score cache reuse
@@ -171,11 +182,363 @@ class CTIWorkbench:
             logging.info(f"Initialized missing JSON file: {file_path}")
             return {}
 
+    def _reset_cancel_state(self):
+        """Reset the cancellation state before starting a new analysis."""
+        self.cancel_requested = False
+
+    def _check_for_exit(self):
+        """Check whether the user has requested cancellation by pressing 'q'."""
+        if self.cancel_requested:
+            raise AnalysisCancelled()
+
+        if msvcrt is None:
+            return
+
+        try:
+            while msvcrt.kbhit():
+                key = msvcrt.getwch()
+                if key.lower() == 'q':
+                    self.cancel_requested = True
+                    logging.warning("User requested cancellation during analysis.")
+                    raise AnalysisCancelled()
+        except Exception:
+            raise AnalysisCancelled()
+
     def _save_json(self, file_path, data):
         """Persist JSON data safely."""
         self._ensure_dir(file_path)
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2)
+
+    def _read_file_content(self, file_path):
+        """Load IOC input from a text, CSV/TSV, or Excel file."""
+        if not os.path.exists(file_path):
+            logging.error(f"Input file not found: {file_path}")
+            return ""
+
+        _, ext = os.path.splitext(file_path)
+        ext = ext.lower()
+
+        if ext in {'.txt', '.cve', '.log', '.md'}:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                return f.read()
+
+        if ext in {'.csv', '.tsv'}:
+            delimiter = '\t' if ext == '.tsv' else ','
+            rows = []
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                reader = csv.reader(f, delimiter=delimiter)
+                for row in reader:
+                    rows.append(' '.join(str(cell) for cell in row if cell not in (None, '')))
+            return '\n'.join(rows)
+
+        if ext in {'.xlsx', '.xls'}:
+            try:
+                import openpyxl  # type: ignore[import]
+            except ImportError:
+                logging.error('openpyxl is required to read Excel files. Install it or save the data as CSV/text.')
+                return ""
+
+            if ext == '.xls':
+                logging.warning('Only .xlsx Excel files are fully supported; .xls support may be limited.')
+
+            try:
+                workbook = openpyxl.load_workbook(file_path, read_only=True, data_only=True)
+                rows = []
+                for sheet in workbook.worksheets:
+                    for row in sheet.iter_rows(values_only=True):
+                        rows.append(' '.join(str(cell) for cell in row if cell not in (None, '')))
+                return '\n'.join(rows)
+            except Exception as e:
+                logging.error(f"Could not read Excel file {file_path}: {e}")
+                return ""
+
+        logging.warning(f"Unsupported file extension for IOC extraction: {file_path}")
+        return ""
+
+    def _extract_iocs_from_text(self, page_text):
+        """Extract IOCs and CVEs from raw text content."""
+        found_ips = sorted(list(set(re.findall(r'\b(?:\d{12}|(?:\d{1,3}(?:\[\.\]|\.|\(\.\))){3}\d{1,3})\b', page_text))))
+        raw_hashes = sorted(list(set(iocextract.extract_hashes(page_text))))
+        ignored_ext = ['.exe', '.png', '.asar', '.zip', '.txt', '.js', '.json', '.jpg', '.get']
+        all_domains = sorted(
+            set(
+                d
+                for d in re.findall(
+                    r'\b[a-zA-Z0-9-]{1,63}(?:\[\.\]|\(\.\)|\.)(?:[a-z]{2,})(?:\/[^^\s]*)?\b',
+                    page_text,
+                    re.IGNORECASE
+                )
+                if not any(ext in d for ext in ignored_ext)
+            )
+        )
+        found_urls = sorted(list(set(re.findall(r'(?:http|hxxp)s?(?:\[\:\/\/\]|\:\/\/)[a-zA-Z0-9\-\.\[\]]+(?:(?:\/|%2F)[\w\.\-\/\=\?\&\%\+\[\]]+)?', page_text))))
+        raw_cves = re.findall(
+            r'\bCVE[\s\-_–—]?(\d{4})[\s\-_–—]?(\d{4,7})\b',
+            page_text,
+            re.IGNORECASE
+        )
+        found_cves = sorted(list(set(f"CVE-{y}-{n}".upper() for y, n in raw_cves)))
+        return found_ips, all_domains, found_urls, raw_hashes, found_cves
+
+    def generate_report_from_file(self, file_path, report_type="ioc"):
+        self._reset_cancel_state()
+        logging.info(f"Starting file analysis for: {file_path} (Report Type: {report_type})")
+        try:
+            content = self._read_file_content(file_path)
+            if not content:
+                logging.error(f"No content could be read from {file_path}")
+                return None
+
+            content_for_context = self.extract_page_content(BeautifulSoup(content, 'html.parser'))
+            context = self.extract_context(content_for_context)
+            found_ips, all_domains, found_urls, raw_hashes, found_cves = self._extract_iocs_from_text(content)
+
+            mal_data = {"File_Hash": [], "Domain": [], "URL": [], "IPs": []}
+            clean_data = {"File_Hash": [], "Domain": [], "URL": [], "IPs": []}
+            full_list = []
+
+            def normalize_ip(ip):
+                return ip.replace("[.]", ".").replace("(.)", ".")
+
+            def normalize_ioc(ioc, ioc_type=None):
+                cleaned = (
+                    ioc.replace("[.]", ".")
+                       .replace("(.)", ".")
+                       .replace("[://]", "://")
+                       .replace("hxxps://", "https://")
+                       .replace("hxxp://", "http://")
+                       .replace("hxxps", "https://")
+                       .replace("hxxp", "http")
+                       .replace("fxp", "ftp")
+                       .strip()
+                )
+                return cleaned if ioc_type == 'url' else cleaned.lower()
+
+            def process_ioc(ioc_list, ioc_type, cat):
+                for ioc in ioc_list:
+                    self._check_for_exit()
+                    logging.info(f"Checking for {cat}: {ioc[:80]}...")
+                    clean_val = normalize_ioc(ioc, ioc_type)
+                    clean_lookup = clean_val.lower() if ioc_type in {'url', 'domain', 'hash'} else clean_val
+                    if any(w in clean_lookup for w in self.ip_whitelist + self.domain_whitelist):
+                        continue
+                    is_block = clean_lookup in self.manual_blocklist
+                    logging.info(f"Processing {ioc_type.upper()} IOC: raw={ioc[:80]} Malicious_IOC={clean_val[:80]}")
+                    self._check_for_exit()
+                    vt_result = (1, "[!] BLOCKLIST MATCH") if is_block else self.get_vt_data(ioc_type, clean_val)
+                    if not vt_result:
+                        vt_result = (0, "VT returned None (check get_vt_data returns)")
+                    hits, status = vt_result
+                    if hits > 0 or "\\\\" in ioc or "hxxp" in ioc.lower() or "[.]" in ioc:
+                        entry = f"{cat}: {clean_val.ljust(45)} | {status}"
+                        full_list.append(entry)
+                        mal_data[cat].append(entry)
+                    else:
+                        entry = f"{cat}: {clean_val.ljust(45)} | {status}"
+                        clean_data[cat].append(entry)
+
+            process_ioc(found_ips, 'ip', 'IPs')
+            process_ioc(all_domains, 'domain', 'Domain')
+            process_ioc(found_urls, 'url', 'URL')
+            process_ioc(raw_hashes, 'hash', 'File_Hash')
+
+            clean_list = [item for sublist in clean_data.values() for item in sublist]
+            ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+            report_name = os.path.basename(file_path).replace(' ', '_')
+            if report_type == 'ioc' and not full_list:
+                logging.info(f"No IOCs found for {file_path}; IOC-only report will not be created.")
+                return "NO IOC Found"
+            report_path = f"{self.base_reports_dir}/FILE_IOC_{report_name}_{ts}.txt" if report_type == 'ioc' else f"{self.base_reports_dir}/FILE_ADVISORY_{report_name}_{ts}.txt"
+            self._ensure_dir(report_path)
+
+            with open(report_path, 'w', encoding='utf-8') as f:
+                if report_type == 'full':
+                    f.write("=" *50 + "\nReport:\n" + "=" *50 + f"\n")
+                    f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    f.write(f"SOURCE FILE      : {file_path}\n\n")
+                    f.write(f"TARGET COMPANY   : {', '.join(context['victims'])}\n\n")
+                    f.write("=" *50 + "\nMITRE ATT&CK ANALYSIS:\n" + "=" *50 + f"\n\nDetected TTPs    : {context['ttps']}\n")
+                    f.write(f"Matched MITRE Codes: {context.get('matched_mitre_codes', 'None')}\n")
+                    f.write(f"Attack Type      : {context.get('attack_types', 'Unknown')}\n")
+                    f.write(f"MITRE Tactic(s)  : {context.get('tactics', 'Unknown')}\n\n")
+                    if context.get('mitre_details'):
+                        f.write("Technique findings:\n")
+                        f.write("\n".join(context['mitre_details']) + "\n\n")
+                elif report_type == 'ioc':
+                    f.write("=" *50 + "\nIOC Report:\n" + "=" *50 + f"\n")
+                    f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    f.write(f"SOURCE FILE      : {file_path}\n\n")
+                f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} IOC_Found), IPs: {len(found_ips)}, Domains: {len(all_domains)}, URLs: {len(found_urls)}, Hashes: {len(raw_hashes)}, CVE: {len(found_cves)}" "\n\n" + "\n".join(full_list) + "\n\n")
+                f.write("=" * 50 + "\nCVE REFERENCES:\n" + "=" * 50 + "\n\n")
+                f.write("Detected CVEs :\n" + ("\n".join(found_cves) if found_cves else "None"))
+
+            if full_list:
+                blocklist_path = f"{self.malicious_dir}/URGENT_BLOCKLIST_{ts}.txt"
+                self._ensure_dir(blocklist_path)
+                with open(blocklist_path, 'w', encoding='utf-8') as b:
+                    for cat, items in mal_data.items():
+                        if items:
+                            b.write(f"[{cat}]\n" + "\n".join(items) + "\n\n")
+
+            if clean_list:
+                clean_path = f"{self.clean_dir}/CLEAN_ARTIFACTS_{ts}.txt"
+                self._ensure_dir(clean_path)
+                with open(clean_path, 'w', encoding='utf-8') as c:
+                    c.write("=" *50 + "\nClean Artifacts Report:\n" + "=" *50 + f"\n")
+                    c.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    c.write(f"SOURCE FILE      : {file_path}\n\n")
+                    c.write(f"Clean IOCs ({len(clean_list)} found)\n\n")
+                    for cat, items in clean_data.items():
+                        if items:
+                            c.write(f"[{cat}]\n" + "\n".join(items) + "\n\n")
+
+            logging.info(f"Success: File report generated at {report_path}")
+            index = self.url_report_index.setdefault(file_path, {"reports": {}, "last_analyzed": None})
+            index["reports"][report_type] = report_path
+            index["last_analyzed"] = datetime.now().isoformat()
+            self._save_json(self.url_report_index_path, self.url_report_index)
+            return report_path
+
+        except AnalysisCancelled:
+            logging.warning("Analysis cancelled during file processing.")
+            return "ANALYSIS_CANCELLED"
+        except Exception as e:
+            logging.critical(f"Error while generating file report: {str(e)}")
+            return None
+
+    def generate_report_from_text(self, text, report_type="ioc"):
+        self._reset_cancel_state()
+        logging.info(f"Starting text analysis (Paste Input) (Report Type: {report_type})")
+        try:
+            content = text
+            if not content:
+                logging.error("No pasted content provided.")
+                return None
+
+            content_for_context = self.extract_page_content(BeautifulSoup(content, 'html.parser'))
+            context = self.extract_context(content_for_context)
+            found_ips, all_domains, found_urls, raw_hashes, found_cves = self._extract_iocs_from_text(content)
+
+            mal_data = {"File_Hash": [], "Domain": [], "URL": [], "IPs": []}
+            clean_data = {"File_Hash": [], "Domain": [], "URL": [], "IPs": []}
+            full_list = []
+            no_vt_score = []
+
+            def normalize_ip(ip):
+                return ip.replace("[.]", ".").replace("(.)", ".")
+
+            def normalize_ioc(ioc, ioc_type=None):
+                cleaned = (
+                    ioc.replace("[.]", ".")
+                       .replace("(.)", ".")
+                       .replace("[://]", "://")
+                       .replace("hxxps://", "https://")
+                       .replace("hxxp://", "http://")
+                       .replace("hxxps", "https://")
+                       .replace("hxxp", "http")
+                       .replace("fxp", "ftp")
+                       .strip()
+                )
+                return cleaned if ioc_type == 'url' else cleaned.lower()
+
+            def process_ioc(ioc_list, ioc_type, cat):
+                for ioc in ioc_list:
+                    self._check_for_exit()
+                    logging.info(f"Checking for {cat}: {ioc[:80]}...")
+                    clean_val = normalize_ioc(ioc, ioc_type)
+                    clean_lookup = clean_val.lower() if ioc_type in {'url', 'domain', 'hash'} else clean_val
+                    if any(w in clean_lookup for w in self.ip_whitelist + self.domain_whitelist):
+                        continue
+                    is_block = clean_lookup in self.manual_blocklist
+                    logging.info(f"Processing {ioc_type.upper()} IOC: raw={ioc[:80]} Malicious_IOC={clean_val[:80]}")
+                    self._check_for_exit()
+                    vt_result = (1, "[!] BLOCKLIST MATCH") if is_block else self.get_vt_data(ioc_type, clean_val)
+                    if not vt_result:
+                        vt_result = (0, "VT returned None (check get_vt_data returns)")
+                    hits, status = vt_result
+                    if hits == 0 and "0 hits" in status.lower():
+                        no_vt_score.append(f"{cat}: {clean_val} | {status}")
+                    if hits > 0 or "\\\\" in ioc or "hxxp" in ioc.lower() or "[.]" in ioc:
+                        entry = f"{cat}: {clean_val.ljust(45)} | {status}"
+                        full_list.append(entry)
+                        mal_data[cat].append(entry)
+                    else:
+                        entry = f"{cat}: {clean_val.ljust(45)} | {status}"
+                        clean_data[cat].append(entry)
+
+            process_ioc(found_ips, 'ip', 'IPs')
+            process_ioc(all_domains, 'domain', 'Domain')
+            process_ioc(found_urls, 'url', 'URL')
+            process_ioc(raw_hashes, 'hash', 'File_Hash')
+
+            clean_list = [item for sublist in clean_data.values() for item in sublist]
+            ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+            report_path = f"{self.base_reports_dir}/PASTE_IOC_{ts}.txt" if report_type == 'ioc' else f"{self.base_reports_dir}/PASTE_ADVISORY_{ts}.txt"
+            self._ensure_dir(report_path)
+
+            with open(report_path, 'w', encoding='utf-8') as f:
+                if report_type == 'full':
+                    f.write("=" *50 + "\nReport:\n" + "=" *50 + f"\n")
+                    f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    f.write(f"SOURCE           : Pasted IOC/Text\n\n")
+                    f.write(f"TARGET COMPANY   : {', '.join(context['victims'])}\n\n")
+                    f.write("=" *50 + "\nMITRE ATT&CK ANALYSIS:\n" + "=" *50 + f"\n\nDetected TTPs    : {context['ttps']}\n")
+                    f.write(f"Matched MITRE Codes: {context.get('matched_mitre_codes', 'None')}\n")
+                    f.write(f"Attack Type      : {context.get('attack_types', 'Unknown')}\n")
+                    f.write(f"MITRE Tactic(s)  : {context.get('tactics', 'Unknown')}\n\n")
+                    if context.get('mitre_details'):
+                        f.write("Technique findings:\n")
+                        f.write("\n".join(context['mitre_details']) + "\n\n")
+                    f.write("=" *50 + "\nSUMMARY:\n" + "=" *50 + f"\n\n")
+                    f.write(self.get_summary(self._remove_iocs_from_text(content_for_context)) + "\n\n")
+                else:
+                    f.write("=" *50 + "\nIOC Report:\n" + "=" *50 + f"\n")
+                    f.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    f.write(f"SOURCE           : Pasted IOC/Text\n\n")
+                if no_vt_score:
+                    f.write("NOTE: The following IOCs had no positive VT score or were not found in VirusTotal:\n")
+                    for entry in no_vt_score:
+                        f.write(f"{entry}\n")
+                    f.write("\n")
+                f.write("-" * 50 + f"\nMALICIOUS IOCs ({len(full_list)} IOC_Found), IPs: {len(found_ips)}, Domains: {len(all_domains)}, URLs: {len(found_urls)}, Hashes: {len(raw_hashes)}, CVE: {len(found_cves)}" "\n\n" + "\n".join(full_list) + "\n\n")
+                f.write("=" * 50 + "\nCVE REFERENCES:\n" + "=" * 50 + "\n\n")
+                f.write("Detected CVEs :\n" + ("\n".join(found_cves) if found_cves else "None"))
+
+            if full_list:
+                blocklist_path = f"{self.malicious_dir}/URGENT_BLOCKLIST_{ts}.txt"
+                self._ensure_dir(blocklist_path)
+                with open(blocklist_path, 'w', encoding='utf-8') as b:
+                    for cat, items in mal_data.items():
+                        if items:
+                            b.write(f"[{cat}]\n" + "\n".join(items) + "\n\n")
+
+            if clean_list:
+                clean_path = f"{self.clean_dir}/CLEAN_ARTIFACTS_{ts}.txt"
+                self._ensure_dir(clean_path)
+                with open(clean_path, 'w', encoding='utf-8') as c:
+                    c.write("=" *50 + "\nClean Artifacts Report:\n" + "=" *50 + f"\n")
+                    c.write(f"REPORT DATE      : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    c.write(f"SOURCE           : Pasted IOC/Text\n\n")
+                    c.write(f"Clean IOCs ({len(clean_list)} found)\n\n")
+                    for cat, items in clean_data.items():
+                        if items:
+                            c.write(f"[{cat}]\n" + "\n".join(items) + "\n\n")
+
+            logging.info(f"Success: Paste report generated at {report_path}/n{ "=" *50}")
+            return report_path
+
+        except AnalysisCancelled:
+            logging.warning("Analysis cancelled during paste text processing.")
+            return "ANALYSIS_CANCELLED"
+        except Exception as e:
+            logging.critical(f"Error while generating paste report: {str(e)}")
+            return None
+
+    def process_target(self, target, report_type="full", reuse_choice=None):
+        if os.path.isfile(target):
+            return self.generate_report_from_file(target, report_type=report_type)
+        return self.generate_report(target, report_type=report_type, reuse_choice=reuse_choice)
 
     #  The _get_url_id function is a helper method that takes a URL as input and encodes it into a format suitable for querying the VirusTotal v3 API.
     #  Since the API requires URLs to be represented as a base64-encoded string, this function performs the necessary encoding and formatting to ensure that the URL can be correctly processed by the API when checking for malicious activity.
@@ -226,24 +589,17 @@ class CTIWorkbench:
                 status = cache_entry.get('status', f"{score} hits (cached)")
                 if score > 0 or cache_age < self.vt_cache_max_age_seconds:
                     if self.vt_cache_prompt_mode == 'interactive':
-                        if self.vt_cache_prompt_choice is None:
-                            while True:
-                                use_cache = input(
-                                    f"Cached VT data found for {ioc_type.upper()} '{val}'. "
-                                    "Use cached result for all cached IOCs this run? [Y/n]: "
-                                ).strip().lower()
-                                if use_cache in {'y', 'yes', ''}:
-                                    self.vt_cache_prompt_choice = True
-                                    break
-                                if use_cache in {'n', 'no'}:
-                                    self.vt_cache_prompt_choice = False
-                                    break
-                                print("Please enter 'y' or 'n'.")
+                        logging.info(
+                            f"Cached VT data found for {ioc_type.upper()} {val}: {status} (age {int(cache_age)}s). "
+                            "Using cached result automatically because interactive prompts are handled in main.py."
+                        )
+                        return score, status
 
-                        if self.vt_cache_prompt_choice:
-                            logging.info(f"Using cached VT result for {ioc_type.upper()} {val}: {status} (age {int(cache_age)}s)")
-                            return score, status
-                        logging.info(f"User declined cached VT result for {ioc_type.upper()} {val}; forcing re-analysis.")
+                    if self.vt_cache_prompt_choice is True:
+                        logging.info(f"Using cached VT result for {ioc_type.upper()} {val}: {status} (age {int(cache_age)}s)")
+                        return score, status
+                    if self.vt_cache_prompt_choice is False:
+                        logging.info(f"Forcing re-analysis for {ioc_type.upper()} {val} due to cache preference.")
                         force_reanalysis = True
                     elif self.vt_cache_prompt_mode == 'force_reanalysis':
                         pass
@@ -337,9 +693,11 @@ class CTIWorkbench:
         results = []
 
         for i, ioc in enumerate(ioc_list, start=1):
+            self._check_for_exit()
             logging.info(f"[{i}/{len(ioc_list)}] VT starting Lookup for {ioc_type.upper()}: {str(ioc)[:200]}...")
             retries = 0
             while retries <= max_retries:
+                self._check_for_exit()
                 score, msg = self.get_vt_data(ioc_type, ioc)
                 if "rate limit" in msg.lower() or "429" in msg:
                     wait_time = base_sleep * (2 ** retries)
@@ -355,6 +713,7 @@ class CTIWorkbench:
                 "score": score,
                 "message": msg
             })
+            self._check_for_exit()
             time.sleep(base_sleep)
 
         return results
@@ -565,6 +924,7 @@ class CTIWorkbench:
     # The report includes detected TTPs, a summary of the page content, and categorized lists of malicious IOCs. The function also handles file management for storing reports and blocklists.
     # Added report_type parameter: "full" for complete report, "ioc" for IOCs only.
     def generate_report(self, url, report_type="full", reuse_choice=None):
+        self._reset_cancel_state()
         logging.info(f"Starting analysis for: {url} (Report Type: {report_type})")
         norm_url = self._normalize_url(url)
         report_entry = self.url_report_index.get(norm_url, {})
@@ -745,17 +1105,19 @@ class CTIWorkbench:
             # and categorizes the results accordingly. This modular approach enhances code readability and maintainability while ensuring consistent processing across all IOC types.
             def process_ioc(ioc_list, ioc_type, cat):
                 for ioc in ioc_list:
-                    print(f"[*] Checking for {cat}: {ioc[:80]}...")
+                    self._check_for_exit()
+                    logging.info(f"Checking for {cat}: {ioc[:80]}...")
 
                     # The cleaning step normalizes the IOC by replacing common obfuscation patterns (like [.] or hxxp) with their standard forms. 
                     # This helps in accurately checking against whitelists and blocklists, as well as querying VirusTotal. By converting to lowercase, 
                     # it also ensures that the checks are case-insensitive, which is important for consistency.
-                    clean_val = normalize_ioc(ioc, ioc_type)# This line process_ioc does the "Refanging"
+                    clean_val = normalize_ioc(ioc, ioc_type)  # This line process_ioc does the "Refanging"
                     clean_lookup = clean_val.lower() if ioc_type in {'url', 'domain', 'hash'} else clean_val
                     if any(w in clean_lookup for w in self.ip_whitelist + self.domain_whitelist):
                         continue
                     is_block = clean_lookup in self.manual_blocklist
 
+                    self._check_for_exit()
                     logging.info(f"Processing {ioc_type.upper()} IOC: raw={ioc[:80]} Malicious_IOC={clean_val[:80]}")
                     # The vt_result variable is assigned a tuple based on whether the IOC is found in the manual blocklist. 
                     # If it is a blocklisted item, it is immediately categorized as a threat with a message indicating a blocklist match.
@@ -865,6 +1227,9 @@ class CTIWorkbench:
 
             return report_path
 
+        except AnalysisCancelled:
+            logging.warning("Analysis cancelled during URL processing.")
+            return "ANALYSIS_CANCELLED"
         except Exception as e:
             logging.critical(f"FATAL ERROR in generate_report: {str(e)}")
             return None

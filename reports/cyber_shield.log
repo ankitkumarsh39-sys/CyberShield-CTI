@@ -4026,3 +4026,243 @@ Original error was:
 2026-05-06 16:27:20 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260506_162720.txt
 2026-05-06 16:27:20 - INFO - Success: Report generated at reports/IOC_ONLY_20260506_162720.txt
 ============================================================
+2026-05-06 16:30:59 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-06 16:31:27 - INFO - Starting analysis for: https://www.trendmicro.com/en_us/research/26/d/inside-shadow-earth-053.html# (Report Type: ioc)
+2026-05-06 16:31:31 - INFO - Extracted counts of IOCs-> IPs: 4, Domains: 27, URLs: 0, Hashes: 4, CVE: 5
+2026-05-06 16:31:31 - INFO - Processing IP IOC: raw=141.164.46.77 Malicious_IOC=141.164.46.77
+2026-05-06 16:31:35 - INFO - Triggering re-analysis for IP: 141.164.46.77 (Score: 4)
+2026-05-06 16:31:39 - INFO - Processing IP IOC: raw=194.38.11.3 Malicious_IOC=194.38.11.3
+2026-05-06 16:31:41 - INFO - Processing IP IOC: raw=209.141.40.254 Malicious_IOC=209.141.40.254
+2026-05-06 16:31:44 - INFO - Processing IP IOC: raw=96.9.125.227 Malicious_IOC=96.9.125.227
+2026-05-06 16:31:46 - INFO - Processing DOMAIN IOC: raw=2.aspx Malicious_IOC=2.aspx
+2026-05-06 16:31:49 - INFO - Triggering re-analysis for DOMAIN: 2.aspx (Score: 0)
+2026-05-06 16:31:49 - INFO - Processing DOMAIN IOC: raw=6t8bljp.log Malicious_IOC=6t8bljp.log
+2026-05-06 16:31:51 - INFO - Triggering re-analysis for DOMAIN: 6t8bljp.log (Score: 0)
+2026-05-06 16:31:52 - INFO - Processing DOMAIN IOC: raw=9xf5wld.log Malicious_IOC=9xf5wld.log
+2026-05-06 16:31:55 - INFO - Triggering re-analysis for DOMAIN: 9xf5wld.log (Score: 0)
+2026-05-06 16:31:55 - INFO - Processing DOMAIN IOC: raw=c06kcq2.log Malicious_IOC=c06kcq2.log
+2026-05-06 16:31:58 - INFO - Triggering re-analysis for DOMAIN: c06kcq2.log (Score: 0)
+2026-05-06 16:31:58 - INFO - Processing DOMAIN IOC: raw=charcode.aspx Malicious_IOC=charcode.aspx
+2026-05-06 16:32:01 - INFO - Triggering re-analysis for DOMAIN: charcode.aspx (Score: 0)
+2026-05-06 16:32:01 - INFO - Processing DOMAIN IOC: raw=client.toml Malicious_IOC=client.toml
+2026-05-06 16:32:04 - INFO - Triggering re-analysis for DOMAIN: client.toml (Score: 0)
+2026-05-06 16:32:05 - INFO - Processing DOMAIN IOC: raw=d5plaa1.log Malicious_IOC=d5plaa1.log
+2026-05-06 16:32:07 - INFO - Triggering re-analysis for DOMAIN: d5plaa1.log (Score: 0)
+2026-05-06 16:32:08 - INFO - Processing DOMAIN IOC: raw=data.aspx Malicious_IOC=data.aspx
+2026-05-06 16:32:10 - INFO - Triggering re-analysis for DOMAIN: data.aspx (Score: 0)
+2026-05-06 16:32:11 - INFO - Processing DOMAIN IOC: raw=error.aspx Malicious_IOC=error.aspx
+2026-05-06 16:32:13 - INFO - Triggering re-analysis for DOMAIN: error.aspx (Score: 0)
+2026-05-06 16:32:13 - INFO - Processing DOMAIN IOC: raw=errorfe.aspx Malicious_IOC=errorfe.aspx
+2026-05-06 16:32:16 - INFO - Triggering re-analysis for DOMAIN: errorfe.aspx (Score: 0)
+2026-05-06 16:32:16 - INFO - Processing DOMAIN IOC: raw=graphics-hook-filter32.dll Malicious_IOC=graphics-hook-filter32.dll
+2026-05-06 16:32:19 - INFO - Triggering re-analysis for DOMAIN: graphics-hook-filter32.dll (Score: 0)
+2026-05-06 16:32:19 - INFO - Processing DOMAIN IOC: raw=i.aspx Malicious_IOC=i.aspx
+2026-05-06 16:32:22 - INFO - Triggering re-analysis for DOMAIN: i.aspx (Score: 0)
+2026-05-06 16:32:22 - INFO - Processing DOMAIN IOC: raw=imjp14k.dll Malicious_IOC=imjp14k.dll
+2026-05-06 16:32:25 - INFO - Triggering re-analysis for DOMAIN: imjp14k.dll (Score: 0)
+2026-05-06 16:32:25 - INFO - Processing DOMAIN IOC: raw=management.powershell Malicious_IOC=management.powershell
+2026-05-06 16:32:28 - INFO - Triggering re-analysis for DOMAIN: management.powershell (Score: 0)
+2026-05-06 16:32:28 - INFO - Processing DOMAIN IOC: raw=microsoft.exchange Malicious_IOC=microsoft.exchange
+2026-05-06 16:32:30 - INFO - Triggering re-analysis for DOMAIN: microsoft.exchange (Score: 0)
+2026-05-06 16:32:35 - INFO - Processing DOMAIN IOC: raw=mps.dll Malicious_IOC=mps.dll
+2026-05-06 16:32:37 - INFO - Triggering re-analysis for DOMAIN: mps.dll (Score: 0)
+2026-05-06 16:32:37 - INFO - Processing DOMAIN IOC: raw=office365-update.com Malicious_IOC=office365-update.com
+2026-05-06 16:32:40 - INFO - Processing DOMAIN IOC: raw=page.aspx Malicious_IOC=page.aspx
+2026-05-06 16:32:42 - INFO - Triggering re-analysis for DOMAIN: page.aspx (Score: 0)
+2026-05-06 16:32:43 - INFO - Processing DOMAIN IOC: raw=signout.aspx Malicious_IOC=signout.aspx
+2026-05-06 16:32:45 - INFO - Triggering re-analysis for DOMAIN: signout.aspx (Score: 0)
+2026-05-06 16:32:45 - INFO - Processing DOMAIN IOC: raw=timeinlogout.aspx Malicious_IOC=timeinlogout.aspx
+2026-05-06 16:32:48 - INFO - Triggering re-analysis for DOMAIN: timeinlogout.aspx (Score: 0)
+2026-05-06 16:32:48 - INFO - Processing DOMAIN IOC: raw=timeout.aspx Malicious_IOC=timeout.aspx
+2026-05-06 16:32:51 - INFO - Triggering re-analysis for DOMAIN: timeout.aspx (Score: 0)
+2026-05-06 16:32:51 - INFO - Processing DOMAIN IOC: raw=tosbtkbd.dll Malicious_IOC=tosbtkbd.dll
+2026-05-06 16:32:54 - INFO - Triggering re-analysis for DOMAIN: tosbtkbd.dll (Score: 0)
+2026-05-06 16:32:54 - INFO - Processing DOMAIN IOC: raw=tunnel.ashx Malicious_IOC=tunnel.ashx
+2026-05-06 16:32:57 - INFO - Triggering re-analysis for DOMAIN: tunnel.ashx (Score: 0)
+2026-05-06 16:32:58 - INFO - Processing DOMAIN IOC: raw=uxtheme.dll Malicious_IOC=uxtheme.dll
+2026-05-06 16:33:00 - INFO - Triggering re-analysis for DOMAIN: uxtheme.dll (Score: 0)
+2026-05-06 16:33:01 - INFO - Processing DOMAIN IOC: raw=vmb9ait.log Malicious_IOC=vmb9ait.log
+2026-05-06 16:33:03 - INFO - Triggering re-analysis for DOMAIN: vmb9ait.log (Score: 0)
+2026-05-06 16:33:04 - INFO - Processing DOMAIN IOC: raw=warn.aspx Malicious_IOC=warn.aspx
+2026-05-06 16:33:06 - INFO - Triggering re-analysis for DOMAIN: warn.aspx (Score: 0)
+2026-05-06 16:33:07 - INFO - Processing DOMAIN IOC: raw=zimbra-beta.info Malicious_IOC=zimbra-beta.info
+2026-05-06 16:33:09 - INFO - Processing HASH IOC: raw=2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2 Malicious_IOC=2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2
+2026-05-06 16:33:12 - INFO - Triggering re-analysis for HASH: 2e8f9fd8213d9f69044101cd029fd1797ec7afbcad40bb1f04eb93d881c04cd2 (Score: 0)
+2026-05-06 16:33:16 - INFO - Processing HASH IOC: raw=4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8 Malicious_IOC=4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8
+2026-05-06 16:33:18 - INFO - Triggering re-analysis for HASH: 4264cfb3980a068ab36d842c7ee0942f40aaf308f31ed48b41e140e59885f5c8 (Score: 1)
+2026-05-06 16:33:22 - INFO - Processing HASH IOC: raw=8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78 Malicious_IOC=8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78
+2026-05-06 16:33:25 - INFO - Triggering re-analysis for HASH: 8d9433e9734dd629d74abe41ff7024c84b3a28c45671df8f4baed344de733c78 (Score: 0)
+2026-05-06 16:33:29 - INFO - Processing HASH IOC: raw=d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3 Malicious_IOC=d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3
+2026-05-06 16:33:31 - INFO - Triggering re-analysis for HASH: d67197bf407e74ecd77be89d0da107d5f7d37c21bdf55456c6b57df65cf429b3 (Score: 0)
+2026-05-06 16:33:35 - INFO - Report generated with 7 malicious IOCs and 28 clean IOCs found.
+2026-05-06 16:33:35 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260506_163335.txt
+2026-05-06 16:33:35 - INFO - Success: Report generated at reports/IOC_ONLY_20260506_163335.txt
+============================================================
+2026-05-11 18:53:10 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 18:54:37 - INFO - Starting analysis for: a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce (Report Type: full)
+2026-05-11 18:54:37 - WARNING - Request error: MissingSchema: Invalid URL 'a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce': No scheme supplied. Perhaps you meant https://a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce?
+2026-05-11 18:54:42 - WARNING - Request error: MissingSchema: Invalid URL 'a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce': No scheme supplied. Perhaps you meant https://a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce?
+2026-05-11 18:54:52 - WARNING - Request error: MissingSchema: Invalid URL 'a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce': No scheme supplied. Perhaps you meant https://a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce?
+2026-05-11 18:55:12 - WARNING - Request error: MissingSchema: Invalid URL 'a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce': No scheme supplied. Perhaps you meant https://a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce?
+2026-05-11 18:55:52 - WARNING - Request error: MissingSchema: Invalid URL 'a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce': No scheme supplied. Perhaps you meant https://a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce?
+2026-05-11 18:55:52 - INFO - Failed to retrieve live content from a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce after 5 attempts. Proceeding with cached IOC data and previous context if available.
+2026-05-11 18:55:52 - INFO - Extracted counts of IOCs-> IPs: 0, Domains: 0, URLs: 0, Hashes: 0, CVE: 0
+2026-05-11 18:55:52 - INFO - Report generated with 0 malicious IOCs and 0 clean IOCs found.
+2026-05-11 18:55:52 - INFO - Success: Report generated at reports/ADVISORY_20260511_185552.txt
+============================================================
+2026-05-11 18:59:55 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:06:33 - INFO - Starting analysis for: https://moonlock.com/fake-vcs-target-crypto-talent-clickfix-campaign (Report Type: full)
+2026-05-11 19:06:35 - INFO - Extracted counts of IOCs-> IPs: 0, Domains: 34, URLs: 2, Hashes: 3, CVE: 0
+2026-05-11 19:06:35 - INFO - Checking for Domain: -meet.com...
+2026-05-11 19:06:35 - INFO - Processing DOMAIN IOC: raw=-meet.com Malicious_IOC=-meet.com
+2026-05-11 19:06:38 - INFO - Triggering re-analysis for DOMAIN: -meet.com (Score: 0)
+2026-05-11 19:06:43 - INFO - Checking for Domain: 07usweb.us...
+2026-05-11 19:06:43 - INFO - Processing DOMAIN IOC: raw=07usweb.us Malicious_IOC=07usweb.us
+2026-05-11 19:06:45 - INFO - Checking for Domain: 07usweb.us/homepage...
+2026-05-11 19:06:45 - INFO - Processing DOMAIN IOC: raw=07usweb.us/homepage Malicious_IOC=07usweb.us/homepage
+2026-05-11 19:06:48 - INFO - Triggering re-analysis for DOMAIN: 07usweb.us/homepage (Score: 0)
+2026-05-11 19:06:48 - INFO - Checking for Domain: breakdream.com...
+2026-05-11 19:06:48 - INFO - Processing DOMAIN IOC: raw=breakdream.com Malicious_IOC=breakdream.com
+2026-05-11 19:06:50 - INFO - Checking for Domain: calendly.com/hureivemykhail/with-solidbit-meeting...
+2026-05-11 19:06:50 - INFO - Processing DOMAIN IOC: raw=calendly.com/hureivemykhail/with-solidbit-meeting Malicious_IOC=calendly.com/hureivemykhail/with-solidbit-meeting
+2026-05-11 19:06:53 - INFO - Triggering re-analysis for DOMAIN: calendly.com/hureivemykhail/with-solidbit-meeting (Score: 0)
+2026-05-11 19:06:53 - INFO - Checking for Domain: cmailer.pro...
+2026-05-11 19:06:53 - INFO - Processing DOMAIN IOC: raw=cmailer.pro Malicious_IOC=cmailer.pro
+2026-05-11 19:06:56 - INFO - Checking for Domain: dreamdie.com...
+2026-05-11 19:06:56 - INFO - Processing DOMAIN IOC: raw=dreamdie.com Malicious_IOC=dreamdie.com
+2026-05-11 19:06:58 - INFO - Checking for Domain: gmail.com...
+2026-05-11 19:06:58 - INFO - Processing DOMAIN IOC: raw=gmail.com Malicious_IOC=gmail.com
+2026-05-11 19:07:01 - INFO - Triggering re-analysis for DOMAIN: gmail.com (Score: 0)
+2026-05-11 19:07:05 - INFO - Checking for Domain: goog1e.us...
+2026-05-11 19:07:05 - INFO - Processing DOMAIN IOC: raw=goog1e.us Malicious_IOC=goog1e.us
+2026-05-11 19:07:07 - INFO - Triggering re-analysis for DOMAIN: goog1e.us (Score: 0)
+2026-05-11 19:07:11 - INFO - Checking for Domain: hduwhv.py...
+2026-05-11 19:07:11 - INFO - Processing DOMAIN IOC: raw=hduwhv.py Malicious_IOC=hduwhv.py
+2026-05-11 19:07:13 - INFO - Triggering re-analysis for DOMAIN: hduwhv.py (Score: 0)
+2026-05-11 19:07:17 - INFO - Checking for Domain: hedgeweek.com...
+2026-05-11 19:07:17 - INFO - Processing DOMAIN IOC: raw=hedgeweek.com Malicious_IOC=hedgeweek.com
+2026-05-11 19:07:20 - INFO - Triggering re-analysis for DOMAIN: hedgeweek.com (Score: 0)
+2026-05-11 19:07:24 - INFO - Checking for Domain: hedgeweeks.online...
+2026-05-11 19:07:24 - INFO - Processing DOMAIN IOC: raw=hedgeweeks.online Malicious_IOC=hedgeweeks.online
+2026-05-11 19:07:26 - INFO - Checking for Domain: hedgeweeks.online/ft?id=<encoded_id...
+2026-05-11 19:07:26 - INFO - Processing DOMAIN IOC: raw=hedgeweeks.online/ft?id=<encoded_id Malicious_IOC=hedgeweeks.online/ft?id=<encoded_id
+2026-05-11 19:07:28 - INFO - Triggering re-analysis for DOMAIN: hedgeweeks.online/ft?id=<encoded_id (Score: 0)
+2026-05-11 19:07:29 - INFO - Checking for Domain: hedgeweeks.online/ft?id=<encoded_id>',$false)<br><br>$x.send()<br><br>iex...
+2026-05-11 19:07:29 - INFO - Processing DOMAIN IOC: raw=hedgeweeks.online/ft?id=<encoded_id>',$false)<br><br>$x.send()<br><br>iex Malicious_IOC=hedgeweeks.online/ft?id=<encoded_id>',$false)<br><br>$x.send()<br><br>iex
+2026-05-11 19:07:31 - INFO - Triggering re-analysis for DOMAIN: hedgeweeks.online/ft?id=<encoded_id>',$false)<br><br>$x.send()<br><br>iex (Score: 0)
+2026-05-11 19:07:31 - INFO - Checking for Domain: lumax.capital...
+2026-05-11 19:07:31 - INFO - Processing DOMAIN IOC: raw=lumax.capital Malicious_IOC=lumax.capital
+2026-05-11 19:07:34 - INFO - Checking for Domain: microsoft.xmlhttp...
+2026-05-11 19:07:34 - INFO - Processing DOMAIN IOC: raw=microsoft.xmlhttp Malicious_IOC=microsoft.xmlhttp
+2026-05-11 19:07:36 - INFO - Triggering re-analysis for DOMAIN: microsoft.xmlhttp (Score: 0)
+2026-05-11 19:07:36 - INFO - Checking for Domain: mylingocoin.com...
+2026-05-11 19:07:36 - INFO - Processing DOMAIN IOC: raw=mylingocoin.com Malicious_IOC=mylingocoin.com
+2026-05-11 19:07:39 - INFO - Checking for Domain: navigator.clipboard...
+2026-05-11 19:07:39 - INFO - Processing DOMAIN IOC: raw=navigator.clipboard Malicious_IOC=navigator.clipboard
+2026-05-11 19:07:41 - INFO - Triggering re-analysis for DOMAIN: navigator.clipboard (Score: 0)
+2026-05-11 19:07:42 - INFO - Checking for Domain: operation.megabit...
+2026-05-11 19:07:42 - INFO - Processing DOMAIN IOC: raw=operation.megabit Malicious_IOC=operation.megabit
+2026-05-11 19:07:44 - INFO - Triggering re-analysis for DOMAIN: operation.megabit (Score: 0)
+2026-05-11 19:07:44 - INFO - Checking for Domain: raw.githubusercontent...
+2026-05-11 19:07:44 - INFO - Processing DOMAIN IOC: raw=raw.githubusercontent Malicious_IOC=raw.githubusercontent
+2026-05-11 19:07:47 - INFO - Triggering re-analysis for DOMAIN: raw.githubusercontent (Score: 0)
+2026-05-11 19:07:47 - INFO - Checking for Domain: support-zoom.us...
+2026-05-11 19:07:47 - INFO - Processing DOMAIN IOC: raw=support-zoom.us Malicious_IOC=support-zoom.us
+2026-05-11 19:07:50 - INFO - Checking for Domain: supportzm.com...
+2026-05-11 19:07:50 - INFO - Processing DOMAIN IOC: raw=supportzm.com Malicious_IOC=supportzm.com
+2026-05-11 19:07:52 - INFO - Checking for Domain: text.encoding...
+2026-05-11 19:07:52 - INFO - Processing DOMAIN IOC: raw=text.encoding Malicious_IOC=text.encoding
+2026-05-11 19:07:55 - INFO - Triggering re-analysis for DOMAIN: text.encoding (Score: 0)
+2026-05-11 19:07:55 - INFO - Checking for Domain: thedigitalassetconference.com...
+2026-05-11 19:07:55 - INFO - Processing DOMAIN IOC: raw=thedigitalassetconference.com Malicious_IOC=thedigitalassetconference.com
+2026-05-11 19:07:58 - INFO - Triggering re-analysis for DOMAIN: thedigitalassetconference.com (Score: 0)
+2026-05-11 19:08:01 - INFO - Checking for Domain: us05-web.us...
+2026-05-11 19:08:01 - INFO - Processing DOMAIN IOC: raw=us05-web.us Malicious_IOC=us05-web.us
+2026-05-11 19:08:04 - INFO - Checking for Domain: us05-web.us/ft?topic=s&gt=<number...
+2026-05-11 19:08:04 - INFO - Processing DOMAIN IOC: raw=us05-web.us/ft?topic=s&gt=<number Malicious_IOC=us05-web.us/ft?topic=s&gt=<number
+2026-05-11 19:08:06 - INFO - Triggering re-analysis for DOMAIN: us05-web.us/ft?topic=s&gt=<number (Score: 0)
+2026-05-11 19:08:07 - INFO - Checking for Domain: us07-web.us...
+2026-05-11 19:08:07 - INFO - Processing DOMAIN IOC: raw=us07-web.us Malicious_IOC=us07-web.us
+2026-05-11 19:08:09 - INFO - Checking for Domain: uswe05.us...
+2026-05-11 19:08:09 - INFO - Processing DOMAIN IOC: raw=uswe05.us Malicious_IOC=uswe05.us
+2026-05-11 19:08:12 - INFO - Checking for Domain: web.us...
+2026-05-11 19:08:12 - INFO - Processing DOMAIN IOC: raw=web.us Malicious_IOC=web.us
+2026-05-11 19:08:14 - INFO - Triggering re-analysis for DOMAIN: web.us (Score: 0)
+2026-05-11 19:08:18 - INFO - Checking for Domain: x.open...
+2026-05-11 19:08:18 - INFO - Processing DOMAIN IOC: raw=x.open Malicious_IOC=x.open
+2026-05-11 19:08:21 - INFO - Triggering re-analysis for DOMAIN: x.open (Score: 0)
+2026-05-11 19:08:25 - INFO - Checking for Domain: x.responsebody...
+2026-05-11 19:08:25 - INFO - Processing DOMAIN IOC: raw=x.responsebody Malicious_IOC=x.responsebody
+2026-05-11 19:08:27 - INFO - Triggering re-analysis for DOMAIN: x.responsebody (Score: 0)
+2026-05-11 19:08:28 - INFO - Checking for Domain: zmsupport.com...
+2026-05-11 19:08:28 - INFO - Processing DOMAIN IOC: raw=zmsupport.com Malicious_IOC=zmsupport.com
+2026-05-11 19:08:31 - INFO - Checking for Domain: zoom.us...
+2026-05-11 19:08:31 - INFO - Processing DOMAIN IOC: raw=zoom.us Malicious_IOC=zoom.us
+2026-05-11 19:08:33 - INFO - Triggering re-analysis for DOMAIN: zoom.us (Score: 0)
+2026-05-11 19:08:37 - INFO - Checking for Domain: zoom.uswe...
+2026-05-11 19:08:37 - INFO - Processing DOMAIN IOC: raw=zoom.uswe Malicious_IOC=zoom.uswe
+2026-05-11 19:08:39 - INFO - Triggering re-analysis for DOMAIN: zoom.uswe (Score: 0)
+2026-05-11 19:08:40 - INFO - Checking for URL: https://hedgeweeks[.]online/ft?id=...
+2026-05-11 19:08:40 - INFO - Processing URL IOC: raw=https://hedgeweeks[.]online/ft?id= Malicious_IOC=https://hedgeweeks.online/ft?id=
+2026-05-11 19:08:42 - INFO - Checking for URL: https://zoom[.]us05-web[.]us/ft?topic=s&gt=...
+2026-05-11 19:08:42 - INFO - Processing URL IOC: raw=https://zoom[.]us05-web[.]us/ft?topic=s&gt= Malicious_IOC=https://zoom.us05-web.us/ft?topic=s&gt=
+2026-05-11 19:08:45 - INFO - Checking for File_Hash: 2fbd34eed9dbf57a44cf1540941fb43a793be27e13e937299167b2b67cb84d6b...
+2026-05-11 19:08:45 - INFO - Processing HASH IOC: raw=2fbd34eed9dbf57a44cf1540941fb43a793be27e13e937299167b2b67cb84d6b Malicious_IOC=2fbd34eed9dbf57a44cf1540941fb43a793be27e13e937299167b2b67cb84d6b
+2026-05-11 19:08:47 - INFO - Checking for File_Hash: 755cc133ae0519accbcfdd5f8f0d9fe1aa08cbcb306c3e5f29ebcb6ac12d9323...
+2026-05-11 19:08:47 - INFO - Processing HASH IOC: raw=755cc133ae0519accbcfdd5f8f0d9fe1aa08cbcb306c3e5f29ebcb6ac12d9323 Malicious_IOC=755cc133ae0519accbcfdd5f8f0d9fe1aa08cbcb306c3e5f29ebcb6ac12d9323
+2026-05-11 19:08:50 - INFO - Checking for File_Hash: 9a778d2b7919717e95072e4dec01c815a5fd81f574b538107652d73d8dc874b6...
+2026-05-11 19:08:50 - INFO - Processing HASH IOC: raw=9a778d2b7919717e95072e4dec01c815a5fd81f574b538107652d73d8dc874b6 Malicious_IOC=9a778d2b7919717e95072e4dec01c815a5fd81f574b538107652d73d8dc874b6
+2026-05-11 19:09:09 - INFO - Report generated with 18 malicious IOCs and 21 clean IOCs found.
+2026-05-11 19:09:09 - INFO - Clean artifacts saved to reports/Clean_Artifacts/CLEAN_ARTIFACTS_20260511_190852.txt
+2026-05-11 19:09:09 - INFO - Success: Report generated at reports/ADVISORY_20260511_190852.txt
+============================================================
+2026-05-11 19:11:21 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:14:09 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:18:22 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:22:20 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:22:46 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:27:40 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:28:17 - INFO - Starting text analysis (Paste Input) (Report Type: ioc)
+2026-05-11 19:28:17 - INFO - Checking for File_Hash: 4f77b4fcfde7abb7e6d0e36104e433abfed3a9d9938bf7fbe0e9d1a0b2ccf265...
+2026-05-11 19:28:17 - INFO - Processing HASH IOC: raw=4f77b4fcfde7abb7e6d0e36104e433abfed3a9d9938bf7fbe0e9d1a0b2ccf265 Malicious_IOC=4f77b4fcfde7abb7e6d0e36104e433abfed3a9d9938bf7fbe0e9d1a0b2ccf265
+2026-05-11 19:28:22 - INFO - Triggering re-analysis for HASH: 4f77b4fcfde7abb7e6d0e36104e433abfed3a9d9938bf7fbe0e9d1a0b2ccf265 (Score: 0)
+2026-05-11 19:28:23 - INFO - Success: Paste report generated at reports/PASTE_IOC_20260511_192823.txt
+2026-05-11 19:31:05 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:31:12 - INFO - Starting text analysis (Paste Input) (Report Type: ioc)
+2026-05-11 19:31:12 - INFO - Checking for File_Hash: 4f77b4fcfde7abb7e6d0e36104e433abfed3a9d9938bf7fbe0e9d1a0b2ccf265...
+2026-05-11 19:31:12 - INFO - Processing HASH IOC: raw=4f77b4fcfde7abb7e6d0e36104e433abfed3a9d9938bf7fbe0e9d1a0b2ccf265 Malicious_IOC=4f77b4fcfde7abb7e6d0e36104e433abfed3a9d9938bf7fbe0e9d1a0b2ccf265
+2026-05-11 19:31:12 - INFO - Using cached VT result for HASH 4f77b4fcfde7abb7e6d0e36104e433abfed3a9d9938bf7fbe0e9d1a0b2ccf265: 0 hits (age 170s)
+2026-05-11 19:31:12 - INFO - Success: Paste report generated at reports/PASTE_IOC_20260511_193112.txt
+2026-05-11 19:32:47 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:34:21 - INFO - Starting text analysis (Paste Input) (Report Type: ioc)
+2026-05-11 19:34:21 - INFO - Checking for File_Hash: a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce...
+2026-05-11 19:34:21 - INFO - Processing HASH IOC: raw=a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce Malicious_IOC=a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce
+2026-05-11 19:34:25 - INFO - Success: Paste report generated at reports/PASTE_IOC_20260511_193425.txt
+2026-05-11 19:36:46 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:36:56 - INFO - Starting text analysis (Paste Input) (Report Type: ioc)
+2026-05-11 19:36:56 - INFO - Checking for File_Hash: a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce...
+2026-05-11 19:36:56 - INFO - Processing HASH IOC: raw=a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce Malicious_IOC=a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce
+2026-05-11 19:36:56 - INFO - Using cached VT result for HASH a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce: 48 hits (age 151s)
+2026-05-11 19:36:56 - INFO - Success: Paste report generated at reports/PASTE_IOC_20260511_193656.txt
+2026-05-11 19:43:05 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:43:12 - INFO - Starting text analysis (Paste Input) (Report Type: ioc)
+2026-05-11 19:43:12 - INFO - Checking for File_Hash: a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce...
+2026-05-11 19:43:12 - INFO - Processing HASH IOC: raw=a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce Malicious_IOC=a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce
+2026-05-11 19:43:12 - INFO - Using cached VT result for HASH a65483b86847995a67de0fcb2a5487cdbc96361cb2e9dea8ab74005c8fef65ce: 48 hits (age 527s)
+2026-05-11 19:43:12 - INFO - Success: Paste report generated at reports/PASTE_IOC_20260511_194312.txt/n==================================================
+2026-05-11 19:43:32 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:43:37 - INFO - Starting text analysis (Paste Input) (Report Type: ioc)
+2026-05-11 19:43:37 - INFO - Checking for File_Hash: 5bf35daaf26508fc136157818ead48cc5c7fa3a3e6273cde2c757673586a78a6...
+2026-05-11 19:43:37 - INFO - Processing HASH IOC: raw=5bf35daaf26508fc136157818ead48cc5c7fa3a3e6273cde2c757673586a78a6 Malicious_IOC=5bf35daaf26508fc136157818ead48cc5c7fa3a3e6273cde2c757673586a78a6
+2026-05-11 19:43:41 - INFO - Success: Paste report generated at reports/PASTE_IOC_20260511_194341.txt/n==================================================
+2026-05-11 19:56:51 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 19:57:09 - INFO - Starting text analysis (Paste Input) (Report Type: ioc)
+2026-05-11 19:57:09 - INFO - Checking for Domain: office365-update[.]com...
+2026-05-11 19:57:09 - INFO - Processing DOMAIN IOC: raw=office365-update[.]com Malicious_IOC=office365-update.com
+2026-05-11 19:57:09 - INFO - Using cached VT result for DOMAIN office365-update.com: 15 hits (age 444269s)
+2026-05-11 19:57:09 - INFO - Success: Paste report generated at reports/PASTE_IOC_20260511_195709.txt/n==================================================
+2026-05-11 20:00:32 - INFO - CyberShield-CTI Engine Initialized.
+2026-05-11 20:00:40 - INFO - Starting text analysis (Paste Input) (Report Type: ioc)
+2026-05-11 20:00:40 - INFO - Checking for Domain: office365-update[.]com...
+2026-05-11 20:00:40 - INFO - Processing DOMAIN IOC: raw=office365-update[.]com Malicious_IOC=office365-update.com
+2026-05-11 20:00:44 - INFO - Success: Paste report generated at reports/PASTE_IOC_20260511_200044.txt/n==================================================

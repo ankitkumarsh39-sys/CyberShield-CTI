@@ -4,7 +4,15 @@ version = "0.1.0"
 description = "Python-based CTI automation for extracting, enriching, and reporting IOCs from threat blogs (VirusTotal integration)."
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "iocextract>=1.16.1",
+    "python-dotenv>=1.0.1",
+    "sumy>=0.11.0",
+    "nltk>=3.8.1",
+    "openpyxl>=3.1.0"
+]
 
 [project.urls]
 "Homepage" = "https://github.com/YOUR_USERNAME/CTI-Workbench-SOC"
